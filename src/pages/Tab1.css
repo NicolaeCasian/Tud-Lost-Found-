@@ -1,0 +1,11 @@
+ion-menu {
+    width: 400px;
+}
+
+ion-menu .menu-inner {
+    width: 100%;
+}
+
+ion-header ion-title {
+    text-align: center;
+}
