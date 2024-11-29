@@ -1,8 +1,32 @@
-import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar } from '@ionic/react';
-import ExploreContainer from '../components/ExploreContainer';
-import './Tab1.css';
+import React from 'react';
+import {
+  IonContent,
+  IonHeader,
+  IonPage,
+  IonTitle,
+  IonToolbar,
+  IonButton,
+} from '@ionic/react';
+import { useMsal } from '@azure/msal-react';
+import { useHistory } from 'react-router-dom';
 
 const Tab1: React.FC = () => {
+  const { instance } = useMsal();
+  const history = useHistory(); // Use navigate for routing
+
+  const logout = async () => {
+    try {
+      console.log('Logging out...');
+      await instance.logoutPopup();
+      console.log('Logout successful.');
+
+      // Redirect to login page after logout
+      history.push('/login');
+    } catch (error) {
+      console.error('Logout failed:', error);
+    }
+  };
+
   return (
     <IonPage>
       <IonHeader>
@@ -11,12 +35,9 @@ const Tab1: React.FC = () => {
         </IonToolbar>
       </IonHeader>
       <IonContent fullscreen>
-        <IonHeader collapse="condense">
-          <IonToolbar>
-            <IonTitle size="large">Tab 1</IonTitle>
-          </IonToolbar>
-        </IonHeader>
-        <ExploreContainer name="Tab 1 page" />
+        <div style={{ padding: '16px', textAlign: 'center' }}>
+          <IonButton onClick={logout}>Logout</IonButton>
+        </div>
       </IonContent>
     </IonPage>
   );

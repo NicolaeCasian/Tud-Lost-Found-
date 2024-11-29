@@ -1,7 +1,16 @@
 {
   "name": "TUD Lost & Found ",
   "integrations": {
-    "capacitor": {}
+    "capacitor": {},
+    "enterprise": {
+      "keyId": 23628,
+      "productKey": "key_0913c536c20e4e21ac1466bb3607a475",
+      "appId": "362f491c",
+      "orgId": "9c7df2ef-d7a4-4359-8923-7a91a9902db9",
+      "registries": [
+        "@ionic-enterprise;https://registry.ionicframework.com/"
+      ]
+    }
   },
   "type": "react-vite",
   "id": "b66d3a39"
