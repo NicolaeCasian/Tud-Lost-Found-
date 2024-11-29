@@ -1,3 +1,4 @@
+import React from 'react';
 import {
     IonAccordion,
     IonAccordionGroup,
@@ -13,14 +14,35 @@ import {
     IonRow,
     IonSplitPane,
     IonTitle,
-    IonToolbar
+    IonToolbar,
+    IonCard,
+    IonCardContent,
+    IonCardHeader,
+    IonCardSubtitle,
+    IonCardTitle
 } from '@ionic/react';
-import React from 'react';
-import {IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle} from '@ionic/react';
+import { useMsal } from '@azure/msal-react';
+import { useHistory } from 'react-router-dom';
 
 import './Tab1.css';
 
 const Tab1: React.FC = () => {
+    const { instance } = useMsal();
+    const history = useHistory(); // Use navigate for routing
+
+    const logout = async () => {
+        try {
+            console.log('Logging out...');
+            await instance.logoutPopup();
+            console.log('Logout successful.');
+
+            // Redirect to login page after logout
+            history.push('/login');
+        } catch (error) {
+            console.error('Logout failed:', error);
+        }
+    };
+
     return (
         <IonPage>
             <IonSplitPane contentId="main-content">
@@ -106,6 +128,7 @@ const Tab1: React.FC = () => {
                                     <IonButton>
                                         Report Lost Item
                                     </IonButton>
+                                    <IonButton onClick={logout}>Logout</IonButton>
                                 </IonRouterLink>
                             </IonButtons>
                         </IonToolbar>
