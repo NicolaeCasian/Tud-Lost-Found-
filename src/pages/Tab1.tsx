@@ -1,11 +1,15 @@
 import {
+    IonAccordion,
+    IonAccordionGroup,
+    IonButton,
+    IonButtons, IonCheckbox,
     IonCol,
     IonContent,
     IonGrid,
     IonHeader, IonItem,
     IonLabel, IonList,
-    IonMenu, IonMenuToggle,
-    IonPage,
+    IonMenu, IonMenuButton, IonMenuToggle,
+    IonPage, IonRouterLink,
     IonRow,
     IonSplitPane,
     IonTitle,
@@ -29,20 +33,60 @@ const Tab1: React.FC = () => {
                     </IonHeader>
                     <IonContent>
                         <IonList>
-                            <IonMenuToggle auto-hide="false">
-                                <IonItem button>
-                                    <IonLabel>Category 1</IonLabel>
-                                </IonItem>
-                                <IonItem button>
-                                    <IonLabel>Category 2</IonLabel>
-                                </IonItem>
-                                <IonItem button>
-                                    <IonLabel>Category 3</IonLabel>
-                                </IonItem>
-                                <IonItem button>
-                                    <IonLabel>Category 4</IonLabel>
-                                </IonItem>
-                            </IonMenuToggle>
+                            <IonAccordionGroup>
+                                <IonAccordion value="type">
+                                    <IonItem slot="header">
+                                        <IonLabel>Type</IonLabel>
+                                    </IonItem>
+                                    <div slot="content">
+                                        <IonItem lines="none">
+                                            <IonLabel>Jackets</IonLabel>
+                                            <IonCheckbox slot="end" />
+                                        </IonItem>
+                                        <IonItem lines="none">
+                                            <IonLabel>Keys</IonLabel>
+                                            <IonCheckbox slot="end" />
+                                        </IonItem>
+                                        <IonItem lines="none">
+                                            <IonLabel>Chargers</IonLabel>
+                                            <IonCheckbox slot="end" />
+                                        </IonItem>
+                                    </div>
+                                </IonAccordion>
+
+                                {/* Location Filter Accordion */}
+                                <IonAccordion value="location">
+                                    <IonItem slot="header">
+                                        <IonLabel>Location</IonLabel>
+                                    </IonItem>
+                                    <div slot="content">
+                                        <IonItem lines="none">
+                                            <IonLabel>Block A</IonLabel>
+                                            <IonCheckbox slot="end" />
+                                        </IonItem>
+                                        <IonItem lines="none">
+                                            <IonLabel>Block B</IonLabel>
+                                            <IonCheckbox slot="end" />
+                                        </IonItem>
+                                        <IonItem lines="none">
+                                            <IonLabel>Block C</IonLabel>
+                                            <IonCheckbox slot="end" />
+                                        </IonItem>
+                                        <IonItem lines="none">
+                                            <IonLabel>Block D</IonLabel>
+                                            <IonCheckbox slot="end" />
+                                        </IonItem>
+                                        <IonItem lines="none">
+                                            <IonLabel>Block E</IonLabel>
+                                            <IonCheckbox slot="end" />
+                                        </IonItem>
+                                        <IonItem lines="none">
+                                            <IonLabel>Block F</IonLabel>
+                                            <IonCheckbox slot="end" />
+                                        </IonItem>
+                                    </div>
+                                </IonAccordion>
+                            </IonAccordionGroup>
                         </IonList>
                     </IonContent>
                 </IonMenu>
@@ -52,7 +96,18 @@ const Tab1: React.FC = () => {
                     {/* Top Navigation */}
                     <IonHeader>
                         <IonToolbar>
+                            {/* Burger Button for Medium/Small Screens */}
+                            <IonButtons slot="start">
+                                <IonMenuButton />
+                            </IonButtons>
                             <IonTitle>Lost Items</IonTitle>
+                            <IonButtons slot={"end"}>
+                                <IonRouterLink href={"/Tab2"}>
+                                    <IonButton>
+                                        Report Lost Item
+                                    </IonButton>
+                                </IonRouterLink>
+                            </IonButtons>
                         </IonToolbar>
                     </IonHeader>
 

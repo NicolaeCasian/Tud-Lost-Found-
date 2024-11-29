@@ -2,8 +2,10 @@ ion-menu {
     width: 400px;
 }
 
-ion-menu .menu-inner {
-    width: 100%;
+@media (max-width: 992px) {
+    ion-menu {
+        width: auto;
+    }
 }
 
 ion-header ion-title {
