@@ -9,11 +9,9 @@ import {
 } from '@ionic/react';
 import { useMsal } from '@azure/msal-react';
 import { loginRequest } from './authConfig';
-import { useHistory } from 'react-router-dom'; 
 
 const Login: React.FC = () => {
   const { instance } = useMsal();
-  const navigate = useHistory(); 
 
   const login = async () => {
     try {
@@ -26,25 +24,16 @@ const Login: React.FC = () => {
         console.log('Login successful. Setting active account:', account);
         instance.setActiveAccount(account);
 
+        const userEmail = account.username; // The 'username' field typically contains the email address
+        console.log('User email:', userEmail);
+
         // Redirect to /tab1 after login
-        navigate.push('/tab1');
+        window.location.href = '/tab1';
       } else {
         console.warn('No account found after login.');
       }
     } catch (error) {
       console.error('Login failed:', error);
-    }
-  };
-  const logout = async () => {
-    try {
-      console.log('Logging out...');
-      await instance.logoutPopup();
-      console.log('Logout successful.');
-
-      // Redirect to login page after logout
-      navigate.push('/login');
-    } catch (error) {
-      console.error('Logout failed:', error);
     }
   };
 

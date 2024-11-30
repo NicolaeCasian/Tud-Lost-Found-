@@ -141,8 +141,9 @@ const Tab1: React.FC = () => {
                                 {Array.from({ length: 6 }).map((_, index) => (
                                     <IonCol
                                         size="12"
+                                        sizeLg="6"
                                         sizeMd="6"
-                                        sizeLg="4"
+                                        sizeXl="4"
                                         key={index}
                                     >
                                         <IonCard>
@@ -151,8 +152,8 @@ const Tab1: React.FC = () => {
                                                 src="https://ionicframework.com/docs/img/demos/card-media.png"
                                             />
                                             <IonCardHeader>
-                                                <IonCardTitle>Card Title {index + 1}</IonCardTitle>
-                                                <IonCardSubtitle>Card Subtitle {index + 1}</IonCardSubtitle>
+                                                <IonCardTitle>Product {index + 1}</IonCardTitle>
+                                                <IonCardSubtitle>Product description {index + 1}</IonCardSubtitle>
                                             </IonCardHeader>
                                             <IonCardContent>
                                                 I'm baby knausgaard brunch jianbing, butcher literally food truck palo santo gastropub irony lomo ugh shaman af roof party dolore.
