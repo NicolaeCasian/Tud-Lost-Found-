@@ -147,7 +147,7 @@ const Tab2: React.FC = () => {
                                 <IonSelectOption value="Backpacks">Backpacks</IonSelectOption>
                                 <IonSelectOption value="Keys">Keys</IonSelectOption>
                                 <IonSelectOption value="Wallets">Wallets</IonSelectOption>
-                                <IonSelectOption value="ID Cards">ID Cards</IonSelectOption>
+                                <IonSelectOption value="ID Card">ID Cards</IonSelectOption>
                                 <IonSelectOption value="Other">Other</IonSelectOption>
                             </IonSelect>
                         </IonItem>

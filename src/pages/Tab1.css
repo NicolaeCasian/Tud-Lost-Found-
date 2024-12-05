@@ -11,3 +11,37 @@ ion-menu {
 ion-header ion-title {
     text-align: center;
 }
+
+.tab1 ion-card ion-button {
+    width: 100%;
+    padding: 10px;
+    margin: 0;
+}
+
+ion-card img {
+    width: 100%;
+    max-height:200px;
+    object-fit: cover;
+    object-position: center
+}
+
+/* Ensure cards maintain equal height */
+.tab1 ion-card {
+    display: flex;
+    flex-direction: column;
+    height: 100%; /* Ensures all cards maintain equal height */
+}
+
+.tab1 ion-card-header {
+    flex: 0; /* Prevents header from stretching */
+}
+
+.tab1 ion-card-content {
+    flex: 1;
+    max-height: 120px;
+    overflow-y: auto;
+}
+
+.tab1 ion-col {
+    margin-bottom:20px;
+}

@@ -59,7 +59,7 @@ const Tab1: React.FC = () => {
     };
 
     return (
-        <IonPage className={"tab1"}>
+        <IonPage>
             <IonSplitPane contentId="main-content">
                 {/* Side Navigation (Filters) */}
                 <IonMenu contentId="main-content" type="overlay">
