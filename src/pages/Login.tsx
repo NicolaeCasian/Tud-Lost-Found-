@@ -28,7 +28,7 @@ const Login: React.FC = () => {
         console.log('Login successful. Setting active account:', account);
         instance.setActiveAccount(account);
 
-        const userEmail = account.username; // The 'username' field typically contains the email address
+        const userEmail = account.username; 
         console.log('User email:', userEmail);
 
         // Redirect to /tab1 after login
