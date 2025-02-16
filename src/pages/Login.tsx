@@ -16,8 +16,7 @@ import { useMsal } from '@azure/msal-react';
 import { loginRequest } from './authConfig';
 
 const Login: React.FC = () => {
-  const { instance } = useMsal();
-
+  const { instance } = useMsal(); 
   const login = async () => {
     try {
       console.log('Triggering login with popup...');
@@ -25,11 +24,19 @@ const Login: React.FC = () => {
 
       const account = response.account;
       if (account) {
+        const userEmail = account.username; // Get the user's email
+        console.log('User email:', userEmail);
+
+        // Check if the email ends with @mytudublin.ie
+        if (!userEmail.endsWith('@mytudublin.ie')) {
+          console.warn('Unauthorized email. Logging out...');
+          alert('Access denied! You must use a @mytudublin.ie email to log in.');
+          await instance.logoutPopup(); // Log out unauthorized users
+          return;
+        }
+
         console.log('Login successful. Setting active account:', account);
         instance.setActiveAccount(account);
-
-        const userEmail = account.username; 
-        console.log('User email:', userEmail);
 
         // Redirect to /tab1 after login
         window.location.href = '/tab1';
@@ -50,12 +57,10 @@ const Login: React.FC = () => {
       </IonHeader>
       <IonContent fullscreen>
         <div style={{ padding: '16px', textAlign: 'center' }}>
-          {/* Login Requirement Message */}
           <IonText color="primary" style={{ fontSize: '18px', fontWeight: 'bold' }}>
             <p>You must log in to access the app features.</p>
           </IonText>
 
-          {/* Welcome Section */}
           <IonCard>
             <IonCardHeader>
               <IonCardTitle>Welcome to TUD Lost & Found</IonCardTitle>
@@ -70,7 +75,6 @@ const Login: React.FC = () => {
             </IonCardContent>
           </IonCard>
 
-          {/* Login Button */}
           <IonButton
             onClick={login}
             style={{
@@ -97,7 +101,6 @@ const Login: React.FC = () => {
             Login with Microsoft
           </IonButton>
 
-          {/* Disclaimer */}
           <div style={{ marginTop: '30px', textAlign: 'center', padding: '10px' }}>
             <IonText color="medium" style={{ fontSize: '14px' }}>
               <p>
