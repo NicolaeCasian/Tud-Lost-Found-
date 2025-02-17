@@ -14,9 +14,10 @@ import {
 } from '@ionic/react';
 import { useMsal } from '@azure/msal-react';
 import { loginRequest } from './authConfig';
+import './Login.css'
 
 const Login: React.FC = () => {
-  const { instance } = useMsal(); 
+  const { instance } = useMsal();
   const login = async () => {
     try {
       console.log('Triggering login with popup...');
@@ -38,6 +39,9 @@ const Login: React.FC = () => {
         console.log('Login successful. Setting active account:', account);
         instance.setActiveAccount(account);
 
+        const userEmail = account.username; // The 'username' field typically contains the email address
+        console.log('User email:', userEmail);
+
         // Redirect to /tab1 after login
         window.location.href = '/tab1';
       } else {
@@ -57,12 +61,13 @@ const Login: React.FC = () => {
       </IonHeader>
       <IonContent fullscreen>
         <div style={{ padding: '16px', textAlign: 'center' }}>
-          <IonText color="primary" style={{ fontSize: '18px', fontWeight: 'bold' }}>
-            <p>You must log in to access the app features.</p>
-          </IonText>
-
+          {/* Login Requirement Message */}
+          {/* Welcome Section */}
           <IonCard>
             <IonCardHeader>
+              <IonText color="primary" style={{ fontSize: '18px', fontWeight: 'bold' }}>
+                <p>You must log in to access the app features.</p>
+              </IonText>
               <IonCardTitle>Welcome to TUD Lost & Found</IonCardTitle>
             </IonCardHeader>
             <IonCardContent>
