@@ -29,18 +29,15 @@ const Login: React.FC = () => {
         console.log('User email:', userEmail);
 
         // Check if the email ends with @mytudublin.ie
-        if (!userEmail.endsWith('@mytudublin.ie')) {
-          console.warn('Unauthorized email. Logging out...');
-          alert('Access denied! You must use a @mytudublin.ie email to log in.');
-          await instance.logoutPopup(); // Log out unauthorized users
-          return;
-        }
+       // if (!userEmail.endsWith('@mytudublin.ie')) {
+         // console.warn('Unauthorized email. Logging out...');
+          //alert('Access denied! You must use a @mytudublin.ie email to log in.');
+          //await instance.logoutPopup(); // Log out unauthorized users
+          //return;
+        //}
 
         console.log('Login successful. Setting active account:', account);
         instance.setActiveAccount(account);
-
-        const userEmail = account.username; // The 'username' field typically contains the email address
-        console.log('User email:', userEmail);
 
         // Redirect to /tab1 after login
         window.location.href = '/tab1';
