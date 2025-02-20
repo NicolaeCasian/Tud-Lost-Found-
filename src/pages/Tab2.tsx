@@ -19,6 +19,8 @@ import {
   IonText,
   IonButtons,
 } from '@ionic/react';
+import Footer from '../components/Footer';
+import Header from '../components/Header';
 import './Tab2.css';
 
 const Tab2: React.FC = () => {
@@ -47,18 +49,7 @@ const Tab2: React.FC = () => {
 
   return (
     <IonPage>
-      {/* Updated Header with Navigation Buttons */}
-      <IonHeader>
-        <IonToolbar color="primary">
-          <IonTitle slot="start">TUD Lost & Found</IonTitle>
-          <IonButtons slot="end">
-            <IonButton routerLink="/home">Home</IonButton>
-            <IonButton routerLink="/report">Report Item</IonButton>
-            <IonButton routerLink="/search">Search</IonButton>
-            <IonButton routerLink="/contact">Contact</IonButton>
-          </IonButtons>
-        </IonToolbar>
-      </IonHeader>
+    <Header />
 
       <IonContent className="ion-padding">
         <IonCard>
@@ -147,47 +138,8 @@ const Tab2: React.FC = () => {
           </IonCardContent>
         </IonCard>
 
-        {/* Footer with Tips and Contact Info */}
-        <IonFooter className="footer-tips">
-          <IonCard className="tips-card">
-            <IonCardContent>
-              <h4>Tips for Reporting Lost Items</h4>
-              <ul>
-                <li>Be as specific as possible in your description</li>
-                <li>Include any unique identifying features</li>
-                <li>Report the loss as soon as possible</li>
-                <li>Check the found items section regularly</li>
-              </ul>
-            </IonCardContent>
-          </IonCard>
-
-          <div className="main-footer">
-            <div className="footer-container">
-              <div className="footer-section">
-                <h4>TUD Lost & Found</h4>
-                <p>Helping students recover lost items across campus.</p>
-              </div>
-
-              <div className="footer-section">
-                <h4>Contact Us</h4>
-                <p>Email: lost.found@tudublin.ie</p>
-                <p>Phone: (01) 323-5041</p>
-              </div>
-
-              <div className="footer-section">
-                <h4>Quick Links</h4>
-                <p><a href="http://localhost:8100/faq">FAQ</a></p>
-                <p><a href="#">Terms of Service</a></p>
-                <p><a href="#">Privacy Policy</a></p>
-              </div>
-            </div>
-
-            <div className="footer-bottom">
-              &copy; 2024 TUD Lost & Found. All rights reserved.
-            </div>
-          </div>
-        </IonFooter>
       </IonContent>
+      <Footer />
     </IonPage>
   );
 };
