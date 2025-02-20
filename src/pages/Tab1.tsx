@@ -36,7 +36,7 @@ const Tab1: React.FC = () => {
     useEffect(() => {
         const fetchLostItems = async () => {
             try {
-                const response = await axios.get('http://localhost:3000/api/lost_items');
+                const response = await axios.get('https://tudlnf-serverv2-90ee51882713.herokuapp.com/api/lost_items');
                 if (response.data.success) {
                     setLostItems(response.data.items);
                 }

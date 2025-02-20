@@ -85,7 +85,7 @@ const Tab2: React.FC = () => {
             formData.append('image', form.image);
 
             try {
-                const response = await fetch('http://localhost:3000/api/report_lost', {
+                const response = await fetch('https://tudlnf-serverv2-90ee51882713.herokuapp.com/api/report_lost', {
                     method: 'POST',
                     body: formData,
                 });
