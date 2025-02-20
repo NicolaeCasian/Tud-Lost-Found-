@@ -176,7 +176,7 @@ const Tab2: React.FC = () => {
 
               <div className="footer-section">
                 <h4>Quick Links</h4>
-                <p><a href="#">FAQ</a></p>
+                <p><a href="http://localhost:8100/faq">FAQ</a></p>
                 <p><a href="#">Terms of Service</a></p>
                 <p><a href="#">Privacy Policy</a></p>
               </div>
