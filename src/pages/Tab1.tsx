@@ -20,7 +20,8 @@ import {
     IonCardContent,
     IonCardHeader,
     IonCardSubtitle,
-    IonCardTitle
+    IonCardTitle,
+    IonSearchbar
 } from '@ionic/react';
 import {useMsal} from '@azure/msal-react';
 import {useHistory} from 'react-router-dom';
@@ -32,6 +33,10 @@ const Tab1: React.FC = () => {
     const {instance} = useMsal();
     const history = useHistory();
     const [lostItems, setLostItems] = useState<any[]>([]);
+    //Tracks last scrool position 
+    const [showSearch, setShowSearch] = useState(true);
+    let lastScrollY = 0; 
+
 
     useEffect(() => {
         const fetchLostItems = async () => {
@@ -44,8 +49,25 @@ const Tab1: React.FC = () => {
                 console.error('Error fetching lost items:', error);
             }
         };
+        
         fetchLostItems();
     }, []);
+
+    useEffect(() => {
+        const handleScroll = () => {
+          const currentScrollY = window.scrollY;
+          if (currentScrollY > lastScrollY) {
+            setShowSearch(false); // Scrolling down → Hide searchbar
+          } else {
+            setShowSearch(true); // Scrolling up → Show searchbar
+          }
+          lastScrollY = currentScrollY;
+        };
+    
+        window.addEventListener('scroll', handleScroll);
+        return () => window.removeEventListener('scroll', handleScroll); // Cleanup
+      }, []);
+    
 
     const logout = async () => {
         try {
@@ -72,13 +94,36 @@ const Tab1: React.FC = () => {
                     <IonContent>
                         <IonList>
                             <IonAccordionGroup>
-                                <IonAccordion value="type">
+                            <IonAccordion value="type">
                                     <IonItem slot="header">
-                                        <IonLabel>Type</IonLabel>
+                                        <IonTitle>Type</IonTitle>
                                     </IonItem>
                                     <div slot="content">
                                         <IonItem lines="none">
-                                            <IonLabel>Jackets</IonLabel>
+                                            <IonLabel>Lost</IonLabel>
+                                            <IonCheckbox slot="end"/>
+                                        </IonItem>
+                                        <IonItem lines="none">
+                                            <IonLabel>Found</IonLabel>
+                                            <IonCheckbox slot="end"/>
+                                        </IonItem>
+                                    </div>
+                                </IonAccordion>
+                                <IonAccordion value="category">
+                                    <IonItem slot="header">
+                                    <IonTitle>Category</IonTitle>
+                                    </IonItem>
+                                    <div slot="content">
+                                        <IonItem lines="none">
+                                            <IonLabel>Electronics</IonLabel>
+                                            <IonCheckbox slot="end"/>
+                                        </IonItem>
+                                        <IonItem lines="none">
+                                            <IonLabel>Clothes</IonLabel>
+                                            <IonCheckbox slot="end"/>
+                                        </IonItem>
+                                        <IonItem lines="none">
+                                            <IonLabel>Backpacks</IonLabel>
                                             <IonCheckbox slot="end"/>
                                         </IonItem>
                                         <IonItem lines="none">
@@ -86,7 +131,15 @@ const Tab1: React.FC = () => {
                                             <IonCheckbox slot="end"/>
                                         </IonItem>
                                         <IonItem lines="none">
-                                            <IonLabel>Chargers</IonLabel>
+                                            <IonLabel>Wallets</IonLabel>
+                                            <IonCheckbox slot="end"/>
+                                        </IonItem>
+                                        <IonItem lines="none">
+                                            <IonLabel>Student ID</IonLabel>
+                                            <IonCheckbox slot="end"/>
+                                        </IonItem>
+                                        <IonItem lines="none">
+                                            <IonLabel>Other</IonLabel>
                                             <IonCheckbox slot="end"/>
                                         </IonItem>
                                     </div>
@@ -95,7 +148,7 @@ const Tab1: React.FC = () => {
                                 {/* Location Filter Accordion */}
                                 <IonAccordion value="location">
                                     <IonItem slot="header">
-                                        <IonLabel>Location</IonLabel>
+                                    <IonTitle>Location</IonTitle>
                                     </IonItem>
                                     <div slot="content">
                                         <IonItem lines="none">
@@ -122,38 +175,61 @@ const Tab1: React.FC = () => {
                                             <IonLabel>Block F</IonLabel>
                                             <IonCheckbox slot="end"/>
                                         </IonItem>
+                                        <IonItem lines="none">
+                                            <IonLabel>Sports Block</IonLabel>
+                                            <IonCheckbox slot="end"/>
+                                        </IonItem>
+                                        <IonItem lines="none">
+                                            <IonLabel>Other</IonLabel>
+                                            <IonCheckbox slot="end"/>
+                                        </IonItem>
                                     </div>
                                 </IonAccordion>
                             </IonAccordionGroup>
+                            <IonGrid>
+                                    <IonRow className="ion-justify-content-center">
+                                     <IonCol size="auto">
+                                      <IonButton>Apply Filters</IonButton>
+                                      </IonCol>
+                                     </IonRow>
+                                    </IonGrid>
+
                         </IonList>
                     </IonContent>
+                   
                 </IonMenu>
 
                 {/* Main Content */}
                 <IonPage id="main-content">
-                    {/* Top Navigation */}
-                    <IonHeader>
-                        <IonToolbar>
-                            {/* Burger Button for Medium/Small Screens */}
-                            <IonButtons slot="start">
-                                <IonMenuButton/>
-                            </IonButtons>
-                            <IonTitle>Lost Items</IonTitle>
-                            <IonButtons slot={"end"}>
-                                <IonRouterLink href={"/Tab2"}>
-                                    <IonButton>
-                                        Report Lost Item
-                                    </IonButton>
-                                    <IonButton onClick={logout}>Logout</IonButton>
-                                </IonRouterLink>
-                            </IonButtons>
-                        </IonToolbar>
-                    </IonHeader>
+      {/* Top Navigation */}
+      <IonHeader>
+        <IonToolbar>
+          {/* Burger Button for Medium/Small Screens */}
+          <IonButtons slot="start">
+            <IonMenuButton />
+          </IonButtons>
+          <IonTitle>Lost Items</IonTitle>
+          <IonButtons slot="end">
+            <IonRouterLink href="/Tab2">
+              <IonButton>Report Lost Item</IonButton>
+              <IonButton>Logout</IonButton>
+            </IonRouterLink>
+          </IonButtons>
+        </IonToolbar>
 
+        {/* Searchbar (Only Show When Scrolling Up) */}
+        {showSearch && (
+          <IonToolbar>
+            <IonSearchbar show-clear-button="focus"></IonSearchbar>
+          </IonToolbar>
+        )}
+      </IonHeader>
                     <IonContent fullscreen>
                         {/* Card Grid */}
                         <IonGrid>
+                            
                             <IonRow>
+                                
                                 {lostItems.length > 0 ? (
                                     lostItems.map((item, index) => (
                                         <IonCol
