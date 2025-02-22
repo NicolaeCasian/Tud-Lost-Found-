@@ -16,6 +16,7 @@ import Tab1 from './pages/Tab1';
 import Tab2 from './pages/Tab2';
 import Tab3 from './pages/Tab3';
 import Login from './pages/Login';
+import Faq from './pages/faq';
 import { MsalProvider } from "@azure/msal-react";
 import { PublicClientApplication } from "@azure/msal-browser";
 import { msalConfig } from './pages/authConfig'; // Your MSAL configuration
@@ -60,6 +61,9 @@ const App: React.FC = () => {
             <Route exact path="/login">
               <Login />
             </Route>
+            <Route exact path="/faq">
+            <Faq />
+          </Route>
             {isAuthenticated ? (
               <IonTabs>
                 <IonRouterOutlet>
@@ -91,6 +95,7 @@ const App: React.FC = () => {
                   </IonTabButton>
                 </IonTabBar>
               </IonTabs>
+              
             ) : (
               <Redirect to="/login" />
             )}
