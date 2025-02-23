@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { Redirect, Route } from 'react-router-dom';
+import { Redirect, Route, useHistory } from 'react-router-dom';
 import {
+  IonAlert,
   IonApp,
   IonIcon,
   IonLabel,
@@ -9,7 +10,6 @@ import {
   IonTabButton,
   IonTabs,
   setupIonicReact,
- 
 } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
 import { searchOutline, addCircleOutline, personCircleOutline } from 'ionicons/icons';
@@ -20,8 +20,7 @@ import Login from './pages/Login';
 import Faq from './pages/faq';
 import { MsalProvider } from "@azure/msal-react";
 import { PublicClientApplication } from "@azure/msal-browser";
-import { msalConfig } from './pages/authConfig'; // Your MSAL configuration
-
+import { msalConfig } from './pages/authConfig';
 
 /* Core CSS required for Ionic components to work properly */
 import '@ionic/react/css/core.css';
@@ -35,9 +34,7 @@ import '@ionic/react/css/text-transformation.css';
 import '@ionic/react/css/flex-utils.css';
 import '@ionic/react/css/display.css';
 import './theme/variables.css';
-
 import '@ionic/react/css/palettes/dark.system.css';
-
 
 setupIonicReact();
 
@@ -49,10 +46,21 @@ const App: React.FC = () => {
     !!msalInstance.getActiveAccount()
   );
 
+  const [showAlert, setShowAlert] = useState(false);
+  const history = useHistory(); // Used for navigation
+
   useEffect(() => {
     const account = msalInstance.getActiveAccount();
     setIsAuthenticated(!!account);
   }, []);
+
+  // Function to navigate and close alert
+  const navigateTo = (path: string) => {
+    setShowAlert(false); // Close the alert first
+    setTimeout(() => {
+      history.push(path); // Navigate after alert closes
+    }, 300); // Small delay ensures smooth navigation
+  };
 
   return (
     <MsalProvider instance={msalInstance}>
@@ -63,8 +71,8 @@ const App: React.FC = () => {
               <Login />
             </Route>
             <Route exact path="/faq">
-            <Faq />
-          </Route>
+              <Faq />
+            </Route>
             {isAuthenticated ? (
               <IonTabs>
                 <IonRouterOutlet>
@@ -81,22 +89,24 @@ const App: React.FC = () => {
                     <Redirect to="/tab1" />
                   </Route>
                 </IonRouterOutlet>
+
                 <IonTabBar slot="bottom">
                   <IonTabButton tab="tab1" href="/tab1">
-                    <IonIcon aria-hidden="true" icon={searchOutline} />
+                    <IonIcon icon={searchOutline} />
                     <IonLabel>Items</IonLabel>
                   </IonTabButton>
-                  <IonTabButton tab="tab2" href="/tab2">
-                    <IonIcon aria-hidden="true" icon={addCircleOutline} />
+                
+                  <IonTabButton tab="tab2" href='/tab2'>
+                    <IonIcon icon={addCircleOutline} />
                     <IonLabel>Report Items</IonLabel>
                   </IonTabButton>
+
                   <IonTabButton tab="tab3" href="/tab3">
-                    <IonIcon aria-hidden="true" icon={personCircleOutline} />
+                    <IonIcon icon={personCircleOutline} />
                     <IonLabel>Account</IonLabel>
                   </IonTabButton>
                 </IonTabBar>
               </IonTabs>
-              
             ) : (
               <Redirect to="/login" />
             )}
