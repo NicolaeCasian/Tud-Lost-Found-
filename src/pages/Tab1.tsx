@@ -264,8 +264,9 @@ const Tab1: React.FC = () => {
                                 )}
                             </IonRow>
                         </IonGrid>
+                        <Footer/>
                     </IonContent>
-                    <Footer/>
+                    
                 </IonPage>
             </IonSplitPane>
         </IonPage>
