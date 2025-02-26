@@ -37,6 +37,7 @@ import '@ionic/react/css/display.css';
 import './theme/variables.css';
 
 import '@ionic/react/css/palettes/dark.system.css';
+import Found from './pages/found'; // Import the Found component
 
 
 setupIonicReact();
@@ -64,6 +65,9 @@ const App: React.FC = () => {
             </Route>
             <Route exact path="/faq">
             <Faq />
+          </Route>
+          <Route exact path="/found">
+            <Found />
           </Route>
             {isAuthenticated ? (
               <IonTabs>

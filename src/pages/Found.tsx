@@ -19,11 +19,11 @@ import {
     IonText, IonSelectOption, IonSelect, IonAlert,
 } from '@ionic/react';
 import { useHistory } from 'react-router-dom';
-import './Tab2.css';
+import './Found.css';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 
-const Tab2: React.FC = () => {
+const Found: React.FC = () => {
     
     const [form, setForm] = useState<{
         itemName: string;
@@ -262,4 +262,4 @@ const Tab2: React.FC = () => {
     );
 };
 
-export default Tab2;  //cecd
+export default Found;  //cecd
