@@ -27,6 +27,7 @@ import {useMsal} from '@azure/msal-react';
 import {useHistory} from 'react-router-dom';
 import axios from 'axios';
 import Footer from '../components/Footer';
+import Header from '../components/Header';
 
 import './Tab1.css';
 
@@ -204,27 +205,26 @@ const Tab1: React.FC = () => {
                 <IonPage id="main-content">
       {/* Top Navigation */}
       <IonHeader>
-        <IonToolbar>
+        <IonToolbar color="primary">
           {/* Burger Button for Medium/Small Screens */}
           <IonButtons slot="start">
             <IonMenuButton />
           </IonButtons>
-          <IonTitle>Lost Items</IonTitle>
-          <IonButtons slot="end">
-            <IonRouterLink href="/Tab2">
-              <IonButton>Report Lost Item</IonButton>
-              <IonButton>Logout</IonButton>
-            </IonRouterLink>
-          </IonButtons>
+         <IonTitle slot="start">TUD Lost & Found</IonTitle>
+                 <IonButtons slot="end">
+                   <IonButton routerLink="/home">Home</IonButton>
+                   <IonButton routerLink="/contact">Contact</IonButton>
+                 </IonButtons>
         </IonToolbar>
 
         {/* Searchbar (Only Show When Scrolling Up) */}
         {showSearch && (
-          <IonToolbar>
-            <IonSearchbar show-clear-button="focus"></IonSearchbar>
-          </IonToolbar>
-        )}
+        <IonToolbar>
+          <IonSearchbar show-clear-button="focus"></IonSearchbar>
+        </IonToolbar>
+      )}
       </IonHeader>
+      
                     <IonContent fullscreen>
                         {/* Card Grid */}
                         <IonGrid>
