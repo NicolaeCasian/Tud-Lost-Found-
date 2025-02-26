@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import {
     IonContent,
     IonHeader,
@@ -25,129 +25,89 @@ import Footer from '../components/Footer';
 
 const Found: React.FC = () => {
     
-    const [form, setForm] = useState<{
-        itemName: string;
-        category: string;
-        description: string;
-        locationLost: string;
-        dateLost: string;
-        contactInfo: string;
-        image: File | null; // Image field added here
-    }>({
+    const [form, setForm] = useState({
         itemName: '',
         category: '',
         description: '',
-        locationLost: '',
+        locationFound: '',
         dateLost: '',
         contactInfo: '',
-        image: null, // Initialize image as null
+        image: null,
     });
     const [showAlert, setShowAlert] = useState(false);
     const [alertMessage, setAlertMessage] = useState('');
     const history = useHistory();
-
-    const [imagePreview, setImagePreview] = useState<string | null>(null); // Store the image preview URL
+    const [imagePreview, setImagePreview] = useState<string | null>(null);
 
     const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const file = e.target.files?.[0]; // Use optional chaining to avoid null issues
+        const file = e.target.files?.[0];
         if (file) {
-            const validTypes = ['image/jpeg', 'image/png', 'image/jpg, image/heic'];
+            const validTypes = ['image/jpeg', 'image/png', 'image/jpg', 'image/heic'];
             if (!validTypes.includes(file.type)) {
-                alert('Only JPEG and PNG images are allowed.');
+                alert('Only JPEG, PNG, and HEIC images are allowed.');
                 return;
             }
 
-            const imageURL = URL.createObjectURL(file);
-            setImagePreview(imageURL); // Update the preview state
-
-            // Update the form state with the image file
-            setForm((prevForm) => ({
-                ...prevForm,
-                image: file,
-            }));
+            setImagePreview(URL.createObjectURL(file));
+            setForm((prevForm) => ({ ...prevForm, image: file }));
         }
     };
 
-
-    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const handleInputChange = (e: any) => {
         const { name, value } = e.target;
         setForm(prevForm => ({ ...prevForm, [name]: value }));
     };
 
     const handleSubmit = async () => {
-
-        // Check if an image was selected and create FormData
-        if (form.image) {
-            const formData = new FormData();
-            formData.append('name', form.itemName);
-            formData.append('category', form.category);
-            formData.append('description', form.description);
-            formData.append('location', form.locationLost);
-            formData.append('dateLost', form.dateLost);
-            formData.append('email', form.contactInfo);
-            formData.append('image', form.image);
-
-            try {
-                const response = await fetch('https://tudlnf-serverv2-90ee51882713.herokuapp.com/api/report_lost', {
-                    method: 'POST',
-                    body: formData,
-                });
-                const data = await response.json();
-                if (data.success) {
-                    setAlertMessage('Your report has been submitted successfully. We will notify you if someone finds your lost item.');
-                    setShowAlert(true);
-                    // console.log('Inserted Item ID:', data.itemId);
-                } else {
-                    alert('Something went wrong!');
-                }
-            } catch (error) {
-                console.error('Error submitting form:', error);
-                alert('Failed to submit the report!');
-            }
-        } else {
+        if (!form.image) {
             alert('Please upload an image!');
+            return;
+        }
+
+        const formData = new FormData();
+        formData.append('name', form.itemName);
+        formData.append('category', form.category);
+        formData.append('description', form.description);
+        formData.append('location', form.locationFound);
+        formData.append('dateLost', new Date(form.dateLost).toLocaleDateString('en-US'));
+        formData.append('email', form.contactInfo);
+        formData.append('image', form.image);
+
+        try {
+            const response = await fetch('https://tudlnf-serverv2-90ee51882713.herokuapp.com/api/report_lost', {
+                method: 'POST',
+                body: formData,
+            });
+            const data = await response.json();
+            if (data.success) {
+                setAlertMessage('Your report has been submitted successfully. We will notify you if someone claims the item.');
+                setShowAlert(true);
+            } else {
+                alert(data.message || 'Something went wrong!');
+            }
+        } catch (error) {
+            console.error('Error submitting form:', error);
+            alert('Failed to submit the report!');
         }
     };
 
-    const navigateToLostItems = () => {
-        history.push('/tab1'); // Navigate to the Lost Items page
-    };
-
     return (
-        
         <IonPage>
-            <IonHeader>
-                <IonToolbar>
-                    <IonTitle>Report Lost Item</IonTitle>
-                </IonToolbar>
-            </IonHeader>
-            <Header/>
-            
-
-          <IonContent className="ion-padding">
+            <Header />
+            <IonContent className="ion-padding">
                 <IonCard>
                     <IonCardHeader>
-                        <IonCardTitle>Report Lost Item</IonCardTitle>
+                        <IonCardTitle>Report Found Item</IonCardTitle>
                     </IonCardHeader>
                     <IonCardContent>
                         <IonItem>
                             <IonLabel position="stacked">Item Name</IonLabel>
-                            <IonInput
-                                name="itemName"
-                                value={form.itemName}
-                                placeholder="Enter item name"
-                                onIonChange={(e) => handleInputChange(e)}
-                            />
+                            <IonInput name="itemName" value={form.itemName} placeholder="Enter item name" onIonChange={handleInputChange} />
                         </IonItem>
 
                         <IonItem>
                             <IonLabel position="stacked">Category</IonLabel>
-                            <IonSelect
-                                name="category"
-                                value={form.category}
-                                placeholder="Select category"
-                                onIonChange={(e) => handleInputChange(e)}
-                            >
+                            <IonSelect name="category" value={form.category} placeholder="Select category" onIonChange={(e) => setForm(prevForm => ({ ...prevForm, category: e.detail.value }))}>
                                 <IonSelectOption value="Electronics">Electronics</IonSelectOption>
                                 <IonSelectOption value="Clothes">Clothes</IonSelectOption>
                                 <IonSelectOption value="Backpacks">Backpacks</IonSelectOption>
@@ -159,34 +119,8 @@ const Found: React.FC = () => {
                         </IonItem>
 
                         <IonItem>
-                            <IonLabel position="stacked">Description</IonLabel>
-                            <IonTextarea
-                                name="description"
-                                value={form.description}
-                                placeholder="Describe the item"
-                                onIonChange={(e) => handleInputChange(e)}
-                            />
-                        </IonItem>
-
-                        <IonItem>
-                            <IonLabel position="stacked">Contact Information</IonLabel>
-                            <IonInput
-                                name="contactInfo"
-                                value={form.contactInfo}
-                                type="email"
-                                placeholder="Enter email"
-                                onIonChange={(e) => handleInputChange(e)}
-                            />
-                        </IonItem>
-
-                        <IonItem>
-                            <IonLabel position="stacked">Location Lost</IonLabel>
-                            <IonSelect
-                                name="locationLost"
-                                value={form.locationLost}
-                                placeholder="Select location"
-                                onIonChange={(e) => handleInputChange(e)}
-                            >
+                            <IonLabel position="stacked">Location Found</IonLabel>
+                            <IonSelect name="locationFound" value={form.locationFound} placeholder="Select location" onIonChange={(e) => setForm(prevForm => ({ ...prevForm, locationFound: e.detail.value }))}>
                                 <IonSelectOption value="A Block">A Block</IonSelectOption>
                                 <IonSelectOption value="B Block">B Block</IonSelectOption>
                                 <IonSelectOption value="C Block">C Block</IonSelectOption>
@@ -199,67 +133,28 @@ const Found: React.FC = () => {
                         </IonItem>
 
                         <IonItem>
-                            <IonLabel position="stacked">Date Lost</IonLabel>
-                            <IonDatetime
-                                display-format="MM/DD/YYYY"
-                                name="dateLost"
-                                value={form.dateLost}
-                                onIonChange={(e) => handleInputChange(e)}
-                            />
+                            <IonLabel position="stacked">Date Found</IonLabel>
+                            <IonDatetime displayFormat="MM/DD/YYYY" name="dateLost" value={form.dateLost} onIonChange={(e) => setForm(prevForm => ({ ...prevForm, dateLost: e.detail.value }))} />
                         </IonItem>
 
                         <IonItem>
                             <IonLabel position="stacked">Upload Image</IonLabel>
-                            <input
-                                type="file"
-                                accept="image/png, image/jpeg, image/jpg, image/heic"
-                                style={{display: 'none'}}
-                                id="upload-image"
-                                onChange={(e) => handleImageUpload(e)}
-                            />
-                            <IonButton expand="block" color="success" className="image-button"
-                                       onClick={() => document.getElementById('upload-image')?.click()}>
+                            <input type="file" accept="image/png, image/jpeg, image/jpg, image/heic" style={{ display: 'none' }} id="upload-image" onChange={handleImageUpload} />
+                            <IonButton expand="block" color="success" onClick={() => document.getElementById('upload-image')?.click()}>
                                 Insert Image
                             </IonButton>
                         </IonItem>
 
-                        {/* Display the image preview if it exists */}
-                        {imagePreview && (
-                            <div>
-                                <p>Image Preview:</p>
-                                <img src={imagePreview} alt="Image Preview" style={{ width: '200px', height: 'auto' }} />
-                            </div>
-                        )}
+                        {imagePreview && <img src={imagePreview} alt="Image Preview" style={{ width: '200px', height: 'auto' }} />}
 
-                        <IonButton expand="block" color="primary" onClick={handleSubmit} className="submit-button">
-                            Submit Report
-                        </IonButton>
+                        <IonButton expand="block" color="primary" onClick={handleSubmit}>Submit Report</IonButton>
                     </IonCardContent>
                 </IonCard>
-
-               
-                <IonAlert
-                    isOpen={showAlert}
-                    onDidDismiss={() => setShowAlert(false)}
-                    header={'Success!'}
-                    message={alertMessage}
-                    buttons={[
-                        {
-                            text: 'Go to Lost Items',
-                            handler: () => navigateToLostItems(),
-                        },
-                        {
-                            text: 'Okay',
-                            role: 'cancel',
-                        },
-                    ]}
-                />
-                 <Footer/>
+                <IonAlert isOpen={showAlert} onDidDismiss={() => setShowAlert(false)} header={'Success!'} message={alertMessage} buttons={[{ text: 'Okay', role: 'cancel' }]} />
+                <Footer />
             </IonContent>
         </IonPage>
-        
-        
     );
 };
 
-export default Found;  //cecd
+export default Found;

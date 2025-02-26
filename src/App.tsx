@@ -18,6 +18,7 @@ import Tab2 from './pages/Tab2';
 import Tab3 from './pages/Tab3';
 import Login from './pages/Login';
 import Faq from './pages/faq';
+import Found from './pages/Found'; // Import the Found component
 import { MsalProvider } from "@azure/msal-react";
 import { PublicClientApplication } from "@azure/msal-browser";
 import { msalConfig } from './pages/authConfig'; // Your MSAL configuration
@@ -37,7 +38,7 @@ import '@ionic/react/css/display.css';
 import './theme/variables.css';
 
 import '@ionic/react/css/palettes/dark.system.css';
-import Found from './pages/found'; // Import the Found component
+
 
 
 setupIonicReact();
