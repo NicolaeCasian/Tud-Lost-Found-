@@ -26,6 +26,7 @@ import {
 import {useMsal} from '@azure/msal-react';
 import {useHistory} from 'react-router-dom';
 import axios from 'axios';
+import Footer from '../components/Footer';
 
 import './Tab1.css';
 
@@ -264,9 +265,11 @@ const Tab1: React.FC = () => {
                             </IonRow>
                         </IonGrid>
                     </IonContent>
+                    <Footer/>
                 </IonPage>
             </IonSplitPane>
         </IonPage>
+        
     );
 };
 

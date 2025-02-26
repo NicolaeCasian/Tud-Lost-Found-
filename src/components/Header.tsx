@@ -12,7 +12,7 @@ const Header: React.FC = () => {
         <IonTitle slot="start">TUD Lost & Found</IonTitle>
         <IonButtons slot="end">
           <IonButton routerLink="/home">Home</IonButton>
-          <IonButton routerLink="/report">Report Item</IonButton>
+          <IonButton routerLink="/report">Report Lost Item</IonButton>
           <IonButton routerLink="/search">Search</IonButton>
           <IonButton routerLink="/contact">Contact</IonButton>
         </IonButtons>
