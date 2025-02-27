@@ -4,14 +4,19 @@ import {
     IonAccordion,
     IonAccordionGroup,
     IonButton,
-    IonButtons, IonCheckbox,
+    IonButtons, 
+    IonCheckbox,
     IonCol,
     IonContent,
     IonGrid,
-    IonHeader, IonItem,
-    IonLabel, IonList,
-    IonMenu, IonMenuButton, IonMenuToggle,
-    IonPage, IonRouterLink,
+    IonHeader, 
+    IonItem,
+    IonLabel, 
+    IonList,
+    IonMenu, IonMenuButton, 
+    IonMenuToggle,
+    IonPage, 
+    IonRouterLink,
     IonRow,
     IonSplitPane,
     IonTitle,
@@ -35,6 +40,9 @@ const Tab1: React.FC = () => {
     const {instance} = useMsal();
     const history = useHistory();
     const [lostItems, setLostItems] = useState<any[]>([]);
+    const [currentPage, setCurrentPage] = useState(1);
+    const itemsPerPage = 6;
+    const maxPages = 5;
     //Tracks last scrool position 
     const [showSearch, setShowSearch] = useState(true);
     let lastScrollY = 0; 
@@ -54,6 +62,11 @@ const Tab1: React.FC = () => {
         
         fetchLostItems();
     }, []);
+
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    const displayedItems = lostItems.slice(startIndex, startIndex + itemsPerPage);
+
+
 
     useEffect(() => {
         const handleScroll = () => {
@@ -231,8 +244,8 @@ const Tab1: React.FC = () => {
                             
                             <IonRow>
                                 
-                                {lostItems.length > 0 ? (
-                                    lostItems.map((item, index) => (
+                                {displayedItems.length > 0 ? (
+                                    displayedItems.map((item, index) => (
                                         <IonCol
                                             size="12"
                                             sizeLg="6"
@@ -264,6 +277,21 @@ const Tab1: React.FC = () => {
                                 )}
                             </IonRow>
                         </IonGrid>
+
+                        {/* Pagination */}
+                        <IonGrid>
+                            <IonRow className="ion-justify-content-center">
+                                <IonButton disabled={currentPage === 1} onClick ={() => setCurrentPage(currentPage - 1)}>
+                                    Previous
+                                    </IonButton>
+                                    <span>Page {currentPage} of {Math.min(maxPages, Math.ceil(lostItems.length / itemsPerPage))} </span>
+                                    <IonButton disabled={currentPage === Math.min(maxPages, Math.ceil(lostItems.length / itemsPerPage))} onClick ={() => setCurrentPage(currentPage + 1)}>
+                                        Next
+                                    </IonButton>
+                                    </IonRow>
+                                    </IonGrid>
+
+                    
                         <Footer/>
                     </IonContent>
                     

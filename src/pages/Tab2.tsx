@@ -20,6 +20,7 @@ import {
 } from '@ionic/react';
 import { useHistory } from 'react-router-dom';
 import './Tab2.css';
+import Header from '../components/Header';
 import Footer from '../components/Footer';
 
 const Tab2: React.FC = () => {
@@ -113,11 +114,7 @@ const Tab2: React.FC = () => {
 
     return (
         <IonPage>
-            <IonHeader>
-                <IonToolbar>
-                    <IonTitle>Report Lost Item</IonTitle>
-                </IonToolbar>
-            </IonHeader>
+            < Header />
 
             <IonContent className="ion-padding">
                 <IonCard>
