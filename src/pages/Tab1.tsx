@@ -26,13 +26,15 @@ import {
     IonCardHeader,
     IonCardSubtitle,
     IonCardTitle,
-    IonSearchbar
+    IonSearchbar,
+    IonIcon
 } from '@ionic/react';
 import {useMsal} from '@azure/msal-react';
 import {useHistory} from 'react-router-dom';
 import axios from 'axios';
 import Footer from '../components/Footer';
 import Header from '../components/Header';
+import { chevronBackOutline, chevronForwardOutline } from "ionicons/icons";
 
 import './Tab1.css';
 
@@ -279,17 +281,32 @@ const Tab1: React.FC = () => {
                         </IonGrid>
 
                         {/* Pagination */}
-                        <IonGrid>
-                            <IonRow className="ion-justify-content-center">
-                                <IonButton disabled={currentPage === 1} onClick ={() => setCurrentPage(currentPage - 1)}>
-                                    Previous
-                                    </IonButton>
-                                    <span>Page {currentPage} of {Math.min(maxPages, Math.ceil(lostItems.length / itemsPerPage))} </span>
-                                    <IonButton disabled={currentPage === Math.min(maxPages, Math.ceil(lostItems.length / itemsPerPage))} onClick ={() => setCurrentPage(currentPage + 1)}>
-                                        Next
-                                    </IonButton>
-                                    </IonRow>
-                                    </IonGrid>
+{/* Pagination */}
+<IonGrid>
+    <IonRow className="ion-align-items-center ion-justify-content-center">
+        <IonCol size="auto">
+            <IonButton 
+                disabled={currentPage === 1} 
+                onClick={() => setCurrentPage(currentPage - 1)}
+            >
+                <IonIcon icon={chevronBackOutline} />
+            </IonButton>
+        </IonCol>
+        
+        <IonCol size="auto" className="ion-text-center">
+            <span>Page {currentPage} of {Math.min(maxPages, Math.ceil(lostItems.length / itemsPerPage))}</span>
+        </IonCol>
+
+        <IonCol size="auto">
+            <IonButton 
+                disabled={currentPage === Math.min(maxPages, Math.ceil(lostItems.length / itemsPerPage))} 
+                onClick={() => setCurrentPage(currentPage + 1)}
+            >
+                <IonIcon icon={chevronForwardOutline} />
+            </IonButton>
+        </IonCol>
+    </IonRow>
+</IonGrid>
 
                     
                         <Footer/>
