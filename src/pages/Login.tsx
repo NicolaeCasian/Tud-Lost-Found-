@@ -111,6 +111,7 @@ const Login: React.FC = () => {
             </IonText>
           </div>
         </div>
+        
       </IonContent>
     </IonPage>
   );
