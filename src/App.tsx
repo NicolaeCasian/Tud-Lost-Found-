@@ -67,15 +67,16 @@ const App: React.FC = () => {
             <Route exact path="/faq">
             <Faq />
           </Route>
-          <Route exact path="/found">
-            <Found />
-          </Route>
+          
             {isAuthenticated ? (
               <IonTabs>
                 <IonRouterOutlet>
                   <Route exact path="/tab1">
                     <Tab1 />
                   </Route>
+                  <Route exact path="/found">
+            <Found />
+          </Route>
                   <Route exact path="/tab2">
                     <Tab2 />
                   </Route>

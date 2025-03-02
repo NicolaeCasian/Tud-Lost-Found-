@@ -16,7 +16,10 @@ import {
     IonCardTitle,
     IonCardContent,
     IonFooter,
-    IonText, IonSelectOption, IonSelect, IonAlert, IonToggle,
+    IonText, IonSelectOption, IonSelect, IonAlert,
+    IonCol,
+    IonGrid,
+    IonRow,
 } from '@ionic/react';
 import { useHistory } from 'react-router-dom';
 import './Tab2.css';
@@ -24,12 +27,6 @@ import Header from '../components/Header';
 import Footer from '../components/Footer';
 
 const Tab2: React.FC = () => {
-    const [formType, setFormType] = useState<'lost' | 'found'>('lost'); // Toggle between 'lost' and 'found'
-
-    const toggleFormType = () => {
-        setFormType(prevType => (prevType === 'lost' ? 'found' : 'lost'));
-    };
-
     const [form, setForm] = useState<{
         itemName: string;
         category: string;
@@ -72,6 +69,7 @@ const Tab2: React.FC = () => {
             }));
         }
     };
+
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         const { name, value } = e.target;
@@ -119,18 +117,23 @@ const Tab2: React.FC = () => {
 
     return (
         <IonPage>
-            < Header />
+            <Header />
 
             <IonContent className="ion-padding">
+            <IonGrid>
+                <IonRow className="ion-justify-content-center">
+                    <IonCol size="6">
+                      <IonButton expand="full" color="secondary" routerLink='/tab2'>Report Lost</IonButton>
+                 </IonCol>
+                    <IonCol size="6">
+                  <IonButton expand="full" color="primary" routerLink='found'>Report Found</IonButton>
+                 </IonCol>
+                </IonRow>
+             </IonGrid>
                 <IonCard>
+               
                     <IonCardHeader>
-                        <IonCardTitle>Report Item</IonCardTitle>
-                        <IonToggle
-                            checked={formType === 'found'}
-                            onIonChange={toggleFormType}
-                            labelPlacement="start"
-                            label="Switch to Found"
-                        />
+                        <IonCardTitle>Report Lost Item</IonCardTitle>
                     </IonCardHeader>
                     <IonCardContent>
                         <IonItem>
@@ -182,61 +185,34 @@ const Tab2: React.FC = () => {
                             />
                         </IonItem>
 
-                        {formType === 'lost' && (
-                            <IonItem>
-                                <IonLabel position="stacked">Location Lost</IonLabel>
-                                <IonSelect
-                                    name="locationLost"
-                                    value={form.locationLost}
-                                    placeholder="Select location"
-                                    onIonChange={(e) => handleInputChange(e)}
-                                >
-                                    <IonSelectOption value="A Block">A Block</IonSelectOption>
-                                    <IonSelectOption value="B Block">B Block</IonSelectOption>
-                                    <IonSelectOption value="C Block">C Block</IonSelectOption>
-                                    <IonSelectOption value="D Block">D Block</IonSelectOption>
-                                    <IonSelectOption value="E Block">E Block</IonSelectOption>
-                                    <IonSelectOption value="F Block">F Block</IonSelectOption>
-                                    <IonSelectOption value="Sports Block">Sports Block</IonSelectOption>
-                                    <IonSelectOption value="Other">Other</IonSelectOption>
-                                </IonSelect>
-                            </IonItem>
-                        )}
+                        <IonItem>
+                            <IonLabel position="stacked">Location Lost</IonLabel>
+                            <IonSelect
+                                name="locationLost"
+                                value={form.locationLost}
+                                placeholder="Select location"
+                                onIonChange={(e) => handleInputChange(e)}
+                            >
+                                <IonSelectOption value="A Block">A Block</IonSelectOption>
+                                <IonSelectOption value="B Block">B Block</IonSelectOption>
+                                <IonSelectOption value="C Block">C Block</IonSelectOption>
+                                <IonSelectOption value="D Block">D Block</IonSelectOption>
+                                <IonSelectOption value="E Block">E Block</IonSelectOption>
+                                <IonSelectOption value="F Block">F Block</IonSelectOption>
+                                <IonSelectOption value="Sports Block">Sports Block</IonSelectOption>
+                                <IonSelectOption value="Other">Other</IonSelectOption>
+                            </IonSelect>
+                        </IonItem>
 
-
-
-                        {formType === 'found' && (
-                            <IonItem>
-                                <IonLabel position="stacked">Location Found</IonLabel>
-                                <IonSelect
-                                    name="locationFound"
-                                    value={form.locationLost}
-                                    placeholder="Select location"
-                                    onIonChange={(e) => handleInputChange(e)}
-                                >
-                                    <IonSelectOption value="A Block">A Block</IonSelectOption>
-                                    <IonSelectOption value="B Block">B Block</IonSelectOption>
-                                    <IonSelectOption value="C Block">C Block</IonSelectOption>
-                                    <IonSelectOption value="D Block">D Block</IonSelectOption>
-                                    <IonSelectOption value="E Block">E Block</IonSelectOption>
-                                    <IonSelectOption value="F Block">F Block</IonSelectOption>
-                                    <IonSelectOption value="Sports Block">Sports Block</IonSelectOption>
-                                    <IonSelectOption value="Other">Other</IonSelectOption>
-                                </IonSelect>
-                            </IonItem>
-                        )}  
-
-                        {formType === 'lost' && (
-                            <IonItem>
-                                <IonLabel position="stacked">Date Lost</IonLabel>
-                                <IonDatetime
-                                    display-format="MM/DD/YYYY"
-                                    name="dateLost"
-                                    value={form.dateLost}
-                                    onIonChange={(e) => handleInputChange(e)}
-                                />
-                            </IonItem>
-                        )}
+                        <IonItem>
+                            <IonLabel position="stacked">Date Lost</IonLabel>
+                            <IonDatetime
+                                display-format="MM/DD/YYYY"
+                                name="dateLost"
+                                value={form.dateLost}
+                                onIonChange={(e) => handleInputChange(e)}
+                            />
+                        </IonItem>
 
                         <IonItem>
                             <IonLabel position="stacked">Upload Image</IonLabel>
@@ -268,8 +244,23 @@ const Tab2: React.FC = () => {
                 </IonCard>
 
                 <IonFooter className="footer-tips">
+                    <IonCard>
+                        <IonCardHeader>
+                            <IonCardTitle>Tips for Reporting Lost Items:</IonCardTitle>
+                        </IonCardHeader>
+                        <IonCardContent>
+                            <IonText>
+                                <h4></h4>
+                                <ul>
+                                    <li>Be specific in your description.</li>
+                                    <li>Include identifying features.</li>
+                                    <li>Report the loss quickly.</li>
+                                    <li>Check the found items section regularly.</li>
+                                </ul>
+                            </IonText>
+                        </IonCardContent>
+                    </IonCard>
                 </IonFooter>
-
                 <IonAlert
                     isOpen={showAlert}
                     onDidDismiss={() => setShowAlert(false)}
@@ -286,11 +277,10 @@ const Tab2: React.FC = () => {
                         },
                     ]}
                 />
-                <Footer />
+                <Footer></Footer>
             </IonContent>
-
         </IonPage>
     );
 };
 
-export default Tab2;
+export default Tab2;  

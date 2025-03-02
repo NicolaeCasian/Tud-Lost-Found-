@@ -17,12 +17,14 @@ import {
     IonCardContent,
     IonFooter,
     IonText, IonSelectOption, IonSelect, IonAlert,
+    
 } from '@ionic/react';
 import { useHistory } from 'react-router-dom';
 import './Tab3.css';
 
 import Header from '../components/Header';
 import Footer from '../components/Footer';
+import ExploreContainer from '../components/ExploreContainer';
 
 const Tab3: React.FC = () => {
   return (
