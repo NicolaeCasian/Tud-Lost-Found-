@@ -6,17 +6,7 @@ import { IonFooter,
 const Footer: React.FC = () => {
   return (
     <IonFooter className="footer-tips">
-      <IonCard className="tips-card">
-        <IonCardContent>
-          <h4>Tips for Reporting Lost Items</h4>
-          <ul>
-            <li>Be as specific as possible in your description</li>
-            <li>Include any unique identifying features</li>
-            <li>Report the loss as soon as possible</li>
-            <li>Check the found items section regularly</li>
-          </ul>
-        </IonCardContent>
-      </IonCard>
+      
 
       <div className="main-footer">
         <div className="footer-container">

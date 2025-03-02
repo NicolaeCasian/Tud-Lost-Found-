@@ -17,12 +17,18 @@ import {
     IonCardContent,
     IonFooter,
     IonText, IonSelectOption, IonSelect, IonAlert,
+    IonCol,
+    IonGrid,
+    IonRow,
 } from '@ionic/react';
 import { useHistory } from 'react-router-dom';
 import './Tab2.css';
+import Header from '../components/Header';
+import Footer from '../components/Footer';
 
 const Tab2: React.FC = () => {
     const [form, setForm] = useState<{
+        type: string;
         itemName: string;
         category: string;
         description: string;
@@ -31,6 +37,7 @@ const Tab2: React.FC = () => {
         contactInfo: string;
         image: File | null; // Image field added here
     }>({
+        type: 'lost',
         itemName: '',
         category: '',
         description: '',
@@ -76,6 +83,7 @@ const Tab2: React.FC = () => {
         // Check if an image was selected and create FormData
         if (form.image) {
             const formData = new FormData();
+            formData.append('type', 'lost');
             formData.append('name', form.itemName);
             formData.append('category', form.category);
             formData.append('description', form.description);
@@ -112,14 +120,21 @@ const Tab2: React.FC = () => {
 
     return (
         <IonPage>
-            <IonHeader>
-                <IonToolbar>
-                    <IonTitle>Report Lost Item</IonTitle>
-                </IonToolbar>
-            </IonHeader>
+            <Header />
 
             <IonContent className="ion-padding">
+            <IonGrid>
+                <IonRow className="ion-justify-content-center">
+                    <IonCol size="6">
+                      <IonButton expand="full" color="secondary" routerLink='/tab2'>Report Lost</IonButton>
+                 </IonCol>
+                    <IonCol size="6">
+                  <IonButton expand="full" color="primary" routerLink='found'>Report Found</IonButton>
+                 </IonCol>
+                </IonRow>
+             </IonGrid>
                 <IonCard>
+               
                     <IonCardHeader>
                         <IonCardTitle>Report Lost Item</IonCardTitle>
                     </IonCardHeader>
@@ -265,9 +280,10 @@ const Tab2: React.FC = () => {
                         },
                     ]}
                 />
+                <Footer></Footer>
             </IonContent>
         </IonPage>
     );
 };
 
-export default Tab2;  //cecd
+export default Tab2;  

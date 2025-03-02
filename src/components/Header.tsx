@@ -11,9 +11,7 @@ const Header: React.FC = () => {
       <IonToolbar color="primary">
         <IonTitle slot="start">TUD Lost & Found</IonTitle>
         <IonButtons slot="end">
-          <IonButton routerLink="/home">Home</IonButton>
-          <IonButton routerLink="/report">Report Item</IonButton>
-          <IonButton routerLink="/search">Search</IonButton>
+          <IonButton routerLink="/home">Home</IonButton> 
           <IonButton routerLink="/contact">Contact</IonButton>
         </IonButtons>
       </IonToolbar>
