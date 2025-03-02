@@ -28,6 +28,7 @@ import Footer from '../components/Footer';
 
 const Found: React.FC = () => {
     const [form, setForm] = useState<{
+        type: string;
         itemName: string;
         category: string;
         description: string;
@@ -36,6 +37,7 @@ const Found: React.FC = () => {
         contactInfo: string;
         image: File | null; // Image field added here
     }>({
+        type: 'found',
         itemName: '',
         category: '',
         description: '',
