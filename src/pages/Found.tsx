@@ -81,6 +81,7 @@ const Found: React.FC = () => {
         // Check if an image was selected and create FormData
         if (form.image) {
             const formData = new FormData();
+            formData.append('type', 'found');
             formData.append('name', form.itemName);
             formData.append('category', form.category);
             formData.append('description', form.description);
@@ -207,7 +208,7 @@ const Found: React.FC = () => {
                             <IonLabel position="stacked">Date Found</IonLabel>
                             <IonDatetime
                                 display-format="MM/DD/YYYY"
-                                name="dateLost"
+                                name="dateFound"
                                 value={form.dateFound}
                                 onIonChange={(e) => handleInputChange(e)}
                             />

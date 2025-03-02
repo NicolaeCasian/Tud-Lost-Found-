@@ -81,6 +81,7 @@ const Tab2: React.FC = () => {
         // Check if an image was selected and create FormData
         if (form.image) {
             const formData = new FormData();
+            formData.append('type', 'lost');
             formData.append('name', form.itemName);
             formData.append('category', form.category);
             formData.append('description', form.description);
