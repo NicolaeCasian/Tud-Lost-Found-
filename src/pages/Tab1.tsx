@@ -1,9 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import {
   IonAccordion,
   IonAccordionGroup,
   IonButton,
-  IonButtons,
   IonCheckbox,
   IonCol,
   IonContent,
@@ -13,9 +12,7 @@ import {
   IonLabel,
   IonList,
   IonMenu,
-  IonMenuButton,
   IonPage,
-  IonRouterLink,
   IonRow,
   IonSplitPane,
   IonTitle,
@@ -38,12 +35,17 @@ import Header from '../components/Header';
 const Tab1: React.FC = () => {
   const { instance } = useMsal();
   const history = useHistory();
+  
+  // Separate state variables for lost and found items
   const [lostItems, setLostItems] = useState<any[]>([]);
+  const [foundItems, setFoundItems] = useState<any[]>([]);
   const [showSearch, setShowSearch] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 6;
   const [searchQuery, setSearchQuery] = useState("");
-  let lastScrollY = 0;
+  
+  // Use a ref to persist the last scroll position between renders
+  const lastScrollY = useRef(0);
 
   // Filters state using Set() for efficient lookups
   const [filters, setFilters] = useState({
@@ -80,12 +82,46 @@ const Tab1: React.FC = () => {
     fetchLostItems();
   }, []);
 
+  // Fetch found items from API
+  useEffect(() => {
+    const fetchFoundItems = async () => {
+      try {
+        const response = await axios.get('https://tudlnf-serverv2-90ee51882713.herokuapp.com/api/found_items');
+        if (response.data.success) {
+          setFoundItems(response.data.items);
+        }
+      } catch (error) {
+        console.error('Error fetching found items:', error);
+      }
+    };
+    fetchFoundItems();
+  }, []);
+
+  // Combine lost and found items into one array
+  const allItems = [...lostItems, ...foundItems];
+
+  // Filter items by selected filters and search query
+  const filteredItems = allItems.filter((item) => {
+    const typeMatch = filters.type.size === 0 || filters.type.has(item.type);
+    const categoryMatch = filters.category.size === 0 || filters.category.has(item.category);
+    const locationMatch = filters.location.size === 0 || filters.location.has(item.location);
+    const searchMatch =
+      searchQuery === "" ||
+      (item.name && item.name.toLowerCase().includes(searchQuery.toLowerCase()));
+    return typeMatch && categoryMatch && locationMatch && searchMatch;
+  });
+
+  // Pagination logic
+  const totalPages = Math.ceil(filteredItems.length / itemsPerPage) || 1;
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const displayedItems = filteredItems.slice(startIndex, startIndex + itemsPerPage);
+
   // Show/hide searchbar when scrolling
   useEffect(() => {
     const handleScroll = () => {
       const currentScrollY = window.scrollY;
-      setShowSearch(currentScrollY < lastScrollY);
-      lastScrollY = currentScrollY;
+      setShowSearch(currentScrollY < lastScrollY.current);
+      lastScrollY.current = currentScrollY;
     };
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
@@ -104,21 +140,6 @@ const Tab1: React.FC = () => {
   const applyFilters = () => {
     setCurrentPage(1);
   };
-
-  // Filter lost items by selected filters and search query
-  const filteredItems = lostItems.filter((item) => {
-    const typeMatch = filters.type.size === 0 || filters.type.has(item.type);
-    const categoryMatch = filters.category.size === 0 || filters.category.has(item.category);
-    const locationMatch = filters.location.size === 0 || filters.location.has(item.location);
-    const searchMatch =
-      searchQuery === "" ||
-      (item.name && item.name.toLowerCase().includes(searchQuery.toLowerCase()));
-    return typeMatch && categoryMatch && locationMatch && searchMatch;
-  });
-
-  const totalPages = Math.ceil(filteredItems.length / itemsPerPage) || 1;
-  const startIndex = (currentPage - 1) * itemsPerPage;
-  const displayedItems = filteredItems.slice(startIndex, startIndex + itemsPerPage);
 
   return (
     <IonPage className="tab1">
@@ -143,14 +164,14 @@ const Tab1: React.FC = () => {
                       <IonLabel>Lost</IonLabel>
                       <IonCheckbox
                         slot="end"
-                        onIonChange={(e) => handleFilterChange(e, "type", "lost")}
+                        onIonChange={(e) => handleFilterChange(e, "type", "Lost")}
                       />
                     </IonItem>
                     <IonItem lines="none">
                       <IonLabel>Found</IonLabel>
                       <IonCheckbox
                         slot="end"
-                        onIonChange={(e) => handleFilterChange(e, "type", "found")}
+                        onIonChange={(e) => handleFilterChange(e, "type", "Found")}
                       />
                     </IonItem>
                   </div>
@@ -198,7 +219,7 @@ const Tab1: React.FC = () => {
         {/* Main Content */}
         <IonPage id="main-content">
           <IonHeader>
-           <Header />
+            <Header />
             {showSearch && (
               <IonToolbar>
                 <IonSearchbar
@@ -232,7 +253,7 @@ const Tab1: React.FC = () => {
                   ))
                 ) : (
                   <IonCol size="12">
-                    <p>No lost items found.</p>
+                    <p>No items found.</p>
                   </IonCol>
                 )}
               </IonRow>
