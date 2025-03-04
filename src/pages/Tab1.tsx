@@ -6,12 +6,15 @@ import {
   IonCheckbox,
   IonCol,
   IonContent,
+  IonFab,
+  IonFabButton,
   IonGrid,
   IonHeader,
   IonItem,
   IonLabel,
   IonList,
   IonMenu,
+  IonMenuToggle,
   IonPage,
   IonRow,
   IonSplitPane,
@@ -28,7 +31,8 @@ import {
 import { useMsal } from '@azure/msal-react';
 import { useHistory } from 'react-router-dom';
 import axios from 'axios';
-import { chevronBackOutline, chevronForwardOutline } from 'ionicons/icons';
+import { chevronBackOutline, chevronForwardOutline, filterOutline } from 'ionicons/icons';
+import { menuController } from '@ionic/core';
 
 import './Tab1.css';
 import Header from '../components/Header';
@@ -36,19 +40,25 @@ import Header from '../components/Header';
 const Tab1: React.FC = () => {
   const { instance } = useMsal();
   const history = useHistory();
-  
-  // Separate state variables for lost and found items
+
+  // Create a ref for the IonMenu (used in small screens)
+  const menuRef = useRef<HTMLIonMenuElement>(null);
+
+  // State variables for items, search, pagination, etc.
   const [lostItems, setLostItems] = useState<any[]>([]);
   const [foundItems, setFoundItems] = useState<any[]>([]);
   const [showSearch, setShowSearch] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 6;
   const [searchQuery, setSearchQuery] = useState("");
-  
-  // Use a ref to persist the last scroll position between renders
+
+  // State to determine if we're on a small screen
+  const [isSmallScreen, setIsSmallScreen] = useState(window.innerWidth < 768);
+
+  // Ref to track the last scroll position
   const lastScrollY = useRef(0);
 
-  // Filters state using Set() for efficient lookups
+  // Filters state
   const [filters, setFilters] = useState({
     type: new Set<string>(),
     category: new Set<string>(),
@@ -98,10 +108,10 @@ const Tab1: React.FC = () => {
     fetchFoundItems();
   }, []);
 
-  // Combine lost and found items into one array
+  // Combine lost and found items
   const allItems = [...lostItems, ...foundItems];
 
-  // Filter items by selected filters and search query
+  // Filter items by filters and search query
   const filteredItems = allItems.filter((item) => {
     const typeMatch = filters.type.size === 0 || filters.type.has(item.type);
     const categoryMatch = filters.category.size === 0 || filters.category.has(item.category);
@@ -133,158 +143,285 @@ const Tab1: React.FC = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // Handle item click to navigate to the item's detail page
+  // Update isSmallScreen state on window resize
+  useEffect(() => {
+    const handleResize = () => {
+      setIsSmallScreen(window.innerWidth < 768);
+    };
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  // Navigate to item detail
   const handleItemClick = (id: string) => {
     history.push(`/item/${id}`);
   };
 
-  // Apply filters and reset to first page
+  // Apply filters (reset pagination)
   const applyFilters = () => {
     setCurrentPage(1);
   };
 
+  // For small screens, IonMenuToggle automatically toggles the menu
+  // (no extra click handler is needed)
+
+  // Render the layout conditionally based on screen width
   return (
-    <IonPage className="tab1">
-      <IonSplitPane contentId="main-content">
-        {/* Side Navigation (Filters) */}
-        <IonMenu contentId="main-content" type="overlay">
-          <IonHeader>
-            <IonToolbar>
-              <IonTitle>Filters</IonTitle>
-            </IonToolbar>
-          </IonHeader>
-          <IonContent>
-            <IonList>
-              <IonAccordionGroup>
-                {/* Type Filter */}
-                <IonAccordion value="type">
-                  <IonItem slot="header">
-                    <IonTitle>Type</IonTitle>
-                  </IonItem>
-                  <div slot="content">
-                    <IonItem lines="none">
-                      <IonLabel>Lost</IonLabel>
-                      <IonCheckbox
-                        slot="end"
-                        onIonChange={(e) => handleFilterChange(e, "type", "Lost")}
-                      />
-                    </IonItem>
-                    <IonItem lines="none">
-                      <IonLabel>Found</IonLabel>
-                      <IonCheckbox
-                        slot="end"
-                        onIonChange={(e) => handleFilterChange(e, "type", "Found")}
-                      />
-                    </IonItem>
-                  </div>
-                </IonAccordion>
-                {/* Category Filter */}
-                <IonAccordion value="category">
-                  <IonItem slot="header">
-                    <IonTitle>Category</IonTitle>
-                  </IonItem>
-                  <div slot="content">
-                    {["Electronics", "Clothes", "Backpacks", "Keys", "Wallets", "Student ID", "Other"].map(category => (
-                      <IonItem key={category} lines="none">
-                        <IonLabel>{category}</IonLabel>
-                        <IonCheckbox
-                          slot="end"
-                          onIonChange={(e) => handleFilterChange(e, "category", category)}
-                        />
-                      </IonItem>
-                    ))}
-                  </div>
-                </IonAccordion>
-                {/* Location Filter */}
-                <IonAccordion value="location">
-                  <IonItem slot="header">
-                    <IonTitle>Location</IonTitle>
-                  </IonItem>
-                  <div slot="content">
-                    {["A Block", "B Block", "C Block", "D Block", "E Block", "F Block", "Sports Block", "Other"].map(location => (
-                      <IonItem key={location} lines="none">
-                        <IonLabel>{location}</IonLabel>
-                        <IonCheckbox
-                          slot="end"
-                          onIonChange={(e) => handleFilterChange(e, "location", location)}
-                        />
-                      </IonItem>
-                    ))}
-                  </div>
-                </IonAccordion>
-              </IonAccordionGroup>
-              <IonButton expand="full" onClick={applyFilters}>Apply Filters</IonButton>
-            </IonList>
-          </IonContent>
-        </IonMenu>
-
-        {/* Main Content */}
-        <IonPage id="main-content">
-          <IonHeader>
-            <Header />
-            {showSearch && (
+    <>
+      {isSmallScreen ? (
+        // Small screen layout: Overlay menu and FAB button to toggle it
+        <>
+          <IonMenu contentId="main-content" type="overlay" menuId="filterMenu" side="start">
+            <IonHeader>
               <IonToolbar>
-                <IonSearchbar
-                  placeholder="Search for items..."
-                  value={searchQuery}
-                  onIonInput={(e) => setSearchQuery(e.detail.value!)}
-                  show-clear-button="focus"
-                />
+                <IonTitle>Filters</IonTitle>
               </IonToolbar>
-            )}
-          </IonHeader>
-          <IonContent fullscreen>
-            <IonGrid>
-              <IonRow>
-                {displayedItems.length > 0 ? (
-                  displayedItems.map((item) => (
-                    <IonCol size="12" sizeLg="6" sizeMd="6" sizeXl="4" key={item._id}>
-                      <IonCard>
-                        <img alt={item.name} src={item.image} />
-                        <IonCardHeader style={{ borderBottom: '1px solid #ddd', marginBottom: '10px' }}>
-                          <IonCardTitle>{item.name}</IonCardTitle>
-                          <IonCardSubtitle>{item.category}</IonCardSubtitle>
-                        </IonCardHeader>
-                        <IonCardContent>
-                          <p style={{ marginBottom: '8px' }}>{item.description}</p>
-                          <p style={{ fontWeight: 'bold', fontSize: '1.1rem' }}>Location: {item.location}</p>
-                        </IonCardContent>
-                        <IonButton onClick={() => handleItemClick(item._id)}>
-                          View Item
-                        </IonButton>
-                      </IonCard>
+            </IonHeader>
+            <IonContent>
+              <IonList>
+                <IonAccordionGroup>
+                  {/* Type Filter */}
+                  <IonAccordion value="type">
+                    <IonItem slot="header">
+                      <IonTitle>Type</IonTitle>
+                    </IonItem>
+                    <div slot="content">
+                      <IonItem lines="none">
+                        <IonLabel>Lost</IonLabel>
+                        <IonCheckbox slot="end" onIonChange={(e) => handleFilterChange(e, "type", "Lost")} />
+                      </IonItem>
+                      <IonItem lines="none">
+                        <IonLabel>Found</IonLabel>
+                        <IonCheckbox slot="end" onIonChange={(e) => handleFilterChange(e, "type", "Found")} />
+                      </IonItem>
+                    </div>
+                  </IonAccordion>
+                  {/* Category Filter */}
+                  <IonAccordion value="category">
+                    <IonItem slot="header">
+                      <IonTitle>Category</IonTitle>
+                    </IonItem>
+                    <div slot="content">
+                      {["Electronics", "Clothes", "Backpacks", "Keys", "Wallets", "Student ID", "Other"].map(category => (
+                        <IonItem key={category} lines="none">
+                          <IonLabel>{category}</IonLabel>
+                          <IonCheckbox slot="end" onIonChange={(e) => handleFilterChange(e, "category", category)} />
+                        </IonItem>
+                      ))}
+                    </div>
+                  </IonAccordion>
+                  {/* Location Filter */}
+                  <IonAccordion value="location">
+                    <IonItem slot="header">
+                      <IonTitle>Location</IonTitle>
+                    </IonItem>
+                    <div slot="content">
+                      {["A Block", "B Block", "C Block", "D Block", "E Block", "F Block", "Sports Block", "Other"].map(location => (
+                        <IonItem key={location} lines="none">
+                          <IonLabel>{location}</IonLabel>
+                          <IonCheckbox slot="end" onIonChange={(e) => handleFilterChange(e, "location", location)} />
+                        </IonItem>
+                      ))}
+                    </div>
+                  </IonAccordion>
+                </IonAccordionGroup>
+                <IonButton expand="full" onClick={applyFilters}>Apply Filters</IonButton>
+              </IonList>
+            </IonContent>
+          </IonMenu>
+          <IonPage id="main-content">
+            <IonHeader>
+              <Header />
+              {showSearch && (
+                <IonToolbar>
+                  <IonSearchbar
+                    placeholder="Search for items..."
+                    value={searchQuery}
+                    onIonInput={(e) => setSearchQuery(e.detail.value!)}
+                    show-clear-button="focus"
+                  />
+                </IonToolbar>
+              )}
+            </IonHeader>
+            <IonContent fullscreen>
+              <IonGrid>
+                <IonRow>
+                  {displayedItems.length > 0 ? (
+                    displayedItems.map((item) => (
+                      <IonCol size="12" sizeLg="6" sizeMd="6" sizeXl="4" key={item._id}>
+                        <IonCard>
+                          <img alt={item.name} src={item.image} />
+                          <IonCardHeader style={{ borderBottom: '1px solid #ddd', marginBottom: '10px' }}>
+                            <IonCardTitle>{item.name}</IonCardTitle>
+                            <IonCardSubtitle>{item.category}</IonCardSubtitle>
+                          </IonCardHeader>
+                          <IonCardContent>
+                            <p style={{ marginBottom: '8px' }}>{item.description}</p>
+                            <p style={{ fontWeight: 'bold', fontSize: '1.1rem' }}>Location: {item.location}</p>
+                          </IonCardContent>
+                          <IonButton onClick={() => handleItemClick(item._id)}>View Item</IonButton>
+                        </IonCard>
+                      </IonCol>
+                    ))
+                  ) : (
+                    <IonCol size="12">
+                      <p>No items found.</p>
                     </IonCol>
-                  ))
-                ) : (
-                  <IonCol size="12">
-                    <p>No items found.</p>
+                  )}
+                </IonRow>
+              </IonGrid>
+              <IonGrid>
+                <IonRow className="ion-align-items-center ion-justify-content-center">
+                  <IonCol size="auto">
+                    <IonButton disabled={currentPage === 1} onClick={() => setCurrentPage(currentPage - 1)}>
+                      <IonIcon icon={chevronBackOutline} />
+                    </IonButton>
                   </IonCol>
-                )}
-              </IonRow>
-            </IonGrid>
-
-            {/* Pagination Controls */}
-            <IonGrid>
-              <IonRow className="ion-align-items-center ion-justify-content-center">
-                <IonCol size="auto">
-                  <IonButton disabled={currentPage === 1} onClick={() => setCurrentPage(currentPage - 1)}>
-                    <IonIcon icon={chevronBackOutline} />
-                  </IonButton>
-                </IonCol>
-                <IonCol size="auto">
-                  <span>Page {currentPage} of {totalPages}</span>
-                </IonCol>
-                <IonCol size="auto">
-                  <IonButton disabled={currentPage >= totalPages} onClick={() => setCurrentPage(currentPage + 1)}>
-                    <IonIcon icon={chevronForwardOutline} />
-                  </IonButton>
-                </IonCol>
-              </IonRow>
-            </IonGrid>
-          </IonContent>
-        </IonPage>
-      </IonSplitPane>
-    </IonPage>
+                  <IonCol size="auto">
+                    <span>Page {currentPage} of {totalPages}</span>
+                  </IonCol>
+                  <IonCol size="auto">
+                    <IonButton disabled={currentPage >= totalPages} onClick={() => setCurrentPage(currentPage + 1)}>
+                      <IonIcon icon={chevronForwardOutline} />
+                    </IonButton>
+                  </IonCol>
+                </IonRow>
+              </IonGrid>
+              {/* Floating button to toggle the filter menu */}
+              <IonFab vertical="bottom" horizontal="end" slot="fixed">
+                <IonMenuToggle menu="filterMenu">
+                  <IonFabButton>
+                    <IonIcon icon={filterOutline} />
+                  </IonFabButton>
+                </IonMenuToggle>
+              </IonFab>
+            </IonContent>
+          </IonPage>
+        </>
+      ) : (
+        // Large screen layout: Use IonSplitPane to show filters permanently
+        <IonSplitPane contentId="main-content">
+          <IonMenu contentId="main-content" type="push" menuId="filterMenu" side="start">
+            <IonHeader>
+              <IonToolbar>
+                <IonTitle>Filters</IonTitle>
+              </IonToolbar>
+            </IonHeader>
+            <IonContent>
+              <IonList>
+                <IonAccordionGroup>
+                  {/* Type Filter */}
+                  <IonAccordion value="type">
+                    <IonItem slot="header">
+                      <IonTitle>Type</IonTitle>
+                    </IonItem>
+                    <div slot="content">
+                      <IonItem lines="none">
+                        <IonLabel>Lost</IonLabel>
+                        <IonCheckbox slot="end" onIonChange={(e) => handleFilterChange(e, "type", "Lost")} />
+                      </IonItem>
+                      <IonItem lines="none">
+                        <IonLabel>Found</IonLabel>
+                        <IonCheckbox slot="end" onIonChange={(e) => handleFilterChange(e, "type", "Found")} />
+                      </IonItem>
+                    </div>
+                  </IonAccordion>
+                  {/* Category Filter */}
+                  <IonAccordion value="category">
+                    <IonItem slot="header">
+                      <IonTitle>Category</IonTitle>
+                    </IonItem>
+                    <div slot="content">
+                      {["Electronics", "Clothes", "Backpacks", "Keys", "Wallets", "Student ID", "Other"].map(category => (
+                        <IonItem key={category} lines="none">
+                          <IonLabel>{category}</IonLabel>
+                          <IonCheckbox slot="end" onIonChange={(e) => handleFilterChange(e, "category", category)} />
+                        </IonItem>
+                      ))}
+                    </div>
+                  </IonAccordion>
+                  {/* Location Filter */}
+                  <IonAccordion value="location">
+                    <IonItem slot="header">
+                      <IonTitle>Location</IonTitle>
+                    </IonItem>
+                    <div slot="content">
+                      {["A Block", "B Block", "C Block", "D Block", "E Block", "F Block", "Sports Block", "Other"].map(location => (
+                        <IonItem key={location} lines="none">
+                          <IonLabel>{location}</IonLabel>
+                          <IonCheckbox slot="end" onIonChange={(e) => handleFilterChange(e, "location", location)} />
+                        </IonItem>
+                      ))}
+                    </div>
+                  </IonAccordion>
+                </IonAccordionGroup>
+                <IonButton expand="full" onClick={applyFilters}>Apply Filters</IonButton>
+              </IonList>
+            </IonContent>
+          </IonMenu>
+          <IonPage id="main-content">
+            <IonHeader>
+              <Header />
+              {showSearch && (
+                <IonToolbar>
+                  <IonSearchbar
+                    placeholder="Search for items..."
+                    value={searchQuery}
+                    onIonInput={(e) => setSearchQuery(e.detail.value!)}
+                    show-clear-button="focus"
+                  />
+                </IonToolbar>
+              )}
+            </IonHeader>
+            <IonContent fullscreen>
+              <IonGrid>
+                <IonRow>
+                  {displayedItems.length > 0 ? (
+                    displayedItems.map((item) => (
+                      <IonCol size="12" sizeLg="6" sizeMd="6" sizeXl="4" key={item._id}>
+                        <IonCard>
+                          <img alt={item.name} src={item.image} />
+                          <IonCardHeader style={{ borderBottom: '1px solid #ddd', marginBottom: '10px' }}>
+                            <IonCardTitle>{item.name}</IonCardTitle>
+                            <IonCardSubtitle>{item.category}</IonCardSubtitle>
+                          </IonCardHeader>
+                          <IonCardContent>
+                            <p style={{ marginBottom: '8px' }}>{item.description}</p>
+                            <p style={{ fontWeight: 'bold', fontSize: '1.1rem' }}>Location: {item.location}</p>
+                          </IonCardContent>
+                          <IonButton onClick={() => handleItemClick(item._id)}>View Item</IonButton>
+                        </IonCard>
+                      </IonCol>
+                    ))
+                  ) : (
+                    <IonCol size="12">
+                      <p>No items found.</p>
+                    </IonCol>
+                  )}
+                </IonRow>
+              </IonGrid>
+              <IonGrid>
+                <IonRow className="ion-align-items-center ion-justify-content-center">
+                  <IonCol size="auto">
+                    <IonButton disabled={currentPage === 1} onClick={() => setCurrentPage(currentPage - 1)}>
+                      <IonIcon icon={chevronBackOutline} />
+                    </IonButton>
+                  </IonCol>
+                  <IonCol size="auto">
+                    <span>Page {currentPage} of {totalPages}</span>
+                  </IonCol>
+                  <IonCol size="auto">
+                    <IonButton disabled={currentPage >= totalPages} onClick={() => setCurrentPage(currentPage + 1)}>
+                      <IonIcon icon={chevronForwardOutline} />
+                    </IonButton>
+                  </IonCol>
+                </IonRow>
+              </IonGrid>
+            </IonContent>
+          </IonPage>
+        </IonSplitPane>
+      )}
+    </>
   );
 };
 
