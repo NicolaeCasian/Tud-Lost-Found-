@@ -117,7 +117,7 @@ const Tab3: React.FC = () => {
         </IonGrid>
         <Footer></Footer>
       </IonContent>
-      <Footer/>
+   
     </IonPage>
   );
 };

@@ -112,6 +112,11 @@ const Tab1: React.FC = () => {
     return typeMatch && categoryMatch && locationMatch && searchMatch;
   });
 
+  // Reset pagination when search query changes
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [searchQuery]);
+
   // Pagination logic
   const totalPages = Math.ceil(filteredItems.length / itemsPerPage) || 1;
   const startIndex = (currentPage - 1) * itemsPerPage;
