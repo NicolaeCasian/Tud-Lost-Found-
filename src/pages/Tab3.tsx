@@ -77,7 +77,6 @@ const Tab3: React.FC = () => {
                 </IonCardHeader>
                 <IonCardContent>
                   <IonList>
-                    <IonItem button>Change Password</IonItem>
                     <IonItem button>Notification Preferences</IonItem>
                     <IonItem button color="danger">Delete Account</IonItem>
                   </IonList>
