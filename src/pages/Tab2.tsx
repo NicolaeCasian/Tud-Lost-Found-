@@ -49,7 +49,7 @@ const Tab2: React.FC = () => {
     const [showAlert, setShowAlert] = useState(false);
     const [alertMessage, setAlertMessage] = useState('');
     const history = useHistory();
-
+    const API_URL = import.meta.env.VITE_API_URL || "https://tudlnf-serverv2-90ee51882713.herokuapp.com";
     const [imagePreview, setImagePreview] = useState<string | null>(null); // Store the image preview URL
 
     const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -93,7 +93,7 @@ const Tab2: React.FC = () => {
             formData.append('image', form.image);
 
             try {
-                const response = await fetch('https://tudlnf-serverv2-90ee51882713.herokuapp.com/api/report_lost', {
+                const response = await fetch(`${API_URL}/api/report_lost`, {
                     method: 'POST',
                     body: formData,
                 });

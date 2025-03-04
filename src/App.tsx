@@ -19,6 +19,7 @@ import Tab3 from './pages/Tab3';
 import Login from './pages/Login';
 import Faq from './pages/faq';
 import Found from './pages/Found'; // Import the Found component
+import LostItem from './pages/LostItem';
 import { MsalProvider } from "@azure/msal-react";
 import { PublicClientApplication } from "@azure/msal-browser";
 import { msalConfig } from './pages/authConfig'; // Your MSAL configuration
@@ -71,6 +72,7 @@ const App: React.FC = () => {
             {isAuthenticated ? (
               <IonTabs>
                 <IonRouterOutlet>
+                  <Route path="/item/:id" component={LostItem} exact />
                   <Route exact path="/tab1">
                     <Tab1 />
                   </Route>
