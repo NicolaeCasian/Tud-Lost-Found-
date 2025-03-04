@@ -66,9 +66,10 @@ const LostItem: React.FC = () => {
                     <p>{item.location}</p>
                     <MapEmbed location={item.location} />
                 </IonText>
+                <Footer/>
             </IonContent>
 
-            <Footer/>
+            
         </IonPage>
     );
 };
