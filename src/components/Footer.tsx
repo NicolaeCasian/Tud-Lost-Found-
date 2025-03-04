@@ -17,15 +17,15 @@ const Footer: React.FC = () => {
 
           <div className="footer-section">
             <h4>Contact Us</h4>
-            <p>Email: lost.found@tudublin.ie</p>
-            <p>Phone: (01) 323-5041</p>
+            <p>Email: studenthubdesk.blanchardstown@tudublin.ie</p>
+            <p>Phone: +353 1 220 8088</p>
           </div>
 
           <div className="footer-section">
             <h4>Quick Links</h4>
             <p><a href="/faq">FAQ</a></p>
             <p><a href="#">Terms of Service</a></p>
-            <p><a href="#">Privacy Policy</a></p>
+            <p><a href="https://www.tudublin.ie/explore/gdpr/data-protection-policy/">Privacy Policy</a></p>
           </div>
         </div>
 
