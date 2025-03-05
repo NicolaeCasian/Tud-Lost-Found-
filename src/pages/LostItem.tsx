@@ -14,10 +14,19 @@ const LostItem: React.FC = () => {
     const API_URL = import.meta.env.VITE_API_URL || "https://tudlnf-serverv2-90ee51882713.herokuapp.com";
 
     const blockMapUrls: { [key: string]: string } = {
-        "D Block": "https://use.mazemap.com/embed.html#v=1&campusid=736&zlevel=1&center=-6.376823,53.405642&zoom=18&sharepoitype=poi&sharepoi=1000954458",
+        "A Block": "https://use.mazemap.com/embed.html#v=1&config=TUDUBLIN&zlevel=1&center=-6.376608,53.406412&zoom=18&campusid=736&sharepoitype=poi&sharepoi=1000954451&utm_medium=iframe",
+        "B Block": "https://use.mazemap.com/embed.html#v=1&config=TUDUBLIN&zlevel=1&center=-6.379801,53.406413&zoom=18&campusid=736&sharepoitype=poi&sharepoi=1000954452&utm_medium=iframe",
+        "C Block": "https://use.mazemap.com/embed.html#v=1&config=TUDUBLIN&zlevel=1&center=-6.378812,53.405410&zoom=18&campusid=736&sharepoitype=poi&sharepoi=1000954453&utm_medium=iframe",
+        "D Block": "https://use.mazemap.com/embed.html#v=1&config=TUDUBLIN&zlevel=1&center=-6.376794,53.405619&zoom=18.2&campusid=736&sharepoitype=poi&sharepoi=1000954458&utm_medium=iframe",
+        "E Block": "https://use.mazemap.com/embed.html#v=1&config=TUDUBLIN&zlevel=1&center=-6.377395,53.405211&zoom=18&campusid=736&sharepoitype=poi&sharepoi=1000954459&utm_medium=iframe",
+        "F Block": "https://use.mazemap.com/embed.html#v=1&config=TUDUBLIN&zlevel=1&center=-6.378331,53.404717&zoom=18&campusid=736&sharepoitype=poi&sharepoi=1000954460&utm_medium=iframe",
+        "G Block": "https://use.mazemap.com/embed.html#v=1&config=TUDUBLIN&zlevel=1&center=-6.379114,53.404456&zoom=18&campusid=736&sharepoitype=poi&sharepoi=1002536126&utm_medium=iframe",
+        "H Block": "https://use.mazemap.com/embed.html#v=1&config=TUDUBLIN&zlevel=1&center=-6.382013,53.404626&zoom=18&campusid=736&sharepoitype=poi&sharepoi=1000954462&utm_medium=iframe",
+        "S Block": "https://use.mazemap.com/embed.html#v=1&config=TUDUBLIN&zlevel=1&center=-6.381390,53.405789&zoom=18&campusid=736&sharepoitype=poi&sharepoi=1000821154&utm_medium=iframe",
+        "Connect Building": "https://use.mazemap.com/embed.html#v=1&config=TUDUBLIN&zlevel=1&center=-6.379618,53.404711&zoom=18&campusid=736&sharepoitype=poi&sharepoi=1000954461&utm_medium=iframe",
     };
 
-    const MapEmbed = ({ location }: { location: string }) => {
+    const MapEmbed = ({location}: { location: string }) => {
         const mapUrl = blockMapUrls[location];
 
         if (!mapUrl) {
@@ -29,7 +38,7 @@ const LostItem: React.FC = () => {
                 width="600"
                 height="420"
                 src={mapUrl}
-                style={{ border: "1px solid grey" }}
+                style={{border: "1px solid grey"}}
                 allow="geolocation"
             ></iframe>
         );
@@ -62,14 +71,14 @@ const LostItem: React.FC = () => {
 
             <IonContent fullscreen className="ion-padding">
                 <IonText>
-                    <h1 style={{ fontSize: '3rem', fontWeight: 'bold' }}>{item.name}</h1>
+                    <h1 style={{fontSize: '3rem', fontWeight: 'bold'}}>{item.name}</h1>
                     <p>{item.location}</p>
-                    <MapEmbed location={item.location} />
+                    <MapEmbed location={item.location}/>
                 </IonText>
                 <Footer/>
             </IonContent>
 
-            
+
         </IonPage>
     );
 };

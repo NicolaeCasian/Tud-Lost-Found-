@@ -202,10 +202,8 @@ const Tab2: React.FC = () => {
                                 <IonSelectOption value="D Block">D Block</IonSelectOption>
                                 <IonSelectOption value="E Block">E Block</IonSelectOption>
                                 <IonSelectOption value="F Block">F Block</IonSelectOption>
-                                <IonSelectOption value="G Block">G Block</IonSelectOption>
-                                <IonSelectOption value="H Block">H Block</IonSelectOption>
-                                <IonSelectOption value="S Block">S Block | Sports Pavilion</IonSelectOption>
-                                <IonSelectOption value="Connect Building">Connect Building</IonSelectOption>
+                                <IonSelectOption value="Sports Block">Sports Block</IonSelectOption>
+                                <IonSelectOption value="Other">Other</IonSelectOption>
                             </IonSelect>
                         </IonItem>
 

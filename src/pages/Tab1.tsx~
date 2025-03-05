@@ -361,7 +361,7 @@ const Tab1: React.FC = () => {
                                             <IonTitle>Location</IonTitle>
                                         </IonItem>
                                         <div slot="content">
-                                            {["A Block", "B Block", "C Block", "D Block", "E Block", "F Block", "G Block", "H Block", "S Block", "Connect Building"].map(location => (
+                                            {["A Block", "B Block", "C Block", "D Block", "E Block", "F Block", "Sports Block", "Other"].map(location => (
                                                 <IonItem key={location} lines="none">
                                                     <IonLabel>{location}</IonLabel>
                                                     <IonCheckbox slot="end"
