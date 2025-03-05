@@ -37,7 +37,7 @@ const LostItem: React.FC = () => {
         return (
             <iframe
                 width="90%"
-                height="400px"
+                height="500px"
                 src={mapUrl}
                 style={{border: "1px solid grey"}}
                 allow="geolocation"
