@@ -36,7 +36,7 @@ const LostItem: React.FC = () => {
 
         return (
             <iframe
-                width="90%"
+                width="100%"
                 height="400px"
                 src={mapUrl}
                 style={{border: "1px solid grey"}}
@@ -68,48 +68,85 @@ const LostItem: React.FC = () => {
 
     return (
         <IonPage>
-            <Header/>
-            <IonContent fullscreen className="ion-padding">
-                <div style={{maxWidth: '1400px', margin: '0 auto', padding: '0 1rem'}}>
-                    <IonGrid>
-                        <IonRow>
-                            <IonCol size={"12"} sizeMd={"6"}>
-                                <div style={{display: 'flex', flexDirection: 'column', gap: '1rem'}}>
-                                    {/* Map Section */}
-                                    <div style={{flex: '1 1 auto'}}>
-                                        <MapEmbed location={item.location}/>
-                                    </div>
+            <Header />
 
-                                    {/* Image Section */}
-                                    <div style={{flex: '1 1 auto', display: 'flex', justifyContent: 'center'}}>
-                                        <IonImg
-                                            src={item.image}
-                                            alt={item.name}
-                                            style={{
-                                                height:'400px',
-                                                width: 'auto',
-                                                maxWidth: '100%',
-                                                objectFit: 'contain',
-                                                display: 'block'
-                                            }}
-                                        />
-                                    </div>
+            <IonContent fullscreen className="ion-padding">
+                <div style={{ maxWidth: '1500px', margin: '0 auto', padding: '0 1rem' }}>
+                    <IonGrid>
+                        {/* Top Section: Item Description (Full Width) */}
+                        <IonRow>
+                            <IonCol size="12">
+                                <div style={{
+                                    backgroundColor: '#333',
+                                    borderRadius: '12px',
+                                    padding: '1.5rem',
+                                    color: 'white',
+                                    textAlign: 'center'
+                                }}>
+                                    <IonText>
+                                        <h1 style={{ fontSize: '2.5rem', fontWeight: 'bold' }}>{item.name}</h1>
+                                        <p><strong>Location:</strong> {item.location}</p>
+                                        <p><strong>Description:</strong> {item.description}</p>
+                                        <p><strong>Date Lost:</strong> {item.dateLost}</p>
+                                    </IonText>
                                 </div>
                             </IonCol>
-                            {/* Right Column: Details */}
-                            <IonCol size={"12"} sizeMd={"6"}>
-                                <IonText>
-                                    <h1 style={{fontSize: '2rem', fontWeight: 'bold'}}>{item.name}</h1>
-                                    <p><strong>Category:</strong> {item.category}</p>
-                                    <p><strong>Location:</strong> {item.location}</p>
-                                    <p><strong>Description:</strong> {item.description}</p>
-                                    <p><strong>Date Lost:</strong> {item.dateLost}</p>
-                                </IonText>
+                        </IonRow>
+
+                        {/* Middle Section: Map & Image Side-by-Side */}
+                        <IonRow>
+                            {/* Map (Left) with Right Margin */}
+                            <IonCol size="12" sizeMd="6">
+                                <div style={{ marginLeft: '20px' }}>
+                                    <h2 style={{ textAlign: 'center', marginBottom: '10px', fontWeight: 'bold' }}>Location</h2>
+                                    <MapEmbed location={item.location} />
+                                </div>
+                            </IonCol>
+
+                            {/* Image (Right) with Left Margin */}
+                            <IonCol size="12" sizeMd="6">
+                                <div style={{ marginRight: '20px', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                                    <h2 style={{ textAlign: 'center', marginBottom: '10px' }}>Item Image</h2>
+                                    <IonImg
+                                        src={item.image}
+                                        alt={item.name}
+                                        style={{
+                                            height: '400px',
+                                            maxWidth: '100%',
+                                            objectFit: 'cover',
+                                            display: 'block'
+                                        }}
+                                    />
+                                </div>
+                            </IonCol>
+                        </IonRow>
+
+                        {/* Bottom Section: Finding Tips (Full Width) */}
+                        <IonRow>
+                            <IonCol size="12">
+                                <div style={{
+                                    backgroundColor: '#333',
+                                    borderRadius: '12px',
+                                    padding: '1.5rem',
+                                    color: 'white',
+                                    textAlign: 'center',
+                                    marginTop: '20px',
+                                    marginBottom: '20px'
+                                }}>
+                                    <IonText>
+                                        <h2 style={{ fontSize: '2rem', fontWeight: 'bold' }}>Finding Tips</h2>
+                                        <p>✔️ Revisit the location where you lost the item.</p>
+                                        <p>✔️ Check with nearby lost & found offices.</p>
+                                        <p>✔️ Post in local lost item groups.</p>
+                                        <p>✔️ Ask people in the area if they’ve seen it.</p>
+                                    </IonText>
+                                </div>
                             </IonCol>
                         </IonRow>
                     </IonGrid>
                 </div>
-                <Footer/>
+
+                <Footer />
             </IonContent>
         </IonPage>
     );
