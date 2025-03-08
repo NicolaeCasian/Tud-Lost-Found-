@@ -33,7 +33,7 @@ const Tab3: React.FC = () => {
   useEffect(() => {
     if (userEmail && userName) {
       // Call your backend API to create a new user or update an existing one
-      fetch('/api/users', {
+      fetch('https://tudlnf-serverv2-90ee51882713.herokuapp.com/api/users', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email: userEmail, name: userName })
@@ -50,7 +50,7 @@ const Tab3: React.FC = () => {
   const handleSaveChanges = async () => {
     const updatedData = { phone, studentId };
     try {
-      const response = await fetch(`/api/users/${encodeURIComponent(userEmail)}`, {
+      const response = await fetch(`https://tudlnf-serverv2-90ee51882713.herokuapp.com/api/users/${encodeURIComponent(userEmail)}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(updatedData)
