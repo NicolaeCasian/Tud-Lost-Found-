@@ -24,7 +24,7 @@ const Footer: React.FC = () => {
           <div className="footer-section">
             <h4>Quick Links</h4>
             <p><a href="/faq">FAQ</a></p>
-            <p><a href="#">Terms of Service</a></p>
+            <p><a href="https://www.tudublin.ie/for-students/student-services-and-support/student-policies-regulations/">Terms of Service</a></p>
             <p><a href="https://www.tudublin.ie/explore/gdpr/data-protection-policy/">Privacy Policy</a></p>
           </div>
         </div>
