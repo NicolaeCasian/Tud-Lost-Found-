@@ -28,6 +28,9 @@ const Tab3: React.FC = () => {
   // State for additional info provided by the user
   const [phone, setPhone] = useState('');
   const [studentId, setStudentId] = useState('');
+  
+  // State for storing the user's reports (lost and found items)
+  const [reports, setReports] = useState<any[]>([]);
 
   // Store basic login info in the database as soon as the user logs in
   useEffect(() => {
@@ -64,6 +67,26 @@ const Tab3: React.FC = () => {
       console.error('Error:', error);
     }
   };
+
+  // Fetch user reports from both lost and found collections
+  useEffect(() => {
+    if (userEmail) {
+      Promise.all([
+        // Fetch lost items posted by the user
+        fetch(`https://tudlnf-serverv2-90ee51882713.herokuapp.com/api/lost_items?email=${encodeURIComponent(userEmail)}`)
+          .then(res => res.json()),
+        // Fetch found items posted by the user
+        fetch(`https://tudlnf-serverv2-90ee51882713.herokuapp.com/api/found_items?email=${encodeURIComponent(userEmail)}`)
+          .then(res => res.json())
+      ])
+      .then(([lostItems, foundItems]) => {
+        // Combine the arrays of lost and found items
+        const combinedReports = [...(lostItems || []), ...(foundItems || [])];
+        setReports(combinedReports);
+      })
+      .catch(err => console.error('Error fetching reports:', err));
+    }
+  }, [userEmail]);
 
   // Example logout function (you can modify as needed)
   const handleLogout = () => {
@@ -144,22 +167,22 @@ const Tab3: React.FC = () => {
                 </IonCardHeader>
                 <IonCardContent>
                   <IonList>
-                    <IonItem>
-                      <IonLabel>Blue Backpack - <strong>Pending</strong></IonLabel>
-                      <IonButton fill="outline" slot="end">View Details</IonButton>
-                    </IonItem>
-                    <IonItem>
-                      <IonLabel>Laptop Charger - <strong>Found</strong></IonLabel>
-                      <IonButton fill="outline" slot="end">View Details</IonButton>
-                    </IonItem>
-                    <IonItem>
-                      <IonLabel>Student ID Card - <strong>Claimed</strong></IonLabel>
-                      <IonButton fill="outline" slot="end">View Details</IonButton>
-                    </IonItem>
-                    <IonItem>
-                      <IonLabel>Car Keys - <strong>Unclaimed</strong></IonLabel>
-                      <IonButton fill="outline" slot="end">View Details</IonButton>
-                    </IonItem>
+                    {reports.length > 0 ? (
+                      reports.map((report, index) => (
+                        <IonItem key={index}>
+                          <IonLabel>
+                            {report.itemName} - <strong>{report.status}</strong>
+                          </IonLabel>
+                          <IonButton fill="outline" slot="end">
+                            View Details
+                          </IonButton>
+                        </IonItem>
+                      ))
+                    ) : (
+                      <IonItem>
+                        <IonLabel>No reports found.</IonLabel>
+                      </IonItem>
+                    )}
                   </IonList>
                 </IonCardContent>
               </IonCard>
