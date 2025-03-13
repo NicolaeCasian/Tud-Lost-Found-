@@ -20,6 +20,7 @@ import Login from './pages/Login';
 import Faq from './pages/faq';
 import Found from './pages/Found'; // Import the Found component
 import LostItem from './pages/LostItem';
+import Admin from './pages/Admin';
 import { MsalProvider } from "@azure/msal-react";
 import { PublicClientApplication } from "@azure/msal-browser";
 import { msalConfig } from './pages/authConfig'; // Your MSAL configuration
