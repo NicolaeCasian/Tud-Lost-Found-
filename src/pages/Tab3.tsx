@@ -13,44 +13,53 @@ import {
   IonCol, 
   IonGrid, 
   IonRow, 
-  IonList 
+  IonList,
+  IonAlert 
 } from '@ionic/react';
 import { useMsal } from '@azure/msal-react';
+import { useHistory } from 'react-router-dom';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 
 const Tab3: React.FC = () => {
   const { accounts, instance } = useMsal();
-  // Basic user info from MSAL
-  const userEmail = accounts.length > 0 ? accounts[0].username : '';
+  const history = useHistory();
+  
+  // Extract and normalize user information
+  const rawUserEmail = accounts.length > 0 ? accounts[0].username : '';
+  const userEmail = rawUserEmail.trim().toLowerCase();
   const userName = accounts.length > 0 ? accounts[0].name : '';
 
-  // State for additional info provided by the user
+  // State for additional user info
   const [phone, setPhone] = useState('');
   const [studentId, setStudentId] = useState('');
+  
+  // State for storing the user's reports (lost and found items)
+  const [reports, setReports] = useState<any[]>([]);
+  
+  // State for alert message
+  const [showAlert, setShowAlert] = useState(false);
+  const [alertMessage, setAlertMessage] = useState('');
 
-  // Store basic login info in the database as soon as the user logs in
+  const API_URL = "https://tudlnf-serverv2-90ee51882713.herokuapp.com";
+
   useEffect(() => {
     if (userEmail && userName) {
-      // Call your backend API to create a new user or update an existing one
-      fetch('https://tudlnf-serverv2-90ee51882713.herokuapp.com/api/users', {
+      fetch(`${API_URL}/api/users`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email: userEmail, name: userName })
       })
         .then(response => response.json())
-        .then(data => {
-          console.log('User record created/updated:', data);
-        })
+        .then(data => console.log('User record created/updated:', data))
         .catch(error => console.error('Error storing user info:', error));
     }
   }, [userEmail, userName]);
 
-  // Function to update additional info (phone number and student ID)
   const handleSaveChanges = async () => {
     const updatedData = { phone, studentId };
     try {
-      const response = await fetch(`https://tudlnf-serverv2-90ee51882713.herokuapp.com/api/users/${encodeURIComponent(userEmail)}`, {
+      const response = await fetch(`${API_URL}/api/users/${encodeURIComponent(userEmail)}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(updatedData)
@@ -65,9 +74,54 @@ const Tab3: React.FC = () => {
     }
   };
 
-  // Example logout function (you can modify as needed)
+  useEffect(() => {
+    if (userEmail) {
+      Promise.all([
+        fetch(`${API_URL}/api/lost_items?email=${encodeURIComponent(userEmail)}`).then(res => res.json()),
+        fetch(`${API_URL}/api/found_items?email=${encodeURIComponent(userEmail)}`).then(res => res.json())
+      ])
+      .then(([lostItemsResponse, foundItemsResponse]) => {
+        const lostItems = lostItemsResponse.items || [];
+        const foundItems = foundItemsResponse.items || [];
+        const combinedReports = [...lostItems, ...foundItems];
+        const userReports = combinedReports.filter(report => 
+          report.email && report.email.trim().toLowerCase() === userEmail
+        );
+        setReports(userReports);
+      })
+      .catch(err => console.error('Error fetching reports:', err));
+    }
+  }, [userEmail]);
+
+  const handleDelete = async (report: any) => {
+    try {
+      let endpoint = "";
+      if (report.type.toLowerCase() === "lost") {
+        endpoint = `${API_URL}/api/lost_items/${report._id}`;
+      } else {
+        endpoint = `${API_URL}/api/found_items/${report._id}`;
+      }
+      const response = await fetch(endpoint, { method: 'DELETE' });
+      
+      if (response.ok) {
+        setReports(prevReports => prevReports.filter(r => r._id !== report._id));
+        setAlertMessage("Item Deleted");
+        setShowAlert(true);
+      } else {
+        const errorText = await response.text();
+        console.error('Error deleting report:', errorText);
+      }
+    } catch (error) {
+      console.error('Error deleting report:', error);
+    }
+  };
+
   const handleLogout = () => {
     instance.logoutRedirect();
+  };
+
+  const handleItemClick = (id: string) => {
+    history.push(`/item/${id}`);
   };
 
   return (
@@ -144,29 +198,39 @@ const Tab3: React.FC = () => {
                 </IonCardHeader>
                 <IonCardContent>
                   <IonList>
-                    <IonItem>
-                      <IonLabel>Blue Backpack - <strong>Pending</strong></IonLabel>
-                      <IonButton fill="outline" slot="end">View Details</IonButton>
-                    </IonItem>
-                    <IonItem>
-                      <IonLabel>Laptop Charger - <strong>Found</strong></IonLabel>
-                      <IonButton fill="outline" slot="end">View Details</IonButton>
-                    </IonItem>
-                    <IonItem>
-                      <IonLabel>Student ID Card - <strong>Claimed</strong></IonLabel>
-                      <IonButton fill="outline" slot="end">View Details</IonButton>
-                    </IonItem>
-                    <IonItem>
-                      <IonLabel>Car Keys - <strong>Unclaimed</strong></IonLabel>
-                      <IonButton fill="outline" slot="end">View Details</IonButton>
-                    </IonItem>
+                    {reports.length > 0 ? (
+                      reports.map((report, index) => (
+                        <IonItem key={index}>
+                          <IonLabel>
+                            {report.name} - <strong>{report.status || report.type}</strong>
+                          </IonLabel>
+                          <IonButton fill="outline" slot="end" onClick={() => handleDelete(report)}>
+                            Delete
+                          </IonButton>
+                          <IonButton fill="outline" slot="end" onClick={() => handleItemClick(report._id)}>
+                            View Details
+                          </IonButton>
+                        </IonItem>
+                      ))
+                    ) : (
+                      <IonItem>
+                        <IonLabel>No reports found.</IonLabel>
+                      </IonItem>
+                    )}
                   </IonList>
                 </IonCardContent>
               </IonCard>
             </IonCol>
           </IonRow>
         </IonGrid>
-        <Footer />
+        <IonAlert
+          isOpen={showAlert}
+          onDidDismiss={() => setShowAlert(false)}
+          header="Notification"
+          message={alertMessage}
+          buttons={["OK"]}
+        />
+      <Footer />
       </IonContent>
     </IonPage>
   );

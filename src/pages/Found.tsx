@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   IonContent,
   IonHeader,
@@ -27,6 +27,7 @@ import {
 import { useHistory } from 'react-router-dom';
 import './Tab2.css';
 import Header from '../components/Header';
+import { useMsal } from '@azure/msal-react';
 import Footer from '../components/Footer';
 
 const Found: React.FC = () => {
@@ -54,6 +55,17 @@ const Found: React.FC = () => {
   const history = useHistory();
   const [imagePreview, setImagePreview] = useState<string | null>(null);
 
+  const { accounts } = useMsal();
+  // Get the user's email from MSAL
+  const userEmail = accounts.length > 0 ? accounts[0].username : '';
+
+  // Pre-populate contactInfo with userEmail if it's empty
+  useEffect(() => {
+    if (!form.contactInfo && userEmail) {
+      setForm((prevForm) => ({ ...prevForm, contactInfo: userEmail }));
+    }
+  }, [userEmail, form.contactInfo]);
+
   // Updated event handler to check for e.detail.value if available
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement> & { detail?: { value: any } }
@@ -66,7 +78,7 @@ const Found: React.FC = () => {
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
-      // Fix validTypes to be separate entries
+      // Allow only valid image types
       const validTypes = ['image/jpeg', 'image/png', 'image/jpg', 'image/heic'];
       if (!validTypes.includes(file.type)) {
         alert('Only JPEG and PNG images are allowed.');
@@ -91,7 +103,8 @@ const Found: React.FC = () => {
       formData.append('location', form.locationFound);
       // Use "dateFound" for found items instead of "dateLost"
       formData.append('dateFound', form.dateFound);
-      formData.append('email', form.contactInfo);
+      // Use form.contactInfo or fall back to userEmail
+      formData.append('email', form.contactInfo || userEmail);
       formData.append('image', form.image);
 
       try {
@@ -101,7 +114,9 @@ const Found: React.FC = () => {
         });
         const data = await response.json();
         if (data.success) {
-          setAlertMessage('Your report has been submitted successfully. We will notify you if someone finds your item.');
+          setAlertMessage(
+            'Your report has been submitted successfully. We will notify you if someone finds your item.'
+          );
           setShowAlert(true);
         } else {
           alert('Something went wrong!');
@@ -181,7 +196,8 @@ const Found: React.FC = () => {
               <IonLabel position="stacked">Contact Information</IonLabel>
               <IonInput
                 name="contactInfo"
-                value={form.contactInfo}
+                value={form.contactInfo || userEmail}
+                readonly
                 type="email"
                 placeholder="Enter email"
                 onIonChange={(e) => handleInputChange(e)}
