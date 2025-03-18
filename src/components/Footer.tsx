@@ -3,6 +3,8 @@ import { IonFooter,
          IonCard, 
          IonCardContent } from '@ionic/react';
 
+import './Header.css';
+
 const Footer: React.FC = () => {
   return (
     <IonFooter className="footer-tips">

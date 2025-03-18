@@ -26,7 +26,8 @@ import {
     IonCardSubtitle,
     IonCardTitle,
     IonSearchbar,
-    IonIcon
+    IonIcon,
+    IonFooter
 } from '@ionic/react';
 import {useMsal} from '@azure/msal-react';
 import {useHistory} from 'react-router-dom';
@@ -36,6 +37,7 @@ import {menuController} from '@ionic/core';
 
 import './Tab1.css';
 import Header from '../components/Header';
+import Footer from '../components/Footer';
 
 const Tab1: React.FC = () => {
     const {instance} = useMsal();
@@ -440,9 +442,16 @@ const Tab1: React.FC = () => {
                                     </IonCol>
                                 </IonRow>
                             </IonGrid>
-                        </IonContent>
+                            </IonContent>
+                            
+                            <IonFooter>
+                                <Footer/>
+                            </IonFooter>
                     </IonPage>
+                    
+                    
                 </IonSplitPane>
+                
             )}
         </>
     );
