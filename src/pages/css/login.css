@@ -41,7 +41,7 @@
 
 .login-card {
     
-    background-color: var(--background);
+    background-color: #e0e4de;
     color: #333;
     border-radius: 5px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
