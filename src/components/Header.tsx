@@ -13,10 +13,6 @@ const Header: React.FC = () => {
   return (
     <IonHeader>
       <IonToolbar className="custom-toolbar">
-        {/* Mobile: Menu toggle button */}
-        <IonButtons slot="start">
-          <IonMenuButton className="menu-button" />
-        </IonButtons>
         {/* App title */}
         <IonTitle className="header-title">TUD L&F</IonTitle>
         {/* Navigation buttons */}
