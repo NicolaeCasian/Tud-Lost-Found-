@@ -3,7 +3,7 @@ import { IonFooter,
          IonCard, 
          IonCardContent } from '@ionic/react';
 
-import './Header.css';
+import './css/Footer.css';
 
 const Footer: React.FC = () => {
   return (

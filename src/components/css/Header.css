@@ -1,7 +1,7 @@
 /* Header.css */
 
 .custom-toolbar {
-    --background: #3a3f51; /* Updated background for a modern look */
+    --background: #274156; /* Updated background for a modern look */
     --color: #fff;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Subtle elevation */
     padding: 0 10px;
