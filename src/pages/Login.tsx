@@ -36,11 +36,19 @@ const Login: React.FC = () => {
         //   return;
         // }
 
+        if (userEmail === 'crudtud@gmail.com') {
+          console.log('Admin account detected. Redirecting to /admin app...');
+          window.location.href = '/admin';
+        } else {
+          console.log('Regular user login. Redirecting to main app...');
+          window.location.href =`/tab1`;
+        }
+
         console.log('Login successful. Setting active account:', account);
         instance.setActiveAccount(account);
 
         // Redirect to /tab1 after login
-        window.location.href = '/tab1';
+        //window.location.href = '/tab1';
       } else {
         console.warn('No account found after login.');
       }

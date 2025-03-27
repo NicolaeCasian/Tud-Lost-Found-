@@ -63,13 +63,15 @@ const App: React.FC = () => {
       <IonApp>
         <IonReactRouter>
           <IonRouterOutlet>
+          <Route exact path="/Admin">
+              <Admin />
+            </Route>
             <Route exact path="/login">
               <Login />
             </Route>
             <Route exact path="/faq">
             <Faq />
           </Route>
-          
             {isAuthenticated ? (
               <IonTabs>
                 <IonRouterOutlet>

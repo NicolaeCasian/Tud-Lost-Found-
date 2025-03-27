@@ -17,8 +17,9 @@ import {
   IonCard,
   IonCardContent,
 } from '@ionic/react';
-import Footer from '../components/Footer';
 import Header from '../components/Header';
+import Footer from '../components/Footer';
+
 
 const Faq: React.FC = () => {
   return (
