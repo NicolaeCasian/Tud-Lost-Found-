@@ -1,0 +1,97 @@
+.login-header {
+    /* Alternatively, if you want a solid color, use: */
+    background: #274156; 
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  }
+  
+  .login-title {
+    font-family: 'Roboto', sans-serif;
+    font-size: 1.8rem;
+    font-weight: 600;
+    text-align: center;
+    color: whitesmoke;
+    padding: 16px;
+    overflow: hidden;
+    white-space: nowrap;
+    border-right: 2px solid;
+    margin: 0 auto;
+    animation: typing 5s steps(30, end), blink-caret 0.75s step-end 1 forwards;;
+  }
+  @media only screen and (max-width: 600px) {
+    .login-title {
+      font-size: 1.4rem;  
+      padding: 12px;      
+      animation: typing 3.5s steps(20, end), blink-caret 0.75s step-end infinite;
+    }
+  }
+
+    @keyframes typing {
+        from { width: 0% }
+        to { width: 100% }
+    }
+
+    @keyframes blink-caret {
+        from, to { border-color: transparent }
+        50% { border-color: whitesmoke }
+    }
+.login-content {
+    --background: whitesmoke;
+    
+}
+
+.login-card {
+    
+    background-color: #e0e4de;
+    color: #333;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    padding: 20px;
+    margin: 20px;
+    max-width: 900px;
+    font-size: 1rem;
+    line-height: 1.5;
+    border: 1px solid #ccc;
+    margin: 0 auto;
+  }
+
+.login-features {
+    align-items: center;
+    list-style: none;
+  }
+
+.login-card-content p {
+    font-size: large;
+}
+
+.login-card-content  {
+    font-size: large;
+}
+
+.login-button {
+    /* Use Ionic’s CSS variables for background, text, etc. */
+    --background:#274156;         /* Normal background */
+    --background-focused: #131416; /* Focused state */
+    --background-hover: #161718;   /* Hover background */
+    --background-activated: #18191a; /* Pressed state */
+    --ripple-color: #ffffff;       /* Ripple effect color */
+    color: #ffffff;                /* Button text/icon color */
+    border-radius: 4px;            /* Rounded corners (optional) */
+  
+    /* For a subtle scale effect on hover, add a transition */
+    transition: transform 0.2s ease;
+  }
+  
+  .login-button:hover {
+    transform: scale(1.05);
+    --background:var(--background-activated);
+  }
+
+  .login-card-text{
+    color: #274156;
+    font-size: 1.2rem;
+    font-weight: 600;
+    text-align: center;
+  }
+
+
+  

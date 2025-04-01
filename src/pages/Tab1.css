@@ -45,3 +45,40 @@ ion-card img {
 .tab1 ion-col {
     margin-bottom:20px;
 }
+
+.tab1-content {
+    padding: 10px;
+    --background: whitesmoke;
+}
+.tab1-menu-toolbar{
+    --background: #274156;
+    --color: #fff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.tab1-menu-content{
+    --background: whitesmoke;
+}
+.tab1-accordion-content{
+    --background: #274156;
+}
+
+.tab1-menu {
+    --background-color: #f0f0f0; /* Example color */
+  }
+  .tab1-accordion {
+    --background-color: #e0e0e0; /* Example color */
+  }
+  
+  .tab1-accordion-header {
+    --background-color: #009688; /* Example color */
+  }
+  
+  .tab1-accordion-title {
+    color: white; /* If you want the title to contrast the background */
+  }
+  
+  .tab1-accordion-content {
+    --background-color: #ffffff; /* Example color for content */
+  }
+    

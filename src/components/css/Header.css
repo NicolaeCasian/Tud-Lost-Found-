@@ -1,0 +1,46 @@
+/* Header.css */
+
+.custom-toolbar {
+    --background: #274156; /* Updated background for a modern look */
+    --color: #fff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Subtle elevation */
+    padding: 0 10px;
+  }
+  
+  .header-title {
+    font-family: 'Roboto', sans-serif; /* Use a modern, professional font */
+    font-size: 1.5rem;
+    font-weight: 600;
+    text-align: center;
+  }
+  
+  .nav-buttons {
+    display: flex;
+    align-items: center;
+  }
+  
+  .nav-button {
+    font-family: 'Roboto', sans-serif;
+    font-weight: 500;
+    margin: 0 5px;
+    transition: background-color 0.3s ease;
+  }
+  
+  .nav-button:hover {
+    background-color: rgba(255, 255, 255, 0.1); /* Subtle hover effect */
+  }
+  
+  .menu-button {
+    font-size: 1.2rem;
+  }
+
+.footer-tips {
+    font-size: 0.8rem;
+    color: #666;
+    text-align: center;
+    margin-top: 10px;
+  }
+.main-footer {
+    color: #3a3f51;
+}
+  
