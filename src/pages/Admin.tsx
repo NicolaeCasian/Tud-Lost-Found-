@@ -21,7 +21,7 @@ import Footer from '../components/Footer';
 const Admin: React.FC = () => {
   const [users, setUsers] = useState<any[]>([]);
   
-  const API_URL = 'https://tudlnf-serverv2-90ee51882713.herokuapp.com/api/admin/users';
+  const API_URL = 'https://tudlnf-serverv2-90ee51882713.herokuapp.com';
 
   // Fetch users from API
   useEffect(() => {
