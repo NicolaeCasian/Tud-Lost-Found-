@@ -13,5 +13,5 @@ Item Retrieval: A streamlined process for matching lost items with their owners.
 SSO Integration: Secure and efficient login for students using Azure Single Sign-On (SSO).
 Mobile Compatibility: Designed and developed to run on both Android and iOS platforms.
 
-Thanks from the Team Nicolae,Akos,Aaron
+Thanks from the Team Nicolae, Akos & Aaron.
 
