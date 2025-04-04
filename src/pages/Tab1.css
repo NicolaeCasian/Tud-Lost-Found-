@@ -1,84 +1,197 @@
-ion-menu {
-    width: 400px;
+/* Force White Theme */
+.white-theme {
+  --ion-background-color: #f5f5f5 !important; /* Light gray background for the page */
+  --ion-text-color: #000000 !important;
+  background-color: #f5f5f5 !important; /* Light gray background */
+  color: #fff9f9 !important;
 }
 
-@media (max-width: 992px) {
-    ion-menu {
-        width: auto;
-    }
-}
-
-ion-header ion-title {
-    text-align: center;
-}
-
-.tab1 ion-card ion-button {
-    width: 100%;
-    padding: 10px;
-    margin: 0;
-}
-
-ion-card img {
-    width: 100%;
-    max-height:200px;
-    object-fit: cover;
-    object-position: center
-}
-
-/* Ensure cards maintain equal height */
-.tab1 ion-card {
-    display: flex;
-    flex-direction: column;
-    height: 100%; /* Ensures all cards maintain equal height */
-}
-
-.tab1 ion-card-header {
-    flex: 0; /* Prevents header from stretching */
-}
-
-.tab1 ion-card-content {
-    flex: 1;
-    max-height: 120px;
-    overflow-y: auto;
-}
-
-.tab1 ion-col {
-    margin-bottom:20px;
-}
-
+/* Page Content */
 .tab1-content {
-    padding: 10px;
-    --background: whitesmoke;
-}
-.tab1-menu-toolbar{
-    --background: #274156;
-    --color: #fff;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  --background: white;
+  padding: 1rem;           /* General padding around the content */
+  padding-bottom: 80px;    /* Extra padding at the bottom to allow scrolling to the footer */
+  min-height: 100vh;       /* Ensure the content fills at least the viewport height */
 }
 
-.tab1-menu-content{
-    --background: whitesmoke;
-}
-.tab1-accordion-content{
-    --background: #274156;
+/* Cards */
+.tab1-card {
+  background-color: #ffffff; /* White card background */
+  border: 1px solid #ddd;    /* Subtle border */
+  border-radius: 8px;        /* Rounded corners */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between; /* Space out content inside the card */
+  height: 450px;
+  width: 100%;    /* Ensure cards take full column width */
+  max-width: 400px; /* Set a maximum width for all cards */
+  margin: 0 auto; /* Center the card horizontally */
+  padding: 1rem;  /* Add padding inside the card */
 }
 
+.tab1-card-img {
+  height: 150px;      /* Fixed height for images */
+  width: 100%;        /* Make the image take the full width of the card */
+  object-fit: cover;  /* Ensure the image fits within the card */
+  border-bottom: 1px solid #ddd; /* Separate the image from the content */
+}
+
+.tab1-card-title {
+  font-size: 1rem;
+  font-weight: bold;
+  color: #000000;
+  margin: 0.5rem 0;
+  text-align: center;
+}
+
+.tab1-card-subtitle {
+  font-size: 0.9rem;
+  color: #555555;
+  text-align: center;
+}
+
+.tab1-card-content {
+  font-size: 0.9rem;
+  color: #333333;
+  flex-grow: 1;       /* Allow content to grow and fill space */
+  overflow: hidden;   /* Prevent overflow if content is too long */
+  padding: 0.5rem;
+  text-align: center;
+}
+
+/* Updated Button Style for IonButton using CSS Variables */
+ion-button.tab1-card-button {
+  --background: #274156 !important;       /* Normal state background */
+  --background-hover: #1e3344 !important; /* Hover state background */
+  --background-focused: #1e3344 !important;
+  --background-activated: #1e3344 !important;
+  --color: #ffffff !important;            /* Text color */
+  border-radius: 4px;                     /* Rounded corners */
+  border: none;
+  font-weight: bold;
+  cursor: pointer;
+  margin: 0.5rem auto;                    /* Center the button horizontally */
+  display: block;
+  max-width: 200px;                       /* Limit the button width */
+  text-align: center;
+}
+
+/* Updated Button Style for regular HTML buttons if used */
+.tab1-card-button {
+  color: #ffffff !important;
+  border-radius: 4px;
+  border: none;
+  font-weight: bold;
+  cursor: pointer;
+  margin: 0.5rem auto;
+  display: block;
+  max-width: 200px;
+  text-align: center;
+  padding: 0.75rem 1.5rem;
+}
+
+/* Grid Layout */
+.tab1-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); /* Responsive grid with fixed card width */
+  gap: 1rem; /* Space between cards */
+}
+
+.tab1-col {
+  display: flex;
+  justify-content: center;
+  align-items: stretch; /* Ensure cards stretch to fill the grid cell */
+}
+
+/* Pagination */
+.tab1-pagination-grid {
+  margin-top: 1rem;
+  text-align: center;
+}
+
+.tab1-pagination-button {
+  --background: #274156 !important; /* Normal state background */
+  color: #ffffff !important;        /* White text */
+  border: none;
+  border-radius: 4px; /* Slightly rounded corners */
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+}
+
+.tab1-pagination-button:hover {
+  background-color: #1e3344 !important; /* Darker shade for hover effect */
+}
+
+.tab1-pagination-info {
+  font-size: 1rem;
+  color: #000000;
+}
+
+/* Footer */
+.tab1-footer {
+  background-color: #ffffff;
+  color: #000000;
+  text-align: center;
+  padding: 1rem;
+  border-top: 1px solid #ddd;
+}
+
+/* Filters Menu */
+
+/* 1) Header for the Filters Menu */
+.tab1-menu-header {
+  background-color: #274156 !important; /* Make the top bar white */
+  --color: #274156 !important;            /* Black text */
+  box-shadow: none;                  /* Remove shadow if you prefer a flat look */
+  padding: 0 10px;
+}
+.tab1-menu-toolbar {
+  --background: #274156 !important; /* Dark blue background for the toolbar */
+  color: #fff !important;           /* White text for the toolbar */
+  padding: 0 10px;
+}
+
+/* 2) IonMenu Container */
 .tab1-menu {
-    --background-color: #f0f0f0; /* Example color */
+  --background: #fff !important; /* White background for the menu */
+}
+
+/* 3) IonContent within the menu */
+.tab1-menu-content {
+  --background: #fff !important; /* White background inside menu */
+  color: #000 !important;        /* Black text for readability */
+}
+
+/* 4) Accordion Headers and Content */
+.tab1-accordion-header {
+  --background: #fff !important; /* White background */
+  color: #000 !important;        /* Black text */
+}
+
+.tab1-accordion-content {
+  --background: #fff !important; /* White background */
+  color: #000 !important;        /* Black text */
+}
+
+/* 5) Apply Filters Button */
+.tab1-apply-filters {
+  --background: #274156 !important; /* Dark blue background */
+  color: #fff !important;           /* White text */
+  border-radius: 4px;
+  font-weight: bold;
+  margin-top: 1rem;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+  .tab1-card-img {
+    height: 120px; /* Reduce image height on smaller screens */
   }
-  .tab1-accordion {
-    --background-color: #e0e0e0; /* Example color */
+}
+
+@media (max-width: 480px) {
+  .tab1-card-img {
+    height: 100px; /* Further reduce image height on very small screens */
   }
-  
-  .tab1-accordion-header {
-    --background-color: #009688; /* Example color */
-  }
-  
-  .tab1-accordion-title {
-    color: white; /* If you want the title to contrast the background */
-  }
-  
-  .tab1-accordion-content {
-    --background-color: #ffffff; /* Example color for content */
-  }
-    
+}

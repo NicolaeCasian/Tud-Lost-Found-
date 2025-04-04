@@ -172,7 +172,7 @@ const Tab1: React.FC = () => {
         // Small screen layout: Overlay menu and FAB button to toggle it
         <>
           <IonMenu contentId="main-content" type="overlay" menuId="filterMenu" side="start" className="tab1-menu">
-            <IonHeader className="tab1-menu-header">
+            <IonHeader className="tab1-menu-header" >
               <IonToolbar className="tab1-menu-toolbar">
                 <IonTitle className="tab1-menu-title">Filters</IonTitle>
               </IonToolbar>
