@@ -1,40 +1,37 @@
 /* Force White Theme */
 .white-theme {
-  --ion-background-color: #f5f5f5 !important; /* Light gray background for the page */
+  --ion-background-color: #f5f5f5 !important;
   --ion-text-color: #000000 !important;
-  background-color: #f5f5f5 !important; /* Light gray background */
+  --background: #f5f5f5 !important;
   color: #fff9f9 !important;
 }
 
-/* Page Content */
 .tab1-content {
-  --background: white;
-  padding: 1rem;           /* General padding around the content */
-  padding-bottom: 80px;    /* Extra padding at the bottom to allow scrolling to the footer */
-  min-height: 100vh;       /* Ensure the content fills at least the viewport height */
+  --background: #f5f5f5 !important;
+  min-height: 80vh;
+  padding: 1rem;
 }
 
-/* Cards */
 .tab1-card {
-  background-color: #ffffff; /* White card background */
-  border: 1px solid #ddd;    /* Subtle border */
-  border-radius: 8px;        /* Rounded corners */
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+  background-color: #ffffff;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   display: flex;
   flex-direction: column;
-  justify-content: space-between; /* Space out content inside the card */
+  justify-content: space-between;
   height: 450px;
-  width: 100%;    /* Ensure cards take full column width */
-  max-width: 400px; /* Set a maximum width for all cards */
-  margin: 0 auto; /* Center the card horizontally */
-  padding: 1rem;  /* Add padding inside the card */
+  width: 100%;
+  max-width: 400px;
+  margin: 0 auto;
+  padding: 1rem;
 }
 
 .tab1-card-img {
-  height: 150px;      /* Fixed height for images */
-  width: 100%;        /* Make the image take the full width of the card */
-  object-fit: cover;  /* Ensure the image fits within the card */
-  border-bottom: 1px solid #ddd; /* Separate the image from the content */
+  height: 150px;
+  width: 100%;
+  object-fit: cover;
+  border-bottom: 1px solid #ddd;
 }
 
 .tab1-card-title {
@@ -54,30 +51,27 @@
 .tab1-card-content {
   font-size: 0.9rem;
   color: #333333;
-  flex-grow: 1;       /* Allow content to grow and fill space */
-  overflow: hidden;   /* Prevent overflow if content is too long */
+  flex-grow: 1;
+  overflow: hidden;
   padding: 0.5rem;
   text-align: center;
 }
 
-/* Updated Button Style for IonButton using CSS Variables */
 ion-button.tab1-card-button {
-  --background: #274156 !important;       /* Normal state background */
-  --background-hover: #1e3344 !important; /* Hover state background */
+  --background: #274156 !important;
   --background-focused: #1e3344 !important;
   --background-activated: #1e3344 !important;
-  --color: #ffffff !important;            /* Text color */
-  border-radius: 4px;                     /* Rounded corners */
+  --color: #ffffff !important;
+  border-radius: 4px;
   border: none;
   font-weight: bold;
   cursor: pointer;
-  margin: 0.5rem auto;                    /* Center the button horizontally */
+  margin: 0.5rem auto;
   display: block;
-  max-width: 200px;                       /* Limit the button width */
+  max-width: 200px;
   text-align: center;
 }
 
-/* Updated Button Style for regular HTML buttons if used */
 .tab1-card-button {
   color: #ffffff !important;
   border-radius: 4px;
@@ -91,36 +85,34 @@ ion-button.tab1-card-button {
   padding: 0.75rem 1.5rem;
 }
 
-/* Grid Layout */
 .tab1-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); /* Responsive grid with fixed card width */
-  gap: 1rem; /* Space between cards */
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1rem;
 }
 
 .tab1-col {
   display: flex;
   justify-content: center;
-  align-items: stretch; /* Ensure cards stretch to fill the grid cell */
+  align-items: stretch;
 }
 
-/* Pagination */
 .tab1-pagination-grid {
   margin-top: 1rem;
   text-align: center;
 }
 
 .tab1-pagination-button {
-  --background: #274156 !important; /* Normal state background */
-  color: #ffffff !important;        /* White text */
+  --background: #274156 !important;
+  color: #ffffff !important;
   border: none;
-  border-radius: 4px; /* Slightly rounded corners */
+  border-radius: 4px;
   padding: 0.5rem 1rem;
   cursor: pointer;
 }
 
 .tab1-pagination-button:hover {
-  background-color: #1e3344 !important; /* Darker shade for hover effect */
+  background-color: #1e3344 !important;
 }
 
 .tab1-pagination-info {
@@ -128,70 +120,129 @@ ion-button.tab1-card-button {
   color: #000000;
 }
 
-/* Footer */
 .tab1-footer {
-  background-color: #ffffff;
+  background-color: #f5f5f5;
   color: #000000;
   text-align: center;
   padding: 1rem;
   border-top: 1px solid #ddd;
 }
 
-/* Filters Menu */
-
-/* 1) Header for the Filters Menu */
 .tab1-menu-header {
-  background-color: #274156 !important; /* Make the top bar white */
-  --color: #274156 !important;            /* Black text */
-  box-shadow: none;                  /* Remove shadow if you prefer a flat look */
+  background-color: #274156 !important;
+  --color: #274156 !important;
+  box-shadow: none;
   padding: 0 10px;
 }
+
 .tab1-menu-toolbar {
-  --background: #274156 !important; /* Dark blue background for the toolbar */
-  color: #fff !important;           /* White text for the toolbar */
+  --background: #274156 !important;
+  color: #fff !important;
   padding: 0 10px;
 }
 
-/* 2) IonMenu Container */
-.tab1-menu {
-  --background: #fff !important; /* White background for the menu */
+.tab1-menu,
+.tab1-menu-content,
+.tab1-menu-content .ion-content {
+  --background: #f5f5f5 !important;
 }
 
-/* 3) IonContent within the menu */
+.tab1-menu-list {
+  background-color: #f5f5f5 !important;
+  color: #000 !important;
+}
+
 .tab1-menu-content {
-  --background: #fff !important; /* White background inside menu */
-  color: #000 !important;        /* Black text for readability */
+  --background: #f5f5f5 !important;
+  color: #000 !important;
 }
 
-/* 4) Accordion Headers and Content */
+.tab1-accordion {
+  background-color: #f5f5f5 !important;
+  color: #000 !important;
+}
+
 .tab1-accordion-header {
-  --background: #fff !important; /* White background */
-  color: #000 !important;        /* Black text */
+  --background: #fff !important;
+  color: #000 !important;
 }
 
-.tab1-accordion-content {
-  --background: #fff !important; /* White background */
-  color: #000 !important;        /* Black text */
+.tab1-filter-item {
+  --background: #fff !important;
+  color: #000 !important;
 }
 
-/* 5) Apply Filters Button */
+.tab1-filter-item:hover {
+  --background: #fff !important;
+  --color: #000 !important;
+}
+
+.tab1-filter-checkbox {
+  border-color: #274156 !important;
+  --checkmark-color: #274156 !important;
+  --size: 20px;
+  border-radius: 4px;
+  cursor: pointer;
+  color: #ddd;
+}
+
+.tab1-filter-checkbox:hover {
+  --border-color: #1e3344 !important;
+}
+
+.tab1-filter-checkbox:checked {
+  --background: #274156 !important;
+  --checkmark-color: #ffffff !important;
+}
+
+.tab1-filter-item ion-label {
+  font-size: 1rem;
+  color: #000000 !important;
+  cursor: pointer;
+}
+
+.tab1-accordion-header:hover {
+  --background: #f5f5f5 !important;
+  background-color: #f5f5f5 !important;
+  --color: #000000 !important;
+  cursor: pointer;
+}
+
+.tab1-accordion-header ion-icon {
+  color: #000000 !important;
+  font-size: 1.2rem;
+}
+
 .tab1-apply-filters {
-  --background: #274156 !important; /* Dark blue background */
-  color: #fff !important;           /* White text */
+  --background: #274156 !important;
+  color: #f5f5f5 !important;
   border-radius: 4px;
   font-weight: bold;
   margin-top: 1rem;
 }
 
-/* Responsive Adjustments */
 @media (max-width: 768px) {
   .tab1-card-img {
-    height: 120px; /* Reduce image height on smaller screens */
+    height: 120px;
   }
 }
 
 @media (max-width: 480px) {
   .tab1-card-img {
-    height: 100px; /* Further reduce image height on very small screens */
+    height: 100px;
   }
+}
+
+.tab1-search-toolbar {
+  --background: #f5f5f5 !important;
+  color: #fff !important;
+  padding: 0 10px;
+}
+
+.tab1-searchbar {
+  --background: #f5f5f5 !important;
+  color: #000 !important;
+  border-radius: 4px;
+  padding: 0.5rem;
+  margin: 1rem 0;
 }
