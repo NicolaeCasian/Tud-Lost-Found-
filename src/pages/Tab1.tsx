@@ -172,7 +172,7 @@ const Tab1: React.FC = () => {
         // Small screen layout: Overlay menu and FAB button to toggle it
         <>
           <IonMenu contentId="main-content" type="overlay" menuId="filterMenu" side="start" className="tab1-menu">
-            <IonHeader className="tab1-menu-header" >
+            <IonHeader className="tab1-menu-header">
               <IonToolbar className="tab1-menu-toolbar">
                 <IonTitle className="tab1-menu-title">Filters</IonTitle>
               </IonToolbar>
@@ -188,15 +188,19 @@ const Tab1: React.FC = () => {
                     <div slot="content" className="tab1-accordion-content">
                       <IonItem lines="none" className="tab1-filter-item">
                         <IonLabel>Lost</IonLabel>
-                        <IonCheckbox slot="end"
-                                     onIonChange={(e) => handleFilterChange(e, "type", "Lost")}
-                                     className="tab1-filter-checkbox" />
+                        <IonCheckbox
+                          slot="end"
+                          onIonChange={(e) => handleFilterChange(e, "type", "Lost")}
+                          className="tab1-filter-checkbox"
+                        />
                       </IonItem>
                       <IonItem lines="none" className="tab1-filter-item">
                         <IonLabel>Found</IonLabel>
-                        <IonCheckbox slot="end"
-                                     onIonChange={(e) => handleFilterChange(e, "type", "Found")}
-                                     className="tab1-filter-checkbox" />
+                        <IonCheckbox
+                          slot="end"
+                          onIonChange={(e) => handleFilterChange(e, "type", "Found")}
+                          className="tab1-filter-checkbox"
+                        />
                       </IonItem>
                     </div>
                   </IonAccordion>
@@ -209,9 +213,11 @@ const Tab1: React.FC = () => {
                       {["Electronics", "Clothes", "Backpacks", "Keys", "Wallets", "Student ID", "Other"].map(category => (
                         <IonItem key={category} lines="none" className="tab1-filter-item">
                           <IonLabel>{category}</IonLabel>
-                          <IonCheckbox slot="end"
-                                       onIonChange={(e) => handleFilterChange(e, "category", category)}
-                                       className="tab1-filter-checkbox" />
+                          <IonCheckbox
+                            slot="end"
+                            onIonChange={(e) => handleFilterChange(e, "category", category)}
+                            className="tab1-filter-checkbox"
+                          />
                         </IonItem>
                       ))}
                     </div>
@@ -225,9 +231,11 @@ const Tab1: React.FC = () => {
                       {["A Block", "B Block", "C Block", "D Block", "E Block", "F Block", "G Block", "H Block", "S Block", "Connect Building"].map(location => (
                         <IonItem key={location} lines="none" className="tab1-filter-item">
                           <IonLabel>{location}</IonLabel>
-                          <IonCheckbox slot="end"
-                                       onIonChange={(e) => handleFilterChange(e, "location", location)}
-                                       className="tab1-filter-checkbox" />
+                          <IonCheckbox
+                            slot="end"
+                            onIonChange={(e) => handleFilterChange(e, "location", location)}
+                            className="tab1-filter-checkbox"
+                          />
                         </IonItem>
                       ))}
                     </div>
@@ -254,7 +262,8 @@ const Tab1: React.FC = () => {
                 </IonToolbar>
               )}
             </IonHeader>
-            <IonContent fullscreen className="tab1-content">
+            {/* Removed fullscreen from IonContent */}
+            <IonContent className="tab1-content">
               <IonGrid className="tab1-grid">
                 <IonRow className="tab1-row">
                   {displayedItems.length > 0 ? (
@@ -313,7 +322,8 @@ const Tab1: React.FC = () => {
                 </IonMenuToggle>
               </IonFab>
             </IonContent>
-            <IonFooter className="tab1-footer">
+            {/* Added style to the IonFooter to enforce auto height */}
+            <IonFooter className="tab1-footer" style={{ height: 'auto' }}>
               <Footer />
             </IonFooter>
           </IonPage>
@@ -338,15 +348,19 @@ const Tab1: React.FC = () => {
                     <div slot="content" className="tab1-accordion-content">
                       <IonItem lines="none" className="tab1-filter-item">
                         <IonLabel>Lost</IonLabel>
-                        <IonCheckbox slot="end"
-                                     onIonChange={(e) => handleFilterChange(e, "type", "Lost")}
-                                     className="tab1-filter-checkbox" />
+                        <IonCheckbox
+                          slot="end"
+                          onIonChange={(e) => handleFilterChange(e, "type", "Lost")}
+                          className="tab1-filter-checkbox"
+                        />
                       </IonItem>
                       <IonItem lines="none" className="tab1-filter-item">
                         <IonLabel>Found</IonLabel>
-                        <IonCheckbox slot="end"
-                                     onIonChange={(e) => handleFilterChange(e, "type", "Found")}
-                                     className="tab1-filter-checkbox" />
+                        <IonCheckbox
+                          slot="end"
+                          onIonChange={(e) => handleFilterChange(e, "type", "Found")}
+                          className="tab1-filter-checkbox"
+                        />
                       </IonItem>
                     </div>
                   </IonAccordion>
@@ -359,9 +373,11 @@ const Tab1: React.FC = () => {
                       {["Electronics", "Clothes", "Backpacks", "Keys", "Wallets", "Student ID", "Other"].map(category => (
                         <IonItem key={category} lines="none" className="tab1-filter-item">
                           <IonLabel>{category}</IonLabel>
-                          <IonCheckbox slot="end"
-                                       onIonChange={(e) => handleFilterChange(e, "category", category)}
-                                       className="tab1-filter-checkbox" />
+                          <IonCheckbox
+                            slot="end"
+                            onIonChange={(e) => handleFilterChange(e, "category", category)}
+                            className="tab1-filter-checkbox"
+                          />
                         </IonItem>
                       ))}
                     </div>
@@ -375,9 +391,11 @@ const Tab1: React.FC = () => {
                       {["A Block", "B Block", "C Block", "D Block", "E Block", "F Block", "G Block", "H Block", "S Block", "Connect Building"].map(location => (
                         <IonItem key={location} lines="none" className="tab1-filter-item">
                           <IonLabel>{location}</IonLabel>
-                          <IonCheckbox slot="end"
-                                       onIonChange={(e) => handleFilterChange(e, "location", location)}
-                                       className="tab1-filter-checkbox" />
+                          <IonCheckbox
+                            slot="end"
+                            onIonChange={(e) => handleFilterChange(e, "location", location)}
+                            className="tab1-filter-checkbox"
+                          />
                         </IonItem>
                       ))}
                     </div>
@@ -404,7 +422,7 @@ const Tab1: React.FC = () => {
                 </IonToolbar>
               )}
             </IonHeader>
-            <IonContent fullscreen className="tab1-content">
+            <IonContent className="tab1-content">
               <IonGrid className="tab1-grid">
                 <IonRow className="tab1-row">
                   {displayedItems.length > 0 ? (
@@ -454,9 +472,40 @@ const Tab1: React.FC = () => {
                   </IonCol>
                 </IonRow>
               </IonGrid>
-              <IonFooter className="tab1-footer">
-              <Footer />
-            </IonFooter>
+              <IonFab vertical="bottom" horizontal="end" slot="fixed" className="tab1-fab">
+                <IonMenuToggle menu="filterMenu" className="tab1-menu-toggle">
+                  <IonFabButton className="tab1-fab-button">
+                    <IonIcon icon={filterOutline} className="tab1-fab-icon" />
+                  </IonFabButton>
+                </IonMenuToggle>
+              </IonFab>
+              <IonToolbar className="tab1-toolbar">
+              <div className="main-footer">
+        <div className="footer-container">
+          <div className="footer-section">
+            <h4>TUD Lost & Found</h4>
+            <p>Helping students recover lost items across campus.</p>
+          </div>
+
+          <div className="footer-section">
+            <h4>Contact Us</h4>
+            <p>Email: studenthubdesk.blanchardstown@tudublin.ie</p>
+            <p>Phone: +353 1 220 8088</p>
+          </div>
+
+          <div className="footer-section">
+            <h4>Quick Links</h4>
+            <p><a href="/faq">FAQ</a></p>
+            <p><a href="https://www.tudublin.ie/for-students/student-services-and-support/student-policies-regulations/">Terms of Service</a></p>
+            <p><a href="https://www.tudublin.ie/explore/gdpr/data-protection-policy/">Privacy Policy</a></p>
+          </div>
+        </div>
+
+        <div className="footer-bottom">
+          &copy; 2024 TUD Lost & Found. All rights reserved.
+        </div>
+      </div>
+      </IonToolbar>
             </IonContent>
             
           </IonPage>

@@ -6,9 +6,7 @@ import { IonFooter,
 
 const Footer: React.FC = () => {
   return (
-    <IonFooter className="footer-tips">
-      
-
+    
       <div className="main-footer">
         <div className="footer-container">
           <div className="footer-section">
@@ -34,7 +32,7 @@ const Footer: React.FC = () => {
           &copy; 2024 TUD Lost & Found. All rights reserved.
         </div>
       </div>
-    </IonFooter>
+
   );
 };
 

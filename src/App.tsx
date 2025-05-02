@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react'; 
 import { Redirect, Route } from 'react-router-dom';
 import {
   IonApp,
@@ -55,7 +55,7 @@ const App: React.FC = () => {
 
   return (
     <MsalProvider instance={msalInstance}>
-      {/* Use the CSS variable for background on the entire app */}
+      {/* The background is set using the CSS variable for the entire app */}
       <IonApp style={{ "--background": "#274156" }}>
         <IonReactRouter>
           <IonRouterOutlet>
@@ -63,7 +63,6 @@ const App: React.FC = () => {
             <Route exact path="/login" component={Login} />
             <Route exact path="/faq" component={Faq} />
             <Route exact path="/Admin" component={Admin} />
-            <Route exact path="/item/:id" component={LostItem} />
 
             {/* Authenticated Routes */}
             {isAuthenticated ? (
@@ -76,6 +75,9 @@ const App: React.FC = () => {
                       <Route exact path="/found" component={Found} />
                       <Route exact path="/tab2" component={Tab2} />
                       <Route exact path="/tab3" component={Tab3} />
+                      {/* The item details route is placed here so that when a user on Tab1 clicks "View Item", 
+                          the LostItem page is rendered within the tab structure */}
+                      <Route exact path="/item/:id" component={LostItem} />
                       <Redirect exact from="/" to="/tab1" />
                     </IonRouterOutlet>
                     <IonTabBar
@@ -102,7 +104,7 @@ const App: React.FC = () => {
                 )}
               />
             ) : (
-              // If not authenticated, redirect from any root path to /login
+              // If not authenticated, redirect to /login
               <Redirect exact from="/" to="/login" />
             )}
           </IonRouterOutlet>
