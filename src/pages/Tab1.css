@@ -1,3 +1,16 @@
+/* Global Layout for Tab1 Page */
+ion-page.tab1-page {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;  /* Ensure the page fills the viewport */
+}
+
+ion-content.tab1-content {
+  flex: 1 1 auto; /* Allow content to expand */
+  padding: 1rem;
+  --background: #f5f5f5 !important;
+}
+
 /* Force White Theme */
 .white-theme {
   --ion-background-color: #f5f5f5 !important;
@@ -6,12 +19,7 @@
   color: #fff9f9 !important;
 }
 
-.tab1-content {
-  --background: #f5f5f5 !important;
-  min-height: 80vh;
-  padding: 1rem;
-}
-
+/* Cards and Grid Layout */
 .tab1-card {
   background-color: #ffffff;
   border: 1px solid #ddd;
@@ -97,6 +105,7 @@ ion-button.tab1-card-button {
   align-items: stretch;
 }
 
+/* Pagination */
 .tab1-pagination-grid {
   margin-top: 1rem;
   text-align: center;
@@ -120,14 +129,18 @@ ion-button.tab1-card-button {
   color: #000000;
 }
 
+/* Footer */
 .tab1-footer {
   background-color: #f5f5f5;
   color: #000000;
   text-align: center;
   padding: 1rem;
   border-top: 1px solid #ddd;
+  position: static !important; /* Allow footer in natural flow */
+  flex: 0 0 auto;
 }
 
+/* Menu and Accordion */
 .tab1-menu-header {
   background-color: #274156 !important;
   --color: #274156 !important;
@@ -221,18 +234,7 @@ ion-button.tab1-card-button {
   margin-top: 1rem;
 }
 
-@media (max-width: 768px) {
-  .tab1-card-img {
-    height: 120px;
-  }
-}
-
-@media (max-width: 480px) {
-  .tab1-card-img {
-    height: 100px;
-  }
-}
-
+/* Search Toolbar */
 .tab1-search-toolbar {
   --background: #f5f5f5 !important;
   color: #fff !important;
@@ -245,4 +247,44 @@ ion-button.tab1-card-button {
   border-radius: 4px;
   padding: 0.5rem;
   margin: 1rem 0;
+}
+
+/* Adjustments for Small Screens */
+@media (max-width: 768px) {
+  .tab1-card-img {
+    height: 120px;
+  }
+  
+  /* Remove fixed min-height and let flex layout handle height */
+  ion-content.tab1-content {
+    padding: 1rem;
+    /* Extra bottom padding if needed; adjust as desired */
+    padding-bottom: 1rem;
+  }
+  
+  .tab1-pagination-grid {
+    margin-bottom: 20px;
+  }
+  
+  .tab1-footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    z-index: 10; /* Ensure it stays above other content */
+    background-color: #fff; /* Match the footer background color */
+    box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1); /* Optional: Add a shadow for better visibility */
+  }
+  
+  /* Ensure floating filter icon is above other elements */
+  .tab1-fab {
+    z-index: 1000;
+  }
+}
+
+/* Adjustments for Extra Small Screens */
+@media (max-width: 480px) {
+  .tab1-card-img {
+    height: 100px;
+  }
 }

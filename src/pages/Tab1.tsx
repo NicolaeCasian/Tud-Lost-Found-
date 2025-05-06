@@ -27,17 +27,18 @@ import {
   IonCardTitle,
   IonSearchbar,
   IonIcon,
-  IonFooter
+  IonFooter,
+  IonBadge
 } from '@ionic/react';
 import { useMsal } from '@azure/msal-react';
 import { useHistory } from 'react-router-dom';
 import axios from 'axios';
 import { chevronBackOutline, chevronForwardOutline, filterOutline } from 'ionicons/icons';
 import { menuController } from '@ionic/core';
-
+import Footer from '../components/Footer';
 import './Tab1.css';
 import Header from '../components/Header';
-import Footer from '../components/Footer';
+
 
 const Tab1: React.FC = () => {
   const { instance } = useMsal();
@@ -172,7 +173,7 @@ const Tab1: React.FC = () => {
         // Small screen layout: Overlay menu and FAB button to toggle it
         <>
           <IonMenu contentId="main-content" type="overlay" menuId="filterMenu" side="start" className="tab1-menu">
-            <IonHeader className="tab1-menu-header" >
+            <IonHeader className="tab1-menu-header">
               <IonToolbar className="tab1-menu-toolbar">
                 <IonTitle className="tab1-menu-title">Filters</IonTitle>
               </IonToolbar>
@@ -188,15 +189,19 @@ const Tab1: React.FC = () => {
                     <div slot="content" className="tab1-accordion-content">
                       <IonItem lines="none" className="tab1-filter-item">
                         <IonLabel>Lost</IonLabel>
-                        <IonCheckbox slot="end"
-                                     onIonChange={(e) => handleFilterChange(e, "type", "Lost")}
-                                     className="tab1-filter-checkbox" />
+                        <IonCheckbox
+                          slot="end"
+                          onIonChange={(e) => handleFilterChange(e, "type", "Lost")}
+                          className="tab1-filter-checkbox"
+                        />
                       </IonItem>
                       <IonItem lines="none" className="tab1-filter-item">
                         <IonLabel>Found</IonLabel>
-                        <IonCheckbox slot="end"
-                                     onIonChange={(e) => handleFilterChange(e, "type", "Found")}
-                                     className="tab1-filter-checkbox" />
+                        <IonCheckbox
+                          slot="end"
+                          onIonChange={(e) => handleFilterChange(e, "type", "Found")}
+                          className="tab1-filter-checkbox"
+                        />
                       </IonItem>
                     </div>
                   </IonAccordion>
@@ -209,9 +214,11 @@ const Tab1: React.FC = () => {
                       {["Electronics", "Clothes", "Backpacks", "Keys", "Wallets", "Student ID", "Other"].map(category => (
                         <IonItem key={category} lines="none" className="tab1-filter-item">
                           <IonLabel>{category}</IonLabel>
-                          <IonCheckbox slot="end"
-                                       onIonChange={(e) => handleFilterChange(e, "category", category)}
-                                       className="tab1-filter-checkbox" />
+                          <IonCheckbox
+                            slot="end"
+                            onIonChange={(e) => handleFilterChange(e, "category", category)}
+                            className="tab1-filter-checkbox"
+                          />
                         </IonItem>
                       ))}
                     </div>
@@ -225,9 +232,11 @@ const Tab1: React.FC = () => {
                       {["A Block", "B Block", "C Block", "D Block", "E Block", "F Block", "G Block", "H Block", "S Block", "Connect Building"].map(location => (
                         <IonItem key={location} lines="none" className="tab1-filter-item">
                           <IonLabel>{location}</IonLabel>
-                          <IonCheckbox slot="end"
-                                       onIonChange={(e) => handleFilterChange(e, "location", location)}
-                                       className="tab1-filter-checkbox" />
+                          <IonCheckbox
+                            slot="end"
+                            onIonChange={(e) => handleFilterChange(e, "location", location)}
+                            className="tab1-filter-checkbox"
+                          />
                         </IonItem>
                       ))}
                     </div>
@@ -254,7 +263,8 @@ const Tab1: React.FC = () => {
                 </IonToolbar>
               )}
             </IonHeader>
-            <IonContent fullscreen className="tab1-content">
+            {/* Removed fullscreen from IonContent */}
+            <IonContent className="tab1-content">
               <IonGrid className="tab1-grid">
                 <IonRow className="tab1-row">
                   {displayedItems.length > 0 ? (
@@ -313,9 +323,7 @@ const Tab1: React.FC = () => {
                 </IonMenuToggle>
               </IonFab>
             </IonContent>
-            <IonFooter className="tab1-footer">
-              <Footer />
-            </IonFooter>
+            
           </IonPage>
         </>
       ) : (
@@ -338,15 +346,19 @@ const Tab1: React.FC = () => {
                     <div slot="content" className="tab1-accordion-content">
                       <IonItem lines="none" className="tab1-filter-item">
                         <IonLabel>Lost</IonLabel>
-                        <IonCheckbox slot="end"
-                                     onIonChange={(e) => handleFilterChange(e, "type", "Lost")}
-                                     className="tab1-filter-checkbox" />
+                        <IonCheckbox
+                          slot="end"
+                          onIonChange={(e) => handleFilterChange(e, "type", "Lost")}
+                          className="tab1-filter-checkbox"
+                        />
                       </IonItem>
                       <IonItem lines="none" className="tab1-filter-item">
                         <IonLabel>Found</IonLabel>
-                        <IonCheckbox slot="end"
-                                     onIonChange={(e) => handleFilterChange(e, "type", "Found")}
-                                     className="tab1-filter-checkbox" />
+                        <IonCheckbox
+                          slot="end"
+                          onIonChange={(e) => handleFilterChange(e, "type", "Found")}
+                          className="tab1-filter-checkbox"
+                        />
                       </IonItem>
                     </div>
                   </IonAccordion>
@@ -359,9 +371,11 @@ const Tab1: React.FC = () => {
                       {["Electronics", "Clothes", "Backpacks", "Keys", "Wallets", "Student ID", "Other"].map(category => (
                         <IonItem key={category} lines="none" className="tab1-filter-item">
                           <IonLabel>{category}</IonLabel>
-                          <IonCheckbox slot="end"
-                                       onIonChange={(e) => handleFilterChange(e, "category", category)}
-                                       className="tab1-filter-checkbox" />
+                          <IonCheckbox
+                            slot="end"
+                            onIonChange={(e) => handleFilterChange(e, "category", category)}
+                            className="tab1-filter-checkbox"
+                          />
                         </IonItem>
                       ))}
                     </div>
@@ -375,9 +389,11 @@ const Tab1: React.FC = () => {
                       {["A Block", "B Block", "C Block", "D Block", "E Block", "F Block", "G Block", "H Block", "S Block", "Connect Building"].map(location => (
                         <IonItem key={location} lines="none" className="tab1-filter-item">
                           <IonLabel>{location}</IonLabel>
-                          <IonCheckbox slot="end"
-                                       onIonChange={(e) => handleFilterChange(e, "location", location)}
-                                       className="tab1-filter-checkbox" />
+                          <IonCheckbox
+                            slot="end"
+                            onIonChange={(e) => handleFilterChange(e, "location", location)}
+                            className="tab1-filter-checkbox"
+                          />
                         </IonItem>
                       ))}
                     </div>
@@ -404,37 +420,96 @@ const Tab1: React.FC = () => {
                 </IonToolbar>
               )}
             </IonHeader>
-            <IonContent fullscreen className="tab1-content">
-              <IonGrid className="tab1-grid">
-                <IonRow className="tab1-row">
-                  {displayedItems.length > 0 ? (
-                    displayedItems.map((item) => (
-                      <IonCol size="12" sizeLg="6" sizeMd="6" sizeXl="4" key={item._id} className="tab1-col">
-                        <IonCard className="tab1-card">
-                          <img alt={item.name} src={item.image} className="tab1-card-img" />
-                          <IonCardHeader className="tab1-card-header" style={{ borderBottom: '1px solid #ddd', marginBottom: '10px' }}>
-                            <IonCardTitle className="tab1-card-title">{item.name}</IonCardTitle>
-                            <IonCardSubtitle className="tab1-card-subtitle">{item.category}</IonCardSubtitle>
-                          </IonCardHeader>
-                          <IonCardContent className="tab1-card-content">
-                            <p className="tab1-card-desc" style={{ marginBottom: '8px' }}>{item.description}</p>
-                            <p className="tab1-card-location" style={{ fontWeight: 'bold', fontSize: '1.1rem' }}>
-                              Location: {item.location}
-                            </p>
-                          </IonCardContent>
-                          <IonButton onClick={() => handleItemClick(item._id)} className="tab1-card-button">
-                            View Item
-                          </IonButton>
-                        </IonCard>
-                      </IonCol>
-                    ))
-                  ) : (
-                    <IonCol size="12" className="tab1-col">
-                      <p className="tab1-no-items">No items found.</p>
-                    </IonCol>
-                  )}
-                </IonRow>
-              </IonGrid>
+            <IonContent className="tab1-content">
+            <IonGrid className="tab1-grid">
+  <IonRow className="tab1-row">
+    {displayedItems.length > 0 ? (
+      displayedItems.map(item => (
+        <IonCol
+          size="12"
+          sizeLg="6"
+          sizeMd="6"
+          sizeXl="4"
+          key={item._id}
+          className="tab1-col"
+        >
+          <IonCard className="tab1-card">
+            <img
+              alt={item.name}
+              src={item.image}
+              className="tab1-card-img"
+            />
+
+            <IonCardHeader
+              className="tab1-card-header"
+              style={{ 
+                borderBottom: '1px solid #ddd', 
+                marginBottom: '10px',
+                position: 'relative',       
+              }}
+            >
+              <IonCardSubtitle className="tab1-card-subtitle">
+                {item.category}
+              </IonCardSubtitle>
+
+              {/* 
+                Wrapper for title+badge: 
+                we absolutely position both around the center 
+              */}
+              <div style={{ position: 'relative', width: '100%', height: '2.2rem' }}>
+                <IonCardTitle 
+                  className="tab1-card-title"
+                  style={{ 
+                    position: 'absolute',
+                    top: '50%',
+                    left: '50%',
+                    transform: 'translate(-50%, -50%)',
+                    margin: 0,
+                  }}
+                >
+                  {item.name}
+                </IonCardTitle>
+
+                <IonBadge
+                  color={item.type === 'Lost' ? 'danger' : 'success'}
+                  style={{
+                    position: 'absolute',
+                    top: '50%',
+                    
+                    left: 'calc(50% + 100px)',
+                    transform: 'translateY(-50%)',
+                    color: '#ffffff', 
+                  }}
+                >
+                  {item.type}
+                </IonBadge>
+              </div>
+            </IonCardHeader>
+
+            <IonCardContent className="tab1-card-content">
+              <p className="tab1-card-desc" style={{ marginBottom: '8px' }}>
+                {item.description}
+              </p>
+              <p className="tab1-card-location" style={{ fontWeight: 'bold', fontSize: '1.1rem' }}>
+                Location: {item.location}
+              </p>
+            </IonCardContent>
+
+            <IonButton onClick={() => handleItemClick(item._id)} className="tab1-card-button">
+              View Item
+            </IonButton>
+          </IonCard>
+        </IonCol>
+      ))
+    ) : (
+      <IonCol size="12" className="tab1-col">
+        <p className="tab1-no-items">No items found.</p>
+      </IonCol>
+    )}
+  </IonRow>
+</IonGrid>
+
+
               <IonGrid className="tab1-pagination-grid">
                 <IonRow className="tab1-pagination-row ion-align-items-center ion-justify-content-center">
                   <IonCol size="auto" className="tab1-pagination-col">
@@ -454,9 +529,14 @@ const Tab1: React.FC = () => {
                   </IonCol>
                 </IonRow>
               </IonGrid>
-              <IonFooter className="tab1-footer">
-              <Footer />
-            </IonFooter>
+              <IonFab vertical="bottom" horizontal="end" slot="fixed" className="tab1-fab">
+                <IonMenuToggle menu="filterMenu" className="tab1-menu-toggle">
+                  <IonFabButton className="tab1-fab-button">
+                    <IonIcon icon={filterOutline} className="tab1-fab-icon" />
+                  </IonFabButton>
+                </IonMenuToggle>
+              </IonFab>
+            <Footer />
             </IonContent>
             
           </IonPage>

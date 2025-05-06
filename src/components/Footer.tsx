@@ -3,13 +3,10 @@ import { IonFooter,
          IonCard, 
          IonCardContent } from '@ionic/react';
 
-import './css/Footer.css';
 
 const Footer: React.FC = () => {
   return (
-    <IonFooter className="footer-tips">
-      
-
+    
       <div className="main-footer">
         <div className="footer-container">
           <div className="footer-section">
@@ -35,7 +32,7 @@ const Footer: React.FC = () => {
           &copy; 2024 TUD Lost & Found. All rights reserved.
         </div>
       </div>
-    </IonFooter>
+
   );
 };
 

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react'; 
 import { Redirect, Route } from 'react-router-dom';
 import {
   IonApp,
@@ -55,66 +55,57 @@ const App: React.FC = () => {
 
   return (
     <MsalProvider instance={msalInstance}>
-      {/* Set the overall app background */}
-      <IonApp style={{ backgroundColor: '#274156' }}>
+      {/* The background is set using the CSS variable for the entire app */}
+      <IonApp style={{ "--background": "#274156" }}>
         <IonReactRouter>
-          {/* Override the router outlet background */}
-          <IonRouterOutlet style={{ backgroundColor: '#274156' }}>
-            <Route exact path="/Admin">
-              <Admin />
-            </Route>
-            <Route exact path="/login">
-              <Login />
-            </Route>
-            <Route exact path="/faq">
-              <Faq />
-            </Route>
+          <IonRouterOutlet>
+            {/* Public Routes */}
+            <Route exact path="/login" component={Login} />
+            <Route exact path="/faq" component={Faq} />
+            <Route exact path="/Admin" component={Admin} />
+
+            {/* Authenticated Routes */}
             {isAuthenticated ? (
-              // Apply the background color on IonTabs and its inner router outlet
-              <IonTabs >
-                
-                <IonRouterOutlet style={{ backgroundColor: '#274156' }}>
-                  <Route path="/item/:id" component={LostItem} exact />
-                  <Route exact path="/tab1">
-                    <Tab1 />
-                  </Route>
-                  <Route exact path="/found">
-                    <Found />
-                  </Route>
-                  <Route exact path="/tab2">
-                    <Tab2 />
-                  </Route>
-                  <Route exact path="/tab3">
-                    <Tab3 />
-                  </Route>
-                  <Route exact path="/">
-                    <Redirect to="/tab1" />
-                  </Route>
-                </IonRouterOutlet>
-                {/* Style the tab bar so that it matches the background */}
-                <IonTabBar 
-                  slot="bottom" 
-                  style={{ 
-                    backgroundColor: '#274156',
-                    borderTop: '1px solid #ccc'
-                  }}
-                >
-                  <IonTabButton tab="tab1" href="/tab1" style={{ color: '#f5f5f5' }}>
-                    <IonIcon aria-hidden="true" icon={searchOutline} />
-                    <IonLabel>Items</IonLabel>
-                  </IonTabButton>
-                  <IonTabButton tab="tab2" href="/tab2" style={{ color: '#f5f5f5' }}>
-                    <IonIcon aria-hidden="true" icon={addCircleOutline} />
-                    <IonLabel>Report Items</IonLabel>
-                  </IonTabButton>
-                  <IonTabButton tab="tab3" href="/tab3" style={{ color: '#f5f5f5' }}>
-                    <IonIcon aria-hidden="true" icon={personCircleOutline} />
-                    <IonLabel>Account</IonLabel>
-                  </IonTabButton>
-                </IonTabBar>
-              </IonTabs>
+              <Route
+                path="/"
+                render={() => (
+                  <IonTabs>
+                    <IonRouterOutlet>
+                      <Route exact path="/tab1" component={Tab1} />
+                      <Route exact path="/found" component={Found} />
+                      <Route exact path="/tab2" component={Tab2} />
+                      <Route exact path="/tab3" component={Tab3} />
+                      {/* The item details route is placed here so that when a user on Tab1 clicks "View Item", 
+                          the LostItem page is rendered within the tab structure */}
+                      <Route exact path="/item/:id" component={LostItem} />
+                      <Redirect exact from="/" to="/tab1" />
+                    </IonRouterOutlet>
+                    <IonTabBar
+                      slot="bottom"
+                      style={{
+                        "--background": "#274156",
+                        "--border-color": "#ccc"
+                      }}
+                    >
+                      <IonTabButton tab="tab1" href="/tab1" style={{ color: '#f5f5f5' }}>
+                        <IonIcon aria-hidden="true" icon={searchOutline} />
+                        <IonLabel>Items</IonLabel>
+                      </IonTabButton>
+                      <IonTabButton tab="tab2" href="/tab2" style={{ color: '#f5f5f5' }}>
+                        <IonIcon aria-hidden="true" icon={addCircleOutline} />
+                        <IonLabel>Report Items</IonLabel>
+                      </IonTabButton>
+                      <IonTabButton tab="tab3" href="/tab3" style={{ color: '#f5f5f5' }}>
+                        <IonIcon aria-hidden="true" icon={personCircleOutline} />
+                        <IonLabel>Account</IonLabel>
+                      </IonTabButton>
+                    </IonTabBar>
+                  </IonTabs>
+                )}
+              />
             ) : (
-              <Redirect to="/login" />
+              // If not authenticated, redirect to /login
+              <Redirect exact from="/" to="/login" />
             )}
           </IonRouterOutlet>
         </IonReactRouter>

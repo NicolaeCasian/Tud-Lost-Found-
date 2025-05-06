@@ -1,0 +1,132 @@
+/* Layout and Page Styling */
+.tab2-page {
+    --ion-background-color: #f5f5f5;
+  }
+  .app-header,
+  .app-footer {
+    width: 100%;
+    padding: 0;
+    margin: 0;
+  }
+  .tab2-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  /* Top Buttons */
+  .button-grid {
+    width: 100%;
+    max-width: 600px;
+    margin: 0 auto 20px; /* center grid horizontally */
+  }
+  .button-row {
+    margin: 0;
+  }
+  .button-col {
+    padding: 0 8px;
+  }
+  .tab2-button {
+    text-transform: uppercase;
+    font-weight: 600;
+  }
+  .lost-button {
+    border: 2px solid var(--ion-color-secondary);
+  }
+  .found-button {
+    border: 2px solid var(--ion-color-primary);
+  }
+  
+  /* Report Card */
+  .report-card {
+    --background: #e6e6e6;
+    width: 100%;
+    max-width: 600px;
+    margin: 0 auto 30px; /* center card */
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  }
+  .report-card-header {
+    background-color: #e6e6e6;
+    padding: 12px 16px;
+  }
+  .report-card-title {
+    background-color:#e6e6e6;
+    font-size: 1.4rem;
+    color: rgb(27, 27, 27);
+    font-weight: bold;
+    margin: auto;
+  }
+  .report-card-content {
+    padding: 16px;
+  }
+  
+  /* Form Elements */
+  .form-item {
+    margin-bottom: 16px;
+  }
+  .form-label {
+    background-color: #ccc;
+    --color: rgb(27, 27, 27);
+    font-weight: 500;
+
+  }
+  .form-input,
+  .form-select,
+  .form-textarea,
+  .form-datetime {
+    width: 100%;
+    --padding-start: 5px;	
+    --padding-end: 5px;
+    --background:#ccc;
+  }
+  .form-textarea {
+    min-height: 100px;
+  }
+  .form-image-button {
+    margin-top: 8px;
+  }
+  
+  /* Image Preview */
+  .image-preview-container {
+    text-align: center;
+    margin: 16px 0;
+  }
+  .image-preview {
+    max-width: 200px;
+    height: auto;
+    border-radius: 4px;
+    border: 1px solid var(--ion-color-medium-tint);
+  }
+  
+  /* Submit Button */
+  .submit-button {
+    margin-top: 20px;
+    letter-spacing: 0.5px;
+  }
+  
+  /* Tips Section */
+  .footer-tips {
+    width: 100%;
+    max-width: 600px;
+    margin: 40px auto 0; /* center tips section */
+  }
+  .tips-card {
+    margin: 0;
+  }
+  .tips-card-header {
+    background-color: var(--ion-color-light-shade);
+    padding: 12px 16px;
+  }
+  .tips-card-title {
+    font-size: 1.2rem;
+  }
+  .tips-card-content ul {
+    padding-left: 20px;
+    margin: 0;
+  }
+  
+  /* Alert */
+  .submit-alert .alert-wrapper {
+    text-align: center;
+  }
+  

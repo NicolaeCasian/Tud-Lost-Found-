@@ -1,54 +1,64 @@
 /* Tips Card Styling */
 .tips-card {
-    background-color: #f8fbff;
-    padding: 10px;
-    border-radius: 8px;
-  }
-  
-  /* Main Footer Styling */
+  background-color: #f8fbff;
+  padding: 10px;
+  border-radius: 8px;
+}
+
+/* Main Footer Styling */
+.main-footer {
+  background-color: #274156;
+  color: #ffffff;
+  padding: 20px 0;
+  text-align: center;
+  /* Ensure that by default the footer is static so it remains in the flow */
+  position: static !important;
+}
+
+.footer-container {
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
+  padding: 10px 20px;
+}
+
+.footer-section {
+  flex: 1;
+  min-width: 200px;
+  text-align: left;
+}
+
+.footer-section h4 {
+  margin-bottom: 10px;
+  font-weight: bold;
+}
+
+.footer-section p {
+  margin: 5px 0;
+  font-size: 14px;
+}
+
+.footer-section a {
+  color: #ffffff;
+  text-decoration: none;
+}
+
+.footer-section a:hover {
+  text-decoration: underline;
+}
+
+.footer-bottom {
+  margin-top: 10px;
+  border-top: 1px solid #444;
+  padding-top: 10px;
+  font-size: 12px;
+}
+
+/* Media Query for Small Screens */
+@media (max-width: 768px) {
+  /* Ensure the footer does not use any fixed or sticky positioning on smaller screens */
   .main-footer {
-    background-color: #274156;
-    color: #ffffff;
-    padding: 20px 0;
-    text-align: center;
+    position: static !important;
+    padding: 15px 0;  /* Optional: reduce padding for small screens */
   }
-  
-  .footer-container {
-    display: flex;
-    justify-content: space-around;
-    flex-wrap: wrap;
-    padding: 10px 20px;
-  }
-  
-  .footer-section {
-    flex: 1;
-    min-width: 200px;
-    text-align: left;
-  }
-  
-  .footer-section h4 {
-    margin-bottom: 10px;
-    font-weight: bold;
-  }
-  
-  .footer-section p {
-    margin: 5px 0;
-    font-size: 14px;
-  }
-  
-  .footer-section a {
-    color: #ffffff;
-    text-decoration: none;
-  }
-  
-  .footer-section a:hover {
-    text-decoration: underline;
-  }
-  
-  .footer-bottom {
-    margin-top: 10px;
-    border-top: 1px solid #444;
-    padding-top: 10px;
-    font-size: 12px;
-  }
-  
+}
