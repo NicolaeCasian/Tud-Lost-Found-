@@ -38,7 +38,6 @@ import { menuController } from '@ionic/core';
 import Footer from '../components/Footer';
 import './Tab1.css';
 import Header from '../components/Header';
-import { min } from 'moment';
 
 
 const Tab1: React.FC = () => {
@@ -428,16 +427,13 @@ const Tab1: React.FC = () => {
       displayedItems.map(item => (
         <IonCol
           size="12"
-          sizeMd="6"
           sizeLg="6"
+          sizeMd="6"
           sizeXl="4"
           key={item._id}
           className="tab1-col"
         >
-          <IonCard
-            className="tab1-card"
-            style={{ overflow: 'visible' }} // allow badge to show
-          >
+          <IonCard className="tab1-card">
             <img
               alt={item.name}
               src={item.image}
@@ -446,40 +442,29 @@ const Tab1: React.FC = () => {
 
             <IonCardHeader
               className="tab1-card-header"
-              style={{
-                borderBottom: '1px solid #ddd',
+              style={{ 
+                borderBottom: '1px solid #ddd', 
                 marginBottom: '10px',
-                overflow: 'visible'
+                position: 'relative',       
               }}
             >
               <IonCardSubtitle className="tab1-card-subtitle">
                 {item.category}
               </IonCardSubtitle>
 
-              {/* inline‑flex wrapper */}
-              <div
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  flexWrap: 'wrap',
-                  gap: '0.5rem',
-                  width: '100%',
-                  marginTop: '0.5rem'
-                }}
-              >
-                <IonCardTitle
+              {/* 
+                Wrapper for title+badge: 
+                we absolutely position both around the center 
+              */}
+              <div style={{ position: 'relative', width: '100%', height: '2.2rem' }}>
+                <IonCardTitle 
                   className="tab1-card-title"
-                  style={{
-                    minWidth: 0,
+                  style={{ 
+                    position: 'absolute',
+                    top: '50%',
+                    left: '50%',
+                    transform: 'translate(-50%, -50%)',
                     margin: 0,
-                    fontSize: '1.2rem',
-                    flex: 1,
-                    textAlign: 'center',
-                    whiteSpace: 'nowrap',      /* (optional) keep title on one line */
-                    overflow: 'hidden',        /* (optional) clip overflowing text */
-                    textOverflow: 'ellipsis'
-                    
                   }}
                 >
                   {item.name}
@@ -487,6 +472,14 @@ const Tab1: React.FC = () => {
 
                 <IonBadge
                   color={item.type === 'Lost' ? 'danger' : 'success'}
+                  style={{
+                    position: 'absolute',
+                    top: '50%',
+                    
+                    left: 'calc(50% + 100px)',
+                    transform: 'translateY(-50%)',
+                    color: '#ffffff', 
+                  }}
                 >
                   {item.type}
                 </IonBadge>
@@ -494,24 +487,15 @@ const Tab1: React.FC = () => {
             </IonCardHeader>
 
             <IonCardContent className="tab1-card-content">
-              <p
-                className="tab1-card-desc"
-                style={{ marginBottom: '8px' }}
-              >
+              <p className="tab1-card-desc" style={{ marginBottom: '8px' }}>
                 {item.description}
               </p>
-              <p
-                className="tab1-card-location"
-                style={{ fontWeight: 'bold', fontSize: '1.1rem' }}
-              >
+              <p className="tab1-card-location" style={{ fontWeight: 'bold', fontSize: '1.1rem' }}>
                 Location: {item.location}
               </p>
             </IonCardContent>
 
-            <IonButton
-              onClick={() => handleItemClick(item._id)}
-              className="tab1-card-button"
-            >
+            <IonButton onClick={() => handleItemClick(item._id)} className="tab1-card-button">
               View Item
             </IonButton>
           </IonCard>
@@ -522,9 +506,8 @@ const Tab1: React.FC = () => {
         <p className="tab1-no-items">No items found.</p>
       </IonCol>
     )}
-  </IonRow> 
+  </IonRow>
 </IonGrid>
-
 
 
               <IonGrid className="tab1-pagination-grid">
