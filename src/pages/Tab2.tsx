@@ -1,29 +1,32 @@
 import React, { useState, useEffect } from 'react';
 import {
   IonContent,
+  IonHeader,
   IonPage,
-  IonGrid,
-  IonRow,
-  IonCol,
+  IonTitle,
+  IonToolbar,
+  IonItem,
+  IonLabel,
+  IonInput,
+  IonTextarea,
+  IonDatetime,
   IonButton,
   IonCard,
   IonCardHeader,
   IonCardTitle,
   IonCardContent,
-  IonItem,
-  IonLabel,
-  IonInput,
-  IonTextarea,
-  IonSelect,
-  IonSelectOption,
-  IonDatetime,
   IonFooter,
   IonText,
+  IonSelectOption,
+  IonSelect,
   IonAlert,
+  IonCol,
+  IonGrid,
+  IonRow,
 } from '@ionic/react';
 import { useHistory } from 'react-router-dom';
 import { useMsal } from '@azure/msal-react';
-import './css/lost.css';
+import './Tab2.css';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 
@@ -50,136 +53,128 @@ const Tab2: React.FC = () => {
   const [showAlert, setShowAlert] = useState(false);
   const [alertMessage, setAlertMessage] = useState('');
   const history = useHistory();
-  const API_URL = import.meta.env.VITE_API_URL || 'https://tudlnf-serverv2-90ee51882713.herokuapp.com';
+  const API_URL =
+    import.meta.env.VITE_API_URL ||
+    'https://tudlnf-serverv2-90ee51882713.herokuapp.com';
   const [imagePreview, setImagePreview] = useState<string | null>(null);
 
   const { accounts } = useMsal();
   const userEmail = accounts.length > 0 ? accounts[0].username : '';
 
+  // Pre-populate contactInfo with userEmail if it's empty
   useEffect(() => {
     if (!form.contactInfo && userEmail) {
-      setForm((prev) => ({ ...prev, contactInfo: userEmail }));
+      setForm((prevForm) => ({ ...prevForm, contactInfo: userEmail }));
     }
   }, [userEmail, form.contactInfo]);
 
-  const handleInputChange = (
-    e: React.ChangeEvent<
-      HTMLInputElement | HTMLTextAreaElement | CustomEvent<any>
-    >
-  ) => {
-    const { name, value } = (e.target as HTMLInputElement);
-    setForm((prev) => ({ ...prev, [name]: value }));
-  };
-
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0] || null;
+    const file = e.target.files?.[0];
     if (file) {
       const validTypes = ['image/jpeg', 'image/png', 'image/jpg', 'image/heic'];
       if (!validTypes.includes(file.type)) {
         alert('Only JPEG and PNG images are allowed.');
         return;
       }
-      setImagePreview(URL.createObjectURL(file));
-      setForm((prev) => ({ ...prev, image: file }));
+
+      const imageURL = URL.createObjectURL(file);
+      setImagePreview(imageURL);
+
+      setForm((prevForm) => ({
+        ...prevForm,
+        image: file,
+      }));
     }
+  };
+
+  const handleInputChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    const { name, value } = e.target;
+    setForm((prevForm) => ({ ...prevForm, [name]: value }));
   };
 
   const handleSubmit = async () => {
-    if (!form.image) {
-      alert('Please upload an image!');
-      return;
-    }
-    const formData = new FormData();
-    formData.append('type', form.type);
-    formData.append('name', form.itemName);
-    formData.append('category', form.category);
-    formData.append('description', form.description);
-    formData.append('location', form.locationLost);
-    formData.append('dateLost', form.dateLost);
-    formData.append('email', form.contactInfo || userEmail);
-    formData.append('image', form.image);
+    if (form.image) {
+      const formData = new FormData();
+      formData.append('type', 'lost');
+      formData.append('name', form.itemName);
+      formData.append('category', form.category);
+      formData.append('description', form.description);
+      formData.append('location', form.locationLost);
+      formData.append('dateLost', form.dateLost);
+      // Use form.contactInfo or fall back to userEmail during submission
+      formData.append('email', form.contactInfo || userEmail);
+      formData.append('image', form.image);
 
-    try {
-      const res = await fetch(`${API_URL}/api/report_lost`, {
-        method: 'POST',
-        body: formData,
-      });
-      const data = await res.json();
-      if (data.success) {
-        setAlertMessage(
-          'Your report has been submitted successfully. We will notify you if someone finds your lost item.'
-        );
-        setShowAlert(true);
-      } else {
-        alert('Something went wrong!');
+      try {
+        const response = await fetch(`${API_URL}/api/report_lost`, {
+          method: 'POST',
+          body: formData,
+        });
+        const data = await response.json();
+        if (data.success) {
+          setAlertMessage(
+            'Your report has been submitted successfully. We will notify you if someone finds your lost item.'
+          );
+          setShowAlert(true);
+        } else {
+          alert('Something went wrong!');
+        }
+      } catch (error) {
+        console.error('Error submitting form:', error);
+        alert('Failed to submit the report!');
       }
-    } catch (err) {
-      console.error(err);
-      alert('Failed to submit the report!');
+    } else {
+      alert('Please upload an image!');
     }
   };
 
-  const navigateToLostItems = () => history.push('/tab1');
+  const navigateToLostItems = () => {
+    history.push('/tab1');
+  };
 
   return (
-    <IonPage className="tab2-page">
-      <Header  />
-      <IonContent className="tab2-content ion-padding">
-        <IonGrid className="button-grid">
-          <IonRow className="button-row ion-justify-content-center">
-            <IonCol size="6" className="button-col">
-              <IonButton
-                expand="full"
-                color="secondary"
-                routerLink="/tab2"
-                className="tab2-button lost-button"
-              >
+    <IonPage>
+      <Header />
+
+      <IonContent className="ion-padding">
+        <IonGrid>
+          <IonRow className="ion-justify-content-center">
+            <IonCol size="6">
+              <IonButton expand="full" color="secondary" routerLink="/tab2">
                 Report Lost
               </IonButton>
             </IonCol>
-            <IonCol size="6" className="button-col">
-              <IonButton
-                expand="full"
-                color="primary"
-                routerLink="/Found"
-                className="tab2-button found-button"
-              >
+            <IonCol size="6">
+              <IonButton expand="full" color="primary" routerLink="found">
                 Report Found
               </IonButton>
             </IonCol>
           </IonRow>
         </IonGrid>
-
-        <IonCard className="report-card">
-          <IonCardHeader className="report-card-header">
-            <IonCardTitle className="report-card-title">
-              Report Lost Item
-            </IonCardTitle>
+        <IonCard>
+          <IonCardHeader>
+            <IonCardTitle>Report Lost Item</IonCardTitle>
           </IonCardHeader>
-          <IonCardContent className="report-card-content">
-            <IonItem className="form-item">
-              <IonLabel position="stacked" className="form-label">
-                Item Name
-              </IonLabel>
+          <IonCardContent>
+            <IonItem>
+              <IonLabel position="stacked">Item Name</IonLabel>
               <IonInput
-                className="form-input"
                 name="itemName"
                 value={form.itemName}
                 placeholder="Enter item name"
-                onIonChange={handleInputChange}
+                onIonChange={(e) => handleInputChange(e)}
               />
             </IonItem>
 
-            <IonItem className="form-item">
-              <IonLabel position="stacked" className="form-label">
-                Category
-              </IonLabel>
+            <IonItem>
+              <IonLabel position="stacked">Category</IonLabel>
               <IonSelect
-                className="form-select"
                 name="category"
                 value={form.category}
                 placeholder="Select category"
-                onIonChange={handleInputChange}
+                onIonChange={(e) => handleInputChange(e)}
               >
                 <IonSelectOption value="Electronics">
                   Electronics
@@ -193,42 +188,35 @@ const Tab2: React.FC = () => {
               </IonSelect>
             </IonItem>
 
-            <IonItem className="form-item">
-              <IonLabel position="stacked" className="form-label">
-                Description
-              </IonLabel>
+            <IonItem>
+              <IonLabel position="stacked">Description</IonLabel>
               <IonTextarea
-                className="form-textarea"
                 name="description"
                 value={form.description}
                 placeholder="Describe the item"
-                onIonChange={handleInputChange}
+                onIonChange={(e) => handleInputChange(e)}
               />
             </IonItem>
 
-            <IonItem className="form-item">
-              <IonLabel position="stacked" className="form-label">
-                Contact Information
-              </IonLabel>
+            <IonItem>
+              <IonLabel position="stacked">Contact Information</IonLabel>
               <IonInput
-                className="form-input"
                 name="contactInfo"
                 value={form.contactInfo || userEmail}
                 readonly
                 type="email"
+                placeholder="Enter email"
+                onIonChange={(e) => handleInputChange(e)}
               />
             </IonItem>
 
-            <IonItem className="form-item">
-              <IonLabel position="stacked" className="form-label">
-                Location Lost
-              </IonLabel>
+            <IonItem>
+              <IonLabel position="stacked">Location Lost</IonLabel>
               <IonSelect
-                className="form-select"
                 name="locationLost"
                 value={form.locationLost}
                 placeholder="Select location"
-                onIonChange={handleInputChange}
+                onIonChange={(e) => handleInputChange(e)}
               >
                 <IonSelectOption value="A Block">A Block</IonSelectOption>
                 <IonSelectOption value="B Block">B Block</IonSelectOption>
@@ -247,56 +235,53 @@ const Tab2: React.FC = () => {
               </IonSelect>
             </IonItem>
 
-            <IonItem className="form-item">
-              <IonLabel position="stacked" className="form-label">
-                Date Lost
-              </IonLabel>
+            <IonItem>
+              <IonLabel position="stacked">Date Lost</IonLabel>
               <IonDatetime
-                className="form-datetime"
                 display-format="MM/DD/YYYY"
                 name="dateLost"
                 value={form.dateLost}
-                onIonChange={handleInputChange}
+                onIonChange={(e) => handleInputChange(e)}
               />
             </IonItem>
 
-            <IonItem className="form-item">
-              <IonLabel position="stacked" className="form-label">
-                Upload Image
-              </IonLabel>
+            <IonItem>
+              <IonLabel position="stacked">Upload Image</IonLabel>
               <input
                 type="file"
                 accept="image/png, image/jpeg, image/jpg, image/heic"
                 style={{ display: 'none' }}
                 id="upload-image"
-                onChange={handleImageUpload}
+                onChange={(e) => handleImageUpload(e)}
               />
               <IonButton
-                className="form-image-button"
                 expand="block"
                 color="success"
-                onClick={() => document.getElementById('upload-image')?.click()}
+                className="image-button"
+                onClick={() =>
+                  document.getElementById('upload-image')?.click()
+                }
               >
                 Insert Image
               </IonButton>
             </IonItem>
 
             {imagePreview && (
-              <div className="image-preview-container">
+              <div>
                 <p>Image Preview:</p>
                 <img
                   src={imagePreview}
                   alt="Image Preview"
-                  className="image-preview"
+                  style={{ width: '200px', height: 'auto' }}
                 />
               </div>
             )}
 
             <IonButton
-              className="submit-button"
               expand="block"
               color="primary"
               onClick={handleSubmit}
+              className="submit-button"
             >
               Submit Report
             </IonButton>
@@ -304,13 +289,11 @@ const Tab2: React.FC = () => {
         </IonCard>
 
         <IonFooter className="footer-tips">
-          <IonCard className="tips-card">
-            <IonCardHeader className="tips-card-header">
-              <IonCardTitle className="tips-card-title">
-                Tips for Reporting Lost Items:
-              </IonCardTitle>
+          <IonCard>
+            <IonCardHeader>
+              <IonCardTitle>Tips for Reporting Lost Items:</IonCardTitle>
             </IonCardHeader>
-            <IonCardContent className="tips-card-content">
+            <IonCardContent>
               <IonText>
                 <ul>
                   <li>Be specific in your description.</li>
@@ -322,19 +305,22 @@ const Tab2: React.FC = () => {
             </IonCardContent>
           </IonCard>
         </IonFooter>
-
         <IonAlert
-          className="submit-alert"
           isOpen={showAlert}
           onDidDismiss={() => setShowAlert(false)}
-          header="Success!"
+          header={'Success!'}
           message={alertMessage}
           buttons={[
-            { text: 'Go to Lost Items', handler: navigateToLostItems },
-            { text: 'Okay', role: 'cancel' },
+            {
+              text: 'Go to Lost Items',
+              handler: () => navigateToLostItems(),
+            },
+            {
+              text: 'Okay',
+              role: 'cancel',
+            },
           ]}
         />
-
         <Footer />
       </IonContent>
     </IonPage>

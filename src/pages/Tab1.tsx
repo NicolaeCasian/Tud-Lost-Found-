@@ -27,17 +27,19 @@ import {
   IonCardTitle,
   IonSearchbar,
   IonIcon,
-  IonFooter
+  IonFooter,
+  IonBadge
 } from '@ionic/react';
 import { useMsal } from '@azure/msal-react';
 import { useHistory } from 'react-router-dom';
 import axios from 'axios';
 import { chevronBackOutline, chevronForwardOutline, filterOutline } from 'ionicons/icons';
 import { menuController } from '@ionic/core';
-
+import Footer from '../components/Footer';
 import './Tab1.css';
 import Header from '../components/Header';
-import Footer from '../components/Footer';
+import { min } from 'moment';
+
 
 const Tab1: React.FC = () => {
   const { instance } = useMsal();
@@ -322,10 +324,7 @@ const Tab1: React.FC = () => {
                 </IonMenuToggle>
               </IonFab>
             </IonContent>
-            {/* Added style to the IonFooter to enforce auto height */}
-            <IonFooter className="tab1-footer" style={{ height: 'auto' }}>
-              <Footer />
-            </IonFooter>
+            
           </IonPage>
         </>
       ) : (
@@ -423,36 +422,111 @@ const Tab1: React.FC = () => {
               )}
             </IonHeader>
             <IonContent className="tab1-content">
-              <IonGrid className="tab1-grid">
-                <IonRow className="tab1-row">
-                  {displayedItems.length > 0 ? (
-                    displayedItems.map((item) => (
-                      <IonCol size="12" sizeLg="6" sizeMd="6" sizeXl="4" key={item._id} className="tab1-col">
-                        <IonCard className="tab1-card">
-                          <img alt={item.name} src={item.image} className="tab1-card-img" />
-                          <IonCardHeader className="tab1-card-header" style={{ borderBottom: '1px solid #ddd', marginBottom: '10px' }}>
-                            <IonCardTitle className="tab1-card-title">{item.name}</IonCardTitle>
-                            <IonCardSubtitle className="tab1-card-subtitle">{item.category}</IonCardSubtitle>
-                          </IonCardHeader>
-                          <IonCardContent className="tab1-card-content">
-                            <p className="tab1-card-desc" style={{ marginBottom: '8px' }}>{item.description}</p>
-                            <p className="tab1-card-location" style={{ fontWeight: 'bold', fontSize: '1.1rem' }}>
-                              Location: {item.location}
-                            </p>
-                          </IonCardContent>
-                          <IonButton onClick={() => handleItemClick(item._id)} className="tab1-card-button">
-                            View Item
-                          </IonButton>
-                        </IonCard>
-                      </IonCol>
-                    ))
-                  ) : (
-                    <IonCol size="12" className="tab1-col">
-                      <p className="tab1-no-items">No items found.</p>
-                    </IonCol>
-                  )}
-                </IonRow>
-              </IonGrid>
+            <IonGrid className="tab1-grid">
+  <IonRow className="tab1-row">
+    {displayedItems.length > 0 ? (
+      displayedItems.map(item => (
+        <IonCol
+          size="12"
+          sizeMd="6"
+          sizeLg="6"
+          sizeXl="4"
+          key={item._id}
+          className="tab1-col"
+        >
+          <IonCard
+            className="tab1-card"
+            style={{ overflow: 'visible' }} // allow badge to show
+          >
+            <img
+              alt={item.name}
+              src={item.image}
+              className="tab1-card-img"
+            />
+
+            <IonCardHeader
+              className="tab1-card-header"
+              style={{
+                borderBottom: '1px solid #ddd',
+                marginBottom: '10px',
+                overflow: 'visible'
+              }}
+            >
+              <IonCardSubtitle className="tab1-card-subtitle">
+                {item.category}
+              </IonCardSubtitle>
+
+              {/* inline‑flex wrapper */}
+              <div
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  flexWrap: 'wrap',
+                  gap: '0.5rem',
+                  width: '100%',
+                  marginTop: '0.5rem'
+                }}
+              >
+                <IonCardTitle
+                  className="tab1-card-title"
+                  style={{
+                    minWidth: 0,
+                    margin: 0,
+                    fontSize: '1.2rem',
+                    flex: 1,
+                    textAlign: 'center',
+                    whiteSpace: 'nowrap',      /* (optional) keep title on one line */
+                    overflow: 'hidden',        /* (optional) clip overflowing text */
+                    textOverflow: 'ellipsis'
+                    
+                  }}
+                >
+                  {item.name}
+                </IonCardTitle>
+
+                <IonBadge
+                  color={item.type === 'Lost' ? 'danger' : 'success'}
+                >
+                  {item.type}
+                </IonBadge>
+              </div>
+            </IonCardHeader>
+
+            <IonCardContent className="tab1-card-content">
+              <p
+                className="tab1-card-desc"
+                style={{ marginBottom: '8px' }}
+              >
+                {item.description}
+              </p>
+              <p
+                className="tab1-card-location"
+                style={{ fontWeight: 'bold', fontSize: '1.1rem' }}
+              >
+                Location: {item.location}
+              </p>
+            </IonCardContent>
+
+            <IonButton
+              onClick={() => handleItemClick(item._id)}
+              className="tab1-card-button"
+            >
+              View Item
+            </IonButton>
+          </IonCard>
+        </IonCol>
+      ))
+    ) : (
+      <IonCol size="12" className="tab1-col">
+        <p className="tab1-no-items">No items found.</p>
+      </IonCol>
+    )}
+  </IonRow> 
+</IonGrid>
+
+
+
               <IonGrid className="tab1-pagination-grid">
                 <IonRow className="tab1-pagination-row ion-align-items-center ion-justify-content-center">
                   <IonCol size="auto" className="tab1-pagination-col">
@@ -479,33 +553,7 @@ const Tab1: React.FC = () => {
                   </IonFabButton>
                 </IonMenuToggle>
               </IonFab>
-              <IonToolbar className="tab1-toolbar">
-              <div className="main-footer">
-        <div className="footer-container">
-          <div className="footer-section">
-            <h4>TUD Lost & Found</h4>
-            <p>Helping students recover lost items across campus.</p>
-          </div>
-
-          <div className="footer-section">
-            <h4>Contact Us</h4>
-            <p>Email: studenthubdesk.blanchardstown@tudublin.ie</p>
-            <p>Phone: +353 1 220 8088</p>
-          </div>
-
-          <div className="footer-section">
-            <h4>Quick Links</h4>
-            <p><a href="/faq">FAQ</a></p>
-            <p><a href="https://www.tudublin.ie/for-students/student-services-and-support/student-policies-regulations/">Terms of Service</a></p>
-            <p><a href="https://www.tudublin.ie/explore/gdpr/data-protection-policy/">Privacy Policy</a></p>
-          </div>
-        </div>
-
-        <div className="footer-bottom">
-          &copy; 2024 TUD Lost & Found. All rights reserved.
-        </div>
-      </div>
-      </IonToolbar>
+            <Footer />
             </IonContent>
             
           </IonPage>
