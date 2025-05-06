@@ -62,7 +62,6 @@ const App: React.FC = () => {
             {/* Public Routes */}
             <Route exact path="/login" component={Login} />
             <Route exact path="/faq" component={Faq} />
-            <Route exact path="/Admin" component={Admin} />
 
             {/* Authenticated Routes */}
             {isAuthenticated ? (
@@ -75,6 +74,7 @@ const App: React.FC = () => {
                       <Route exact path="/found" component={Found} />
                       <Route exact path="/tab2" component={Tab2} />
                       <Route exact path="/tab3" component={Tab3} />
+                      <Route exact path="/Admin" component={Admin} />
                       {/* The item details route is placed here so that when a user on Tab1 clicks "View Item", 
                           the LostItem page is rendered within the tab structure */}
                       <Route exact path="/item/:id" component={LostItem} />

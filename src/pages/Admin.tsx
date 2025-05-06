@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import {
   IonPage,
   IonHeader,
@@ -61,11 +61,25 @@ const Admin: React.FC = () => {
   const [alertMessage, setAlertMessage] = useState<string>("");
   const [showSearch, setShowSearch] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
+  
+  // Create a ref for the last scroll position (similar to Tab1)
+  const lastScrollY = useRef(0);
 
   const API_URL = "https://tudlnf-serverv2-90ee51882713.herokuapp.com/api";
 
   useEffect(() => {
     fetchUsers();
+  }, []);
+
+  // Show/hide searchbar when scrolling (similar to Tab1)
+  useEffect(() => {
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY;
+      setShowSearch(currentScrollY < lastScrollY.current);
+      lastScrollY.current = currentScrollY;
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
   const fetchUsers = async () => {
@@ -87,7 +101,7 @@ const Admin: React.FC = () => {
       const usersWithItems = await Promise.all(
         usersBasicInfo.map(async (user: User) => {
           try {
-            // Following the same pattern as in Tab3.tsx
+            
             const [lostItemsResponse, foundItemsResponse] = await Promise.all([
               axios.get(`${API_URL}/lost_items?email=${encodeURIComponent(user.email)}`),
               axios.get(`${API_URL}/found_items?email=${encodeURIComponent(user.email)}`)
@@ -189,25 +203,33 @@ const Admin: React.FC = () => {
     setExpandedUserEmail(prev => (prev === email ? null : email));
   };
 
+  // Filter users based on search query 
+  const filteredUsers = users.filter((user) => {
+    return searchQuery === "" || 
+           (user.fullName && user.fullName.toLowerCase().includes(searchQuery.toLowerCase())) ||
+           (user.email && user.email.toLowerCase().includes(searchQuery.toLowerCase())) ||
+           (user.studentId && user.studentId.toLowerCase().includes(searchQuery.toLowerCase()));
+  });
+
   return (
     <IonPage>
       <Header />
 
-      {showSearch && (
-                      <IonToolbar className="tab1-search-toolbar">
-                        <IonSearchbar
-                          placeholder="Search for names..."
-                          value={searchQuery}
-                          onIonInput={(e) => setSearchQuery(e.detail.value!)}
-                          show-clear-button="focus"
-                          className="admin-searchbar"
-                        />
-                      </IonToolbar>
-                    )}
       <IonHeader>
         <IonToolbar>
           <IonTitle>Admin - Manage Users</IonTitle>
         </IonToolbar>
+        {showSearch && (
+          <IonToolbar className="admin-search-toolbar">
+            <IonSearchbar
+              placeholder="Search for users..."
+              value={searchQuery}
+              onIonInput={(e) => setSearchQuery(e.detail.value!)}
+              showClearButton="focus"
+              className="admin-searchbar"
+            />
+          </IonToolbar>
+        )}
       </IonHeader>
 
       <IonContent>
@@ -216,14 +238,14 @@ const Admin: React.FC = () => {
             <IonSpinner name="crescent" />
             <p>Loading users...</p>
           </div>
-        ) : users.length === 0 ? (
+        ) : filteredUsers.length === 0 ? (
           <div className="ion-padding ion-text-center">
             <IonText color="medium">No users found</IonText>
           </div>
         ) : (
           <IonGrid>
             <IonRow>
-              {users.map(user => {
+              {filteredUsers.map(user => {
                 const isExpanded = expandedUserEmail === user.email;
                 return (
                   <IonCol size="12" size-md="6" size-lg="4" key={user.email}>
