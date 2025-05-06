@@ -110,7 +110,7 @@ const LostItem: React.FC = () => {
                                         <p><strong style={{display: 'block'}}>Description:</strong> {item.description}
                                         </p>
                                         <p><strong style={{display: 'block'}}>Category:</strong> {item.category}</p>
-                                        <p><strong style={{display: 'block'}}>{dateLabel}</strong> {getFormattedDate(item.dateLost)}</p>
+                                        <p><strong style={{display: 'block'}}>{dateLabel}:</strong> {getFormattedDate(item.dateLost)}</p>
                                         <div style={{
                                             backgroundColor: '#555',  // Darker gray to contrast with background
                                             height: '4px',  // Thickness of the line

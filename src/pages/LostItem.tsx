@@ -84,7 +84,7 @@ const LostItem: React.FC = () => {
     }, [id]);
 
     if (!item) {
-        return <div>Loading...</div>; // Show a loading message while fetching
+        return <div>Loading...</div>;
     }
 
     return (
@@ -94,7 +94,6 @@ const LostItem: React.FC = () => {
             <IonContent fullscreen className="ion-padding">
                 <div style={{maxWidth: '1500px', margin: '0 auto', padding: '0 1rem'}}>
                     <IonGrid>
-                        {/* Top Section: Item Description (Full Width) */}
                         <IonRow>
                             <IonCol size="12">
                                 <div style={{
@@ -110,13 +109,14 @@ const LostItem: React.FC = () => {
                                         <p><strong style={{display: 'block'}}>Description:</strong> {item.description}
                                         </p>
                                         <p><strong style={{display: 'block'}}>Category:</strong> {item.category}</p>
-                                        <p><strong style={{display: 'block'}}>{dateLabel}:</strong> {getFormattedDate(item.dateLost)}</p>
+                                        <p><strong
+                                            style={{display: 'block'}}>{dateLabel}:</strong> {getFormattedDate(item.dateLost)}
+                                        </p>
                                         <div style={{
-                                            backgroundColor: '#555',  // Darker gray to contrast with background
-                                            height: '4px',  // Thickness of the line
-                                            width: '100%',  // Full width
+                                            backgroundColor: '#555',
+                                            height: '4px',
                                             margin: '1rem 0',
-                                            borderRadius: '2px' // Soft edges
+                                            borderRadius: '2px'
                                         }}></div>
                                         <IonButton expand="block" color="primary" style={{
                                             fontSize: '1rem',
@@ -127,7 +127,7 @@ const LostItem: React.FC = () => {
                                             marginRight: '15px',
                                             minHeight: '45px'
                                         }}
-                                            onClick={() => setShowAlert(true)}
+                                                   onClick={() => setShowAlert(true)}
                                         >
                                             Show Contact Information
                                         </IonButton>
