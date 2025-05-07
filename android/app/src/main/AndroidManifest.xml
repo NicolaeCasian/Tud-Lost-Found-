@@ -17,9 +17,24 @@
             android:launchMode="singleTask"
             android:exported="true">
 
+            <!-- Existing launcher filter -->
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+
+            <!-- Add this block for MSAL custom-scheme redirect -->
+            <intent-filter android:autoVerify="true">
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <!-- Must exactly match your redirectUri in authConfig.ts -->
+                <data
+                    android:scheme="msauth"
+                    android:host="io.ionic.starter"
+                    android:path="/g8yEzGu%2FOSEgBl4iWdvcEpiA7Kg%3D" />
             </intent-filter>
 
         </activity>
@@ -31,11 +46,10 @@
             android:grantUriPermissions="true">
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/file_paths"></meta-data>
+                android:resource="@xml/file_paths" />
         </provider>
     </application>
 
     <!-- Permissions -->
-
     <uses-permission android:name="android.permission.INTERNET" />
 </manifest>

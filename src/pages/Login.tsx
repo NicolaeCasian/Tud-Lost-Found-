@@ -1,3 +1,5 @@
+// src/pages/Login.tsx
+
 import React from 'react';
 import {
   IonContent,
@@ -11,10 +13,10 @@ import {
   IonCardTitle,
   IonCardContent,
   IonText,
-  isPlatform,
+  isPlatform,                      // ← added
 } from '@ionic/react';
 import { useMsal } from '@azure/msal-react';
-import { PopupRequest, RedirectRequest } from '@azure/msal-browser';
+import { PopupRequest, RedirectRequest } from '@azure/msal-browser';  // ← added
 import { loginRequest } from './authConfig';
 import './css/login.css';
 
@@ -25,10 +27,10 @@ const Login: React.FC = () => {
     try {
       console.log('Triggering login...');
       if (isPlatform('capacitor')) {
-        // On device/emulator, use redirect flow
+        // On device/emulator: use redirect flow
         await instance.loginRedirect(loginRequest as RedirectRequest);
       } else {
-        // In browser, use popup flow
+        // In browser: use popup flow
         await instance.loginPopup(loginRequest as PopupRequest);
       }
 
@@ -83,7 +85,10 @@ const Login: React.FC = () => {
               </IonText>
             </IonCardHeader>
             <IonCardContent className="login-card-content">
-              <p>TUD Lost &amp; Found helps you report and recover lost items within the university. Easily log in and access features like:</p>
+              <p>
+                TUD Lost &amp; Found helps you report and recover lost items within the university.
+                Easily log in and access features like:
+              </p>
               <ul className="login-features" style={{ textAlign: 'center', marginTop: '20px' }}>
                 <li>Browse lost items</li>
                 <li>Report an item you've lost</li>
@@ -118,7 +123,11 @@ const Login: React.FC = () => {
             </svg>
             Login with Microsoft
           </IonButton>
-          <IonButton onClick={signInUsingDummyAccount} className="login-button" style={{ marginTop: '10px', padding: '10px 20px', fontSize: '16px' }}>
+          <IonButton
+            onClick={signInUsingDummyAccount}
+            className="login-button"
+            style={{ marginTop: '10px', padding: '10px 20px', fontSize: '16px' }}
+          >
             Use Dummy Account
           </IonButton>
 
