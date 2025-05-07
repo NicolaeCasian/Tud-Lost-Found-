@@ -23,7 +23,9 @@ import {
   IonCol,
   IonGrid,
   IonRow,
+  // Remove incorrect imports
 } from '@ionic/react';
+import { InputChangeEventDetail, SelectChangeEventDetail, TextareaChangeEventDetail, DatetimeChangeEventDetail } from '@ionic/core';
 import { useHistory } from 'react-router-dom';
 import { useMsal } from '@azure/msal-react';
 import './Tab2.css';
@@ -89,17 +91,15 @@ const Tab2: React.FC = () => {
 
   // Updated handler to work with Ionic event types
   const handleInputChange = (e: any) => {
-    // Handle React's change event
-    if (e.target && e.target.name && typeof e.target.value !== 'undefined') {
+    // For React native events (from standard HTML inputs)
+    if (e.target && 'name' in e.target && 'value' in e.target) {
       const { name, value } = e.target;
       setForm((prevForm) => ({ ...prevForm, [name]: value }));
-    } 
-    // Handle Ionic's custom events
-    else if (e.detail && typeof e.detail.value !== 'undefined') {
-      const target = e.target as HTMLElement;
-      const name = target.getAttribute('name') || '';
+    }
+    // For Ionic component events
+    else if (e.detail && 'value' in e.detail) {
+      const name = e.target?.getAttribute('name') || '';
       const value = e.detail.value;
-      
       if (name) {
         setForm((prevForm) => ({ ...prevForm, [name]: value }));
       }
@@ -150,8 +150,8 @@ const Tab2: React.FC = () => {
     <IonPage>
       <Header />
 
-      <IonContent fullscreen>
-        <IonGrid style={{ marginTop: '20px'}}>
+      <IonContent className="ion-padding">
+        <IonGrid>
           <IonRow className="ion-justify-content-center">
             <IonCol size="6">
               <IonButton expand="full" color="secondary" routerLink="/tab2">
@@ -316,6 +316,7 @@ const Tab2: React.FC = () => {
               </IonText>
             </IonCardContent>
           </IonCard>
+        </IonFooter>
         <IonAlert
           isOpen={showAlert}
           onDidDismiss={() => setShowAlert(false)}
