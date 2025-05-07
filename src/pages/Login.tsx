@@ -41,7 +41,7 @@ const Login: React.FC = () => {
         instance.setActiveAccount(account);
 
         // add account to localStorage.
-        // addAccountToLocalStorage({email: account.username})
+        addAccountToLocalStorage({email: account.username, name: account.name})
 
         // Redirect based on user email
         if (userEmail === 'crudtud@gmail.com') {
@@ -61,7 +61,7 @@ const Login: React.FC = () => {
 
   // another function to just log in using dummy account.
   const signInUsingDummyAccount = () => {
-    addAccountToLocalStorage({email: "dummy@gmail.com"});
+    addAccountToLocalStorage({email: "dummy@gmail.com", name: "Dummy User"});
 
     window.location.href = '/tab1';
   }
@@ -120,7 +120,7 @@ const Login: React.FC = () => {
             </svg>
             Login with Microsoft
           </IonButton>
-          <IonButton onClick={signInUsingDummyAccount} className="login-button" style={{ marginTop: '10px', padding: '10px 20px', fontSize: '16px' }}></IonButton>
+          <IonButton onClick={signInUsingDummyAccount} className="login-button" style={{ marginTop: '20px', padding: '10px 20px', fontSize: '16px' }}>Test with Dummy Account</IonButton>
 
           <div className="login-disclaimer" style={{ marginTop: '30px', textAlign: 'center', padding: '10px' }}>
             <IonText color="medium" className="disclaimer-text" style={{ fontSize: '14px' }}>

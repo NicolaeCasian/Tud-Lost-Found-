@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'; 
+import React, { useEffect, useState } from 'react';
 import { Redirect, Route } from 'react-router-dom';
 import {
   IonApp,
@@ -16,9 +16,7 @@ import Tab1 from './pages/Tab1';
 import Tab2 from './pages/Tab2';
 import Tab3 from './pages/Tab3';
 import Login from './pages/Login';
-import Faq from './pages/faq';
 import ManageItemPage from "./pages/ManageItemPage";
-import Found from './pages/Found';
 import LostItem from './pages/LostItem';
 import Admin from './pages/Admin';
 import { MsalProvider } from "@azure/msal-react";
@@ -38,6 +36,7 @@ import '@ionic/react/css/flex-utils.css';
 import '@ionic/react/css/display.css';
 import './theme/variables.css';
 import '@ionic/react/css/palettes/dark.system.css';
+import {getAccountFromLocalStorage} from "./utils/auth";
 
 setupIonicReact();
 
@@ -46,11 +45,11 @@ const msalInstance = new PublicClientApplication(msalConfig);
 
 const App: React.FC = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(
-    !!msalInstance.getActiveAccount()
+    !!msalInstance.getActiveAccount() || !!getAccountFromLocalStorage()
   );
 
   useEffect(() => {
-    const account = msalInstance.getActiveAccount();
+    const account = msalInstance.getActiveAccount() || getAccountFromLocalStorage();
     setIsAuthenticated(!!account);
   }, []);
 
@@ -62,7 +61,6 @@ const App: React.FC = () => {
           <IonRouterOutlet>
             {/* Public Routes */}
             <Route exact path="/login" component={Login} />
-            <Route exact path="/faq" component={Faq} />
             <Route exact path="/manage-item" component={ManageItemPage}/>
 
             {/* Authenticated Routes */}
@@ -73,7 +71,6 @@ const App: React.FC = () => {
                   <IonTabs>
                     <IonRouterOutlet>
                       <Route exact path="/tab1" component={Tab1} />
-                      <Route exact path="/found" component={Found} />
                       <Route exact path="/tab2" component={Tab2} />
                       <Route exact path="/tab3" component={Tab3} />
                       <Route exact path="/Admin" component={Admin} />
