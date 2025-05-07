@@ -23,6 +23,10 @@ import {
   IonCol,
   IonGrid,
   IonRow,
+  InputChangeEventDetail,
+  SelectChangeEventDetail,
+  TextareaChangeEventDetail,
+  DatetimeChangeEventDetail
 } from '@ionic/react';
 import { useHistory } from 'react-router-dom';
 import './Tab2.css';
@@ -66,12 +70,12 @@ const Found: React.FC = () => {
     }
   }, [userEmail, form.contactInfo]);
 
-  // Updated event handler to check for e.detail.value if available
+  // Updated event handler to handle all Ionic input types
   const handleInputChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement> & { detail?: { value: any } }
+    e: CustomEvent<InputChangeEventDetail | SelectChangeEventDetail<any> | TextareaChangeEventDetail | DatetimeChangeEventDetail>
   ) => {
-    const { name } = e.target;
-    const value = e.detail?.value ?? e.target.value;
+    const name = (e.target as HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement).name;
+    const value = e.detail.value;
     setForm((prevForm) => ({ ...prevForm, [name]: value }));
   };
 
@@ -163,7 +167,7 @@ const Found: React.FC = () => {
                 name="itemName"
                 value={form.itemName}
                 placeholder="Enter item name"
-                onIonChange={(e) => handleInputChange(e)}
+                onIonChange={handleInputChange}
               />
             </IonItem>
             <IonItem>
@@ -172,7 +176,7 @@ const Found: React.FC = () => {
                 name="category"
                 value={form.category}
                 placeholder="Select category"
-                onIonChange={(e) => handleInputChange(e)}
+                onIonChange={handleInputChange}
               >
                 <IonSelectOption value="Electronics">Electronics</IonSelectOption>
                 <IonSelectOption value="Clothes">Clothes</IonSelectOption>
@@ -189,7 +193,7 @@ const Found: React.FC = () => {
                 name="description"
                 value={form.description}
                 placeholder="Describe the item"
-                onIonChange={(e) => handleInputChange(e)}
+                onIonChange={handleInputChange}
               />
             </IonItem>
             <IonItem>
@@ -200,7 +204,7 @@ const Found: React.FC = () => {
                 readonly
                 type="email"
                 placeholder="Enter email"
-                onIonChange={(e) => handleInputChange(e)}
+                onIonChange={handleInputChange}
               />
             </IonItem>
             <IonItem>
@@ -209,7 +213,7 @@ const Found: React.FC = () => {
                 name="locationFound"
                 value={form.locationFound}
                 placeholder="Select location"
-                onIonChange={(e) => handleInputChange(e)}
+                onIonChange={handleInputChange}
               >
                 <IonSelectOption value="A Block">A Block</IonSelectOption>
                 <IonSelectOption value="B Block">B Block</IonSelectOption>
@@ -227,7 +231,7 @@ const Found: React.FC = () => {
                 display-format="MM/DD/YYYY"
                 name="dateFound"
                 value={form.dateFound}
-                onIonChange={(e) => handleInputChange(e)}
+                onIonChange={handleInputChange}
               />
             </IonItem>
             <IonItem>
