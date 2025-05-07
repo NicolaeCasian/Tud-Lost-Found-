@@ -142,12 +142,12 @@ const Found: React.FC = () => {
           <IonRow className="ion-justify-content-center">
             <IonCol size="6">
               <IonButton expand="full" color="primary" routerLink="/tab2">
-                Report Lost Item
+                Report Lost 
               </IonButton>
             </IonCol>
             <IonCol size="6">
               <IonButton expand="full" color="secondary" routerLink="/found">
-                Report Found Item
+                Report Found 
               </IonButton>
             </IonCol>
           </IonRow>

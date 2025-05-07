@@ -273,7 +273,19 @@ const Tab1: React.FC = () => {
                         <IonCard className="tab1-card">
                           <img alt={item.name} src={item.image} className="tab1-card-img" />
                           <IonCardHeader className="tab1-card-header" style={{ borderBottom: '1px solid #ddd', marginBottom: '10px' }}>
-                            <IonCardTitle className="tab1-card-title">{item.name}</IonCardTitle>
+                            <IonCardTitle className="tab1-card-title">{item.name}  <IonBadge
+                  color={item.type === 'Lost' ? 'danger' : 'success'}
+                  style={{
+                    position: 'absolute',
+                    top: '50%',
+                    
+                    left: 'calc(50% + 80px)',
+                    transform: 'translateY(-50%)',
+                    color: '#ffffff', 
+                  }}
+                >
+                  {item.type}
+                </IonBadge></IonCardTitle>
                             <IonCardSubtitle className="tab1-card-subtitle">{item.category}</IonCardSubtitle>
                           </IonCardHeader>
                           <IonCardContent className="tab1-card-content">
@@ -476,7 +488,7 @@ const Tab1: React.FC = () => {
                     position: 'absolute',
                     top: '50%',
                     
-                    left: 'calc(50% + 100px)',
+                    left: 'calc(50% + 80px)',
                     transform: 'translateY(-50%)',
                     color: '#ffffff', 
                   }}
@@ -508,7 +520,6 @@ const Tab1: React.FC = () => {
     )}
   </IonRow>
 </IonGrid>
-
 
               <IonGrid className="tab1-pagination-grid">
                 <IonRow className="tab1-pagination-row ion-align-items-center ion-justify-content-center">

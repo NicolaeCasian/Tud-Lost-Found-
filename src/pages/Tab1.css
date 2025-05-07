@@ -5,6 +5,14 @@ ion-page.tab1-page {
   height: 100vh;  /* Ensure the page fills the viewport */
 }
 
+ion-badge {
+  font-size: 0.7rem;
+  padding: 0.25rem 0.5rem;
+  max-width: 90%;
+  text-align: center;
+  word-break: break-word;
+}
+
 ion-content.tab1-content {
   flex: 1 1 auto; /* Allow content to expand */
   padding: 1rem;
