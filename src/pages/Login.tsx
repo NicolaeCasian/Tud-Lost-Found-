@@ -11,8 +11,10 @@ import {
   IonCardTitle,
   IonCardContent,
   IonText,
+  isPlatform,
 } from '@ionic/react';
 import { useMsal } from '@azure/msal-react';
+import { PopupRequest, RedirectRequest } from '@azure/msal-browser';
 import { loginRequest } from './authConfig';
 import './css/login.css';
 
@@ -21,38 +23,35 @@ const Login: React.FC = () => {
 
   const login = async () => {
     try {
-      console.log('Triggering login with popup...');
-      const response = await instance.loginPopup(loginRequest);
-      const account = response.account;
-      console.log(account)
-      if (account) {
-        const userEmail = account.username;
-        console.log('User email:', userEmail);
-
-        // Uncomment below if you want to restrict login to specific email domains.
-        // if (!userEmail.endsWith('@mytudublin.ie')) {
-        //   console.warn('Unauthorized email. Logging out...');
-        //   alert('Access denied! You must use a @mytudublin.ie email to log in.');
-        //   await instance.logoutPopup();
-        //   return;
-        // }
-
-        console.log('Login successful. Setting active account:', account);
-        instance.setActiveAccount(account);
-
-        // add account to localStorage.
-        // addAccountToLocalStorage({email: account.username})
-
-        // Redirect based on user email
-        if (userEmail === 'crudtud@gmail.com') {
-          console.log('Admin account detected. Redirecting to /admin app...');
-          window.location.href = '/admin';
-        } else {
-          console.log('Regular user login. Redirecting to main app...');
-          window.location.href = '/tab1';
-        }
+      console.log('Triggering login...');
+      if (isPlatform('capacitor')) {
+        // On device/emulator, use redirect flow
+        await instance.loginRedirect(loginRequest as RedirectRequest);
       } else {
+        // In browser, use popup flow
+        await instance.loginPopup(loginRequest as PopupRequest);
+      }
+
+      // After login completes, get the active account
+      const accounts = instance.getAllAccounts();
+      if (accounts.length === 0) {
         console.warn('No account found after login.');
+        return;
+      }
+      const account = accounts[0];
+      console.log(account);
+      instance.setActiveAccount(account);
+
+      const userEmail = account.username;
+      console.log('User email:', userEmail);
+
+      // Redirect based on user email
+      if (userEmail === 'crudtud@gmail.com') {
+        console.log('Admin account detected. Redirecting to /admin app...');
+        window.location.href = '/admin';
+      } else {
+        console.log('Regular user login. Redirecting to main app...');
+        window.location.href = '/tab1';
       }
     } catch (error) {
       console.error('Login failed:', error);
@@ -61,10 +60,9 @@ const Login: React.FC = () => {
 
   // another function to just log in using dummy account.
   const signInUsingDummyAccount = () => {
-    addAccountToLocalStorage({email: "dummy@gmail.com"});
-
+    addAccountToLocalStorage({ email: 'dummy@gmail.com' });
     window.location.href = '/tab1';
-  }
+  };
 
   // function to add account to localStorage
   const addAccountToLocalStorage = (account: any) => {
@@ -74,18 +72,18 @@ const Login: React.FC = () => {
   return (
     <IonPage className="login-page">
       <IonHeader className="login-header">
-          <IonTitle className="login-title">Welcome to TUD Lost &amp; Found !</IonTitle>
+        <IonTitle className="login-title">Welcome to TUD Lost &amp; Found !</IonTitle>
       </IonHeader>
       <IonContent fullscreen className="login-content">
         <div className="login-container" style={{ padding: '16px', textAlign: 'center' }}>
           <IonCard className="login-card">
             <IonCardHeader className="login-card-header">
-              <IonText  className="login-card-text" style={{ fontSize: '20px' }}>
+              <IonText className="login-card-text" style={{ fontSize: '20px' }}>
                 <p>You must log in to access the app features!</p>
               </IonText>
             </IonCardHeader>
             <IonCardContent className="login-card-content">
-             <p>TUD Lost &amp; Found helps you report and recover lost items within the university. Easily log in and access features like:</p> 
+              <p>TUD Lost &amp; Found helps you report and recover lost items within the university. Easily log in and access features like:</p>
               <ul className="login-features" style={{ textAlign: 'center', marginTop: '20px' }}>
                 <li>Browse lost items</li>
                 <li>Report an item you've lost</li>
@@ -120,7 +118,9 @@ const Login: React.FC = () => {
             </svg>
             Login with Microsoft
           </IonButton>
-          <IonButton onClick={signInUsingDummyAccount} className="login-button" style={{ marginTop: '10px', padding: '10px 20px', fontSize: '16px' }}></IonButton>
+          <IonButton onClick={signInUsingDummyAccount} className="login-button" style={{ marginTop: '10px', padding: '10px 20px', fontSize: '16px' }}>
+            Use Dummy Account
+          </IonButton>
 
           <div className="login-disclaimer" style={{ marginTop: '30px', textAlign: 'center', padding: '10px' }}>
             <IonText color="medium" className="disclaimer-text" style={{ fontSize: '14px' }}>
