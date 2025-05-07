@@ -70,24 +70,45 @@ const ManageItemPage: React.FC = () => {
     return (
         <IonPage>
             <Header/>
-            <IonContent className="ion-padding">
+            <IonContent fullscreen>
                 {status === "loading" && <p>Loading...</p>}
                 {status === "error" && <p>Invalid or expired link.</p>}
                 {status === "ready" && item && (
-                    <IonCard>
+                    <IonCard style={{
+                        backgroundColor: '#F8F8F8',
+                        width: '90%',
+                        maxWidth: '1200px',
+                        margin: '1rem auto',
+                        padding: '1rem',
+                    }}
+                    >
                         <IonCardHeader>
-                            <IonCardTitle>{item.name}</IonCardTitle>
+                            <IonCardTitle style={{
+                                fontSize: '1.5rem',
+                                fontWeight: 'bold',
+                                textAlign: 'center',
+                            }}>{item.name}</IonCardTitle>
                         </IonCardHeader>
                         <IonCardContent>
-                            <p><strong>Description:</strong> {item.description}</p>
-                            <p><strong>Date Lost:</strong> {new Date(item.dateLost).toLocaleDateString()}</p>
-                            <IonButton expand="block" color="success" onClick={handleProlong}>Prolong</IonButton>
-                            <IonButton expand="block" color="danger" onClick={handleRemove}>Remove</IonButton>
+                            <hr style={{border: 'none', borderTop: '1px solid #ccc', margin: '1rem 0'}}/>
+                            <IonImg style={{
+                                height: '400px',
+                                width: '100%',
+                                marginBottom: '1rem',
+                            }} src={item.image} alt={item.name}/>
+                            <hr style={{border: 'none', borderTop: '1px solid #ccc', margin: '1rem 0'}}/>
+                            <p style={{margin: '0.75rem 0 1.2rem'}}><strong>Description:</strong> {item.description}</p>
+                            <p style={{margin: '0.75rem 0 1.2rem'}}><strong>Date
+                                Lost:</strong> {new Date(item.dateLost).toLocaleDateString()}</p>
+                            <IonButton style={{height: '44px'}} expand="block" color="success"
+                                       onClick={handleProlong}>Prolong</IonButton>
+                            <IonButton style={{height: '44px'}} expand="block" color="danger"
+                                       onClick={handleRemove}>Remove</IonButton>
                         </IonCardContent>
                     </IonCard>
                 )}
+                <Footer/>
             </IonContent>
-            <Footer/>
         </IonPage>
     );
 };

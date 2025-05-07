@@ -1,560 +1,586 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, {useEffect, useState, useRef} from 'react';
 import {
-  IonAccordion,
-  IonAccordionGroup,
-  IonButton,
-  IonCheckbox,
-  IonCol,
-  IonContent,
-  IonFab,
-  IonFabButton,
-  IonGrid,
-  IonHeader,
-  IonItem,
-  IonLabel,
-  IonList,
-  IonMenu,
-  IonMenuToggle,
-  IonPage,
-  IonRow,
-  IonSplitPane,
-  IonTitle,
-  IonToolbar,
-  IonCard,
-  IonCardContent,
-  IonCardHeader,
-  IonCardSubtitle,
-  IonCardTitle,
-  IonSearchbar,
-  IonIcon,
-  IonFooter,
-  IonBadge
+    IonAccordion,
+    IonAccordionGroup,
+    IonButton,
+    IonCheckbox,
+    IonCol,
+    IonContent,
+    IonFab,
+    IonFabButton,
+    IonGrid,
+    IonHeader,
+    IonItem,
+    IonLabel,
+    IonList,
+    IonMenu,
+    IonMenuToggle,
+    IonPage,
+    IonRow,
+    IonSplitPane,
+    IonTitle,
+    IonToolbar,
+    IonCard,
+    IonCardContent,
+    IonCardHeader,
+    IonCardSubtitle,
+    IonCardTitle,
+    IonSearchbar,
+    IonIcon,
+    IonFooter,
+    IonBadge
 } from '@ionic/react';
-import { useMsal } from '@azure/msal-react';
-import { useHistory } from 'react-router-dom';
+import {useMsal} from '@azure/msal-react';
+import {useHistory} from 'react-router-dom';
 import axios from 'axios';
-import { chevronBackOutline, chevronForwardOutline, filterOutline } from 'ionicons/icons';
-import { menuController } from '@ionic/core';
+import {chevronBackOutline, chevronForwardOutline, filterOutline} from 'ionicons/icons';
+import {menuController} from '@ionic/core';
 import Footer from '../components/Footer';
 import './Tab1.css';
 import Header from '../components/Header';
 
 
 const Tab1: React.FC = () => {
-  const { instance } = useMsal();
-  const history = useHistory();
+    const {instance} = useMsal();
+    const history = useHistory();
 
-  // Create a ref for the IonMenu (used in small screens)
-  const menuRef = useRef<HTMLIonMenuElement>(null);
+    // Create a ref for the IonMenu (used in small screens)
+    const menuRef = useRef<HTMLIonMenuElement>(null);
 
-  // State variables for items, search, pagination, etc.
-  const [lostItems, setLostItems] = useState<any[]>([]);
-  const [foundItems, setFoundItems] = useState<any[]>([]);
-  const [showSearch, setShowSearch] = useState(true);
-  const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 6;
-  const [searchQuery, setSearchQuery] = useState("");
-  const API_URL = import.meta.env.VITE_API_URL || "https://tudlnf-serverv2-90ee51882713.herokuapp.com";
+    // State variables for items, search, pagination, etc.
+    const [lostItems, setLostItems] = useState<any[]>([]);
+    const [foundItems, setFoundItems] = useState<any[]>([]);
+    const [showSearch, setShowSearch] = useState(true);
+    const [currentPage, setCurrentPage] = useState(1);
+    const itemsPerPage = 6;
+    const [searchQuery, setSearchQuery] = useState("");
+    const API_URL = import.meta.env.VITE_API_URL || "https://tudlnf-serverv2-90ee51882713.herokuapp.com";
 
-  // State to determine if we're on a small screen
-  const [isSmallScreen, setIsSmallScreen] = useState(window.innerWidth < 768);
+    // State to determine if we're on a small screen
+    const [isSmallScreen, setIsSmallScreen] = useState(window.innerWidth < 768);
 
-  // Ref to track the last scroll position
-  const lastScrollY = useRef(0);
+    // Ref to track the last scroll position
+    const lastScrollY = useRef(0);
 
-  // Filters state
-  const [filters, setFilters] = useState({
-    type: new Set<string>(),
-    category: new Set<string>(),
-    location: new Set<string>()
-  });
-
-  // Handle checkbox filter changes
-  const handleFilterChange = (
-    event: CustomEvent,
-    filterType: keyof typeof filters,
-    value: string
-  ) => {
-    setFilters((prevFilters) => {
-      const updatedFilter = new Set(prevFilters[filterType]);
-      event.detail.checked ? updatedFilter.add(value) : updatedFilter.delete(value);
-      return { ...prevFilters, [filterType]: updatedFilter };
+    // Filters state
+    const [filters, setFilters] = useState({
+        type: new Set<string>(),
+        category: new Set<string>(),
+        location: new Set<string>()
     });
-  };
 
-  // Fetch lost items from API
-  useEffect(() => {
-    const fetchLostItems = async () => {
-      try {
-        const response = await axios.get(`${API_URL}/api/lost_items`);
-        if (response.data.success) {
-          setLostItems(response.data.items);
-        }
-      } catch (error) {
-        console.error('Error fetching lost items:', error);
-      }
+    // Handle checkbox filter changes
+    const handleFilterChange = (
+        event: CustomEvent,
+        filterType: keyof typeof filters,
+        value: string
+    ) => {
+        setFilters((prevFilters) => {
+            const updatedFilter = new Set(prevFilters[filterType]);
+            event.detail.checked ? updatedFilter.add(value) : updatedFilter.delete(value);
+            return {...prevFilters, [filterType]: updatedFilter};
+        });
     };
-    fetchLostItems();
-  }, []);
 
-  // Fetch found items from API
-  useEffect(() => {
-    const fetchFoundItems = async () => {
-      try {
-        const response = await axios.get(`${API_URL}/api/found_items`);
-        if (response.data.success) {
-          setFoundItems(response.data.items);
-        }
-      } catch (error) {
-        console.error('Error fetching found items:', error);
-      }
+    // Fetch lost items from API
+    useEffect(() => {
+        const fetchLostItems = async () => {
+            try {
+                const response = await axios.get(`${API_URL}/api/lost_items`);
+                if (response.data.success) {
+                    setLostItems(response.data.items);
+                }
+            } catch (error) {
+                console.error('Error fetching lost items:', error);
+            }
+        };
+        fetchLostItems();
+    }, []);
+
+    // Fetch found items from API
+    useEffect(() => {
+        const fetchFoundItems = async () => {
+            try {
+                const response = await axios.get(`${API_URL}/api/found_items`);
+                if (response.data.success) {
+                    setFoundItems(response.data.items);
+                }
+            } catch (error) {
+                console.error('Error fetching found items:', error);
+            }
+        };
+        fetchFoundItems();
+    }, []);
+
+    // Combine lost and found items
+    const allItems = [...lostItems, ...foundItems];
+
+    // Filter items by filters and search query
+    const filteredItems = allItems.filter((item) => {
+        const typeMatch = filters.type.size === 0 || filters.type.has(item.type);
+        const categoryMatch = filters.category.size === 0 || filters.category.has(item.category);
+        const locationMatch = filters.location.size === 0 || filters.location.has(item.location);
+        const searchMatch =
+            searchQuery === "" ||
+            (item.name && item.name.toLowerCase().includes(searchQuery.toLowerCase()));
+        return typeMatch && categoryMatch && locationMatch && searchMatch;
+    });
+
+    // Reset pagination when search query changes
+    useEffect(() => {
+        setCurrentPage(1);
+    }, [searchQuery]);
+
+    // Pagination logic
+    const totalPages = Math.ceil(filteredItems.length / itemsPerPage) || 1;
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    const displayedItems = filteredItems.slice(startIndex, startIndex + itemsPerPage);
+
+    // Show/hide searchbar when scrolling
+    useEffect(() => {
+        const handleScroll = () => {
+            const currentScrollY = window.scrollY;
+            setShowSearch(currentScrollY < lastScrollY.current);
+            lastScrollY.current = currentScrollY;
+        };
+        window.addEventListener('scroll', handleScroll);
+        return () => window.removeEventListener('scroll', handleScroll);
+    }, []);
+
+    // Update isSmallScreen state on window resize
+    useEffect(() => {
+        const handleResize = () => {
+            setIsSmallScreen(window.innerWidth < 768);
+        };
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
+    }, []);
+
+    // Navigate to item detail
+    const handleItemClick = (id: string) => {
+        history.push(`/item/${id}`);
     };
-    fetchFoundItems();
-  }, []);
 
-  // Combine lost and found items
-  const allItems = [...lostItems, ...foundItems];
-
-  // Filter items by filters and search query
-  const filteredItems = allItems.filter((item) => {
-    const typeMatch = filters.type.size === 0 || filters.type.has(item.type);
-    const categoryMatch = filters.category.size === 0 || filters.category.has(item.category);
-    const locationMatch = filters.location.size === 0 || filters.location.has(item.location);
-    const searchMatch =
-      searchQuery === "" ||
-      (item.name && item.name.toLowerCase().includes(searchQuery.toLowerCase()));
-    return typeMatch && categoryMatch && locationMatch && searchMatch;
-  });
-
-  // Reset pagination when search query changes
-  useEffect(() => {
-    setCurrentPage(1);
-  }, [searchQuery]);
-
-  // Pagination logic
-  const totalPages = Math.ceil(filteredItems.length / itemsPerPage) || 1;
-  const startIndex = (currentPage - 1) * itemsPerPage;
-  const displayedItems = filteredItems.slice(startIndex, startIndex + itemsPerPage);
-
-  // Show/hide searchbar when scrolling
-  useEffect(() => {
-    const handleScroll = () => {
-      const currentScrollY = window.scrollY;
-      setShowSearch(currentScrollY < lastScrollY.current);
-      lastScrollY.current = currentScrollY;
+    // Apply filters (reset pagination)
+    const applyFilters = () => {
+        setCurrentPage(1);
     };
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
 
-  // Update isSmallScreen state on window resize
-  useEffect(() => {
-    const handleResize = () => {
-      setIsSmallScreen(window.innerWidth < 768);
-    };
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
-  }, []);
-
-  // Navigate to item detail
-  const handleItemClick = (id: string) => {
-    history.push(`/item/${id}`);
-  };
-
-  // Apply filters (reset pagination)
-  const applyFilters = () => {
-    setCurrentPage(1);
-  };
-
-  // Render the layout conditionally based on screen width
-  return (
-    <>
-      {isSmallScreen ? (
-        // Small screen layout: Overlay menu and FAB button to toggle it
+    // Render the layout conditionally based on screen width
+    return (
         <>
-          <IonMenu contentId="main-content" type="overlay" menuId="filterMenu" side="start" className="tab1-menu">
-            <IonHeader className="tab1-menu-header">
-              <IonToolbar className="tab1-menu-toolbar">
-                <IonTitle className="tab1-menu-title">Filters</IonTitle>
-              </IonToolbar>
-            </IonHeader>
-            <IonContent className="tab1-menu-content">
-              <IonList className="tab1-menu-list">
-                <IonAccordionGroup className="tab1-accordion-group">
-                  {/* Type Filter */}
-                  <IonAccordion value="type" className="tab1-accordion">
-                    <IonItem slot="header" className="tab1-accordion-header">
-                      <IonTitle className="tab1-accordion-title">Type</IonTitle>
-                    </IonItem>
-                    <div slot="content" className="tab1-accordion-content">
-                      <IonItem lines="none" className="tab1-filter-item">
-                        <IonLabel>Lost</IonLabel>
-                        <IonCheckbox
-                          slot="end"
-                          onIonChange={(e) => handleFilterChange(e, "type", "Lost")}
-                          className="tab1-filter-checkbox"
-                        />
-                      </IonItem>
-                      <IonItem lines="none" className="tab1-filter-item">
-                        <IonLabel>Found</IonLabel>
-                        <IonCheckbox
-                          slot="end"
-                          onIonChange={(e) => handleFilterChange(e, "type", "Found")}
-                          className="tab1-filter-checkbox"
-                        />
-                      </IonItem>
-                    </div>
-                  </IonAccordion>
-                  {/* Category Filter */}
-                  <IonAccordion value="category" className="tab1-accordion">
-                    <IonItem slot="header" className="tab1-accordion-header">
-                      <IonTitle className="tab1-accordion-title">Category</IonTitle>
-                    </IonItem>
-                    <div slot="content" className="tab1-accordion-content">
-                      {["Electronics", "Clothes", "Backpacks", "Keys", "Wallets", "Student ID", "Other"].map(category => (
-                        <IonItem key={category} lines="none" className="tab1-filter-item">
-                          <IonLabel>{category}</IonLabel>
-                          <IonCheckbox
-                            slot="end"
-                            onIonChange={(e) => handleFilterChange(e, "category", category)}
-                            className="tab1-filter-checkbox"
-                          />
-                        </IonItem>
-                      ))}
-                    </div>
-                  </IonAccordion>
-                  {/* Location Filter */}
-                  <IonAccordion value="location" className="tab1-accordion">
-                    <IonItem slot="header" className="tab1-accordion-header">
-                      <IonTitle className="tab1-accordion-title">Location</IonTitle>
-                    </IonItem>
-                    <div slot="content" className="tab1-accordion-content">
-                      {["A Block", "B Block", "C Block", "D Block", "E Block", "F Block", "G Block", "H Block", "S Block", "Connect Building"].map(location => (
-                        <IonItem key={location} lines="none" className="tab1-filter-item">
-                          <IonLabel>{location}</IonLabel>
-                          <IonCheckbox
-                            slot="end"
-                            onIonChange={(e) => handleFilterChange(e, "location", location)}
-                            className="tab1-filter-checkbox"
-                          />
-                        </IonItem>
-                      ))}
-                    </div>
-                  </IonAccordion>
-                </IonAccordionGroup>
-                <IonButton expand="full" onClick={applyFilters} className="tab1-apply-filters">
-                  Apply Filters
-                </IonButton>
-              </IonList>
-            </IonContent>
-          </IonMenu>
-          <IonPage id="main-content" className="tab1-page">
-            <IonHeader className="tab1-header">
-              <Header />
-              {showSearch && (
-                <IonToolbar className="tab1-search-toolbar">
-                  <IonSearchbar
-                    placeholder="Search for items..."
-                    value={searchQuery}
-                    onIonInput={(e) => setSearchQuery(e.detail.value!)}
-                    show-clear-button="focus"
-                    className="tab1-searchbar"
-                  />
-                </IonToolbar>
-              )}
-            </IonHeader>
-            {/* Removed fullscreen from IonContent */}
-            <IonContent className="tab1-content">
-              <IonGrid className="tab1-grid">
-                <IonRow className="tab1-row">
-                  {displayedItems.length > 0 ? (
-                    displayedItems.map((item) => (
-                      <IonCol size="12" sizeLg="6" sizeMd="6" sizeXl="4" key={item._id} className="tab1-col">
-                        <IonCard className="tab1-card">
-                          <img alt={item.name} src={item.image} className="tab1-card-img" />
-                          <IonCardHeader className="tab1-card-header" style={{ borderBottom: '1px solid #ddd', marginBottom: '10px' }}>
-                            <IonCardTitle className="tab1-card-title">{item.name}  <IonBadge
-                  color={item.type === 'Lost' ? 'danger' : 'success'}
-                  style={{
-                    position: 'absolute',
-                    top: '50%',
-                    
-                    left: 'calc(50% + 80px)',
-                    transform: 'translateY(-50%)',
-                    color: '#ffffff', 
-                  }}
-                >
-                  {item.type}
-                </IonBadge></IonCardTitle>
-                            <IonCardSubtitle className="tab1-card-subtitle">{item.category}</IonCardSubtitle>
-                          </IonCardHeader>
-                          <IonCardContent className="tab1-card-content">
-                            <p className="tab1-card-desc" style={{ marginBottom: '8px' }}>{item.description}</p>
-                            <p className="tab1-card-location" style={{ fontWeight: 'bold', fontSize: '1.1rem' }}>
-                              Location: {item.location}
-                            </p>
-                          </IonCardContent>
-                          <IonButton onClick={() => handleItemClick(item._id)} className="tab1-card-button">
-                            View Item
-                          </IonButton>
-                        </IonCard>
-                      </IonCol>
-                    ))
-                  ) : (
-                    <IonCol size="12" className="tab1-col">
-                      <p className="tab1-no-items">No items found.</p>
-                    </IonCol>
-                  )}
-                </IonRow>
-              </IonGrid>
-              <IonGrid className="tab1-pagination-grid">
-                <IonRow className="tab1-pagination-row ion-align-items-center ion-justify-content-center">
-                  <IonCol size="auto" className="tab1-pagination-col">
-                    <IonButton disabled={currentPage === 1} onClick={() => setCurrentPage(currentPage - 1)} className="tab1-pagination-button">
-                      <IonIcon icon={chevronBackOutline} className="tab1-pagination-icon" />
-                    </IonButton>
-                  </IonCol>
-                  <IonCol size="auto" className="tab1-pagination-col">
+            {isSmallScreen ? (
+                // Small screen layout: Overlay menu and FAB button to toggle it
+                <>
+                    <IonMenu contentId="main-content" type="overlay" menuId="filterMenu" side="start"
+                             className="tab1-menu">
+                        <IonHeader className="tab1-menu-header">
+                            <IonToolbar className="tab1-menu-toolbar">
+                                <IonTitle className="tab1-menu-title">Filters</IonTitle>
+                            </IonToolbar>
+                        </IonHeader>
+                        <IonContent className="tab1-menu-content">
+                            <IonList className="tab1-menu-list">
+                                <IonAccordionGroup className="tab1-accordion-group">
+                                    {/* Type Filter */}
+                                    <IonAccordion value="type" className="tab1-accordion">
+                                        <IonItem slot="header" className="tab1-accordion-header">
+                                            <IonTitle className="tab1-accordion-title">Type</IonTitle>
+                                        </IonItem>
+                                        <div slot="content" className="tab1-accordion-content">
+                                            <IonItem lines="none" className="tab1-filter-item">
+                                                <IonLabel>Lost</IonLabel>
+                                                <IonCheckbox
+                                                    slot="end"
+                                                    onIonChange={(e) => handleFilterChange(e, "type", "Lost")}
+                                                    className="tab1-filter-checkbox"
+                                                />
+                                            </IonItem>
+                                            <IonItem lines="none" className="tab1-filter-item">
+                                                <IonLabel>Found</IonLabel>
+                                                <IonCheckbox
+                                                    slot="end"
+                                                    onIonChange={(e) => handleFilterChange(e, "type", "Found")}
+                                                    className="tab1-filter-checkbox"
+                                                />
+                                            </IonItem>
+                                        </div>
+                                    </IonAccordion>
+                                    {/* Category Filter */}
+                                    <IonAccordion value="category" className="tab1-accordion">
+                                        <IonItem slot="header" className="tab1-accordion-header">
+                                            <IonTitle className="tab1-accordion-title">Category</IonTitle>
+                                        </IonItem>
+                                        <div slot="content" className="tab1-accordion-content">
+                                            {["Electronics", "Clothes", "Backpacks", "Keys", "Wallets", "Student ID", "Other"].map(category => (
+                                                <IonItem key={category} lines="none" className="tab1-filter-item">
+                                                    <IonLabel>{category}</IonLabel>
+                                                    <IonCheckbox
+                                                        slot="end"
+                                                        onIonChange={(e) => handleFilterChange(e, "category", category)}
+                                                        className="tab1-filter-checkbox"
+                                                    />
+                                                </IonItem>
+                                            ))}
+                                        </div>
+                                    </IonAccordion>
+                                    {/* Location Filter */}
+                                    <IonAccordion value="location" className="tab1-accordion">
+                                        <IonItem slot="header" className="tab1-accordion-header">
+                                            <IonTitle className="tab1-accordion-title">Location</IonTitle>
+                                        </IonItem>
+                                        <div slot="content" className="tab1-accordion-content">
+                                            {["A Block", "B Block", "C Block", "D Block", "E Block", "F Block", "G Block", "H Block", "S Block", "Connect Building"].map(location => (
+                                                <IonItem key={location} lines="none" className="tab1-filter-item">
+                                                    <IonLabel>{location}</IonLabel>
+                                                    <IonCheckbox
+                                                        slot="end"
+                                                        onIonChange={(e) => handleFilterChange(e, "location", location)}
+                                                        className="tab1-filter-checkbox"
+                                                    />
+                                                </IonItem>
+                                            ))}
+                                        </div>
+                                    </IonAccordion>
+                                </IonAccordionGroup>
+                                <IonButton expand="full" onClick={applyFilters} className="tab1-apply-filters">
+                                    Apply Filters
+                                </IonButton>
+                            </IonList>
+                        </IonContent>
+                    </IonMenu>
+                    <IonPage id="main-content" className="tab1-page">
+                        <IonHeader className="tab1-header">
+                            <Header/>
+                            {showSearch && (
+                                <IonToolbar className="tab1-search-toolbar">
+                                    <IonSearchbar
+                                        placeholder="Search for items..."
+                                        value={searchQuery}
+                                        onIonInput={(e) => setSearchQuery(e.detail.value!)}
+                                        show-clear-button="focus"
+                                        className="tab1-searchbar"
+                                    />
+                                </IonToolbar>
+                            )}
+                        </IonHeader>
+                        {/* Removed fullscreen from IonContent */}
+                        <IonContent className="tab1-content">
+                            <IonGrid className="tab1-grid">
+                                <IonRow className="tab1-row">
+                                    {displayedItems.length > 0 ? (
+                                        displayedItems.map((item) => (
+                                            <IonCol size="12" sizeLg="6" sizeMd="6" sizeXl="4" key={item._id}
+                                                    className="tab1-col">
+                                                <IonCard className="tab1-card">
+                                                    <img alt={item.name} src={item.image} className="tab1-card-img"/>
+                                                    <IonCardHeader className="tab1-card-header" style={{
+                                                        borderBottom: '1px solid #ddd',
+                                                        marginBottom: '10px'
+                                                    }}>
+                                                        <IonCardTitle className="tab1-card-title">{item.name} <IonBadge
+                                                            color={item.type === 'Lost' ? 'danger' : 'success'}
+                                                            style={{
+                                                                position: 'absolute',
+                                                                top: '50%',
+
+                                                                left: 'calc(50% + 80px)',
+                                                                transform: 'translateY(-50%)',
+                                                                color: '#ffffff',
+                                                            }}
+                                                        >
+                                                            {item.type}
+                                                        </IonBadge></IonCardTitle>
+                                                        <IonCardSubtitle
+                                                            className="tab1-card-subtitle">{item.category}</IonCardSubtitle>
+                                                    </IonCardHeader>
+                                                    <IonCardContent className="tab1-card-content">
+                                                        <p className="tab1-card-desc"
+                                                           style={{marginBottom: '8px'}}>{item.description}</p>
+                                                        <p className="tab1-card-location"
+                                                           style={{fontWeight: 'bold', fontSize: '1.1rem'}}>
+                                                            Location: {item.location}
+                                                        </p>
+                                                    </IonCardContent>
+                                                    <IonButton onClick={() => handleItemClick(item._id)}
+                                                               className="tab1-card-button">
+                                                        View Item
+                                                    </IonButton>
+                                                </IonCard>
+                                            </IonCol>
+                                        ))
+                                    ) : (
+                                        <IonCol size="12" className="tab1-col">
+                                            <p className="tab1-no-items">No items found.</p>
+                                        </IonCol>
+                                    )}
+                                </IonRow>
+                            </IonGrid>
+                            <IonGrid className="tab1-pagination-grid">
+                                <IonRow
+                                    className="tab1-pagination-row ion-align-items-center ion-justify-content-center">
+                                    <IonCol size="auto" className="tab1-pagination-col">
+                                        <IonButton disabled={currentPage === 1}
+                                                   onClick={() => setCurrentPage(currentPage - 1)}
+                                                   className="tab1-pagination-button">
+                                            <IonIcon icon={chevronBackOutline} className="tab1-pagination-icon"/>
+                                        </IonButton>
+                                    </IonCol>
+                                    <IonCol size="auto" className="tab1-pagination-col">
                     <span className="tab1-pagination-info">
                       Page {currentPage} of {totalPages}
                     </span>
-                  </IonCol>
-                  <IonCol size="auto" className="tab1-pagination-col">
-                    <IonButton disabled={currentPage >= totalPages} onClick={() => setCurrentPage(currentPage + 1)} className="tab1-pagination-button">
-                      <IonIcon icon={chevronForwardOutline} className="tab1-pagination-icon" />
-                    </IonButton>
-                  </IonCol>
-                </IonRow>
-              </IonGrid>
-              {/* Floating button to toggle the filter menu */}
-              <IonFab vertical="bottom" horizontal="end" slot="fixed" className="tab1-fab">
-                <IonMenuToggle menu="filterMenu" className="tab1-menu-toggle">
-                  <IonFabButton className="tab1-fab-button">
-                    <IonIcon icon={filterOutline} className="tab1-fab-icon" />
-                  </IonFabButton>
-                </IonMenuToggle>
-              </IonFab>
-            </IonContent>
-            
-          </IonPage>
-        </>
-      ) : (
-        // Large screen layout: Use IonSplitPane to show filters permanently
-        <IonSplitPane contentId="main-content" className="tab1-split-pane">
-          <IonMenu contentId="main-content" type="push" menuId="filterMenu" side="start" className="tab1-menu">
-            <IonHeader className="tab1-menu-header">
-              <IonToolbar className="tab1-menu-toolbar">
-                <IonTitle className="tab1-menu-title">Filters</IonTitle>
-              </IonToolbar>
-            </IonHeader>
-            <IonContent className="tab1-menu-content">
-              <IonList className="tab1-menu-list">
-                <IonAccordionGroup className="tab1-accordion-group">
-                  {/* Type Filter */}
-                  <IonAccordion value="type" className="tab1-accordion">
-                    <IonItem slot="header" className="tab1-accordion-header">
-                      <IonTitle className="tab1-accordion-title">Type</IonTitle>
-                    </IonItem>
-                    <div slot="content" className="tab1-accordion-content">
-                      <IonItem lines="none" className="tab1-filter-item">
-                        <IonLabel>Lost</IonLabel>
-                        <IonCheckbox
-                          slot="end"
-                          onIonChange={(e) => handleFilterChange(e, "type", "Lost")}
-                          className="tab1-filter-checkbox"
-                        />
-                      </IonItem>
-                      <IonItem lines="none" className="tab1-filter-item">
-                        <IonLabel>Found</IonLabel>
-                        <IonCheckbox
-                          slot="end"
-                          onIonChange={(e) => handleFilterChange(e, "type", "Found")}
-                          className="tab1-filter-checkbox"
-                        />
-                      </IonItem>
-                    </div>
-                  </IonAccordion>
-                  {/* Category Filter */}
-                  <IonAccordion value="category" className="tab1-accordion">
-                    <IonItem slot="header" className="tab1-accordion-header">
-                      <IonTitle className="tab1-accordion-title">Category</IonTitle>
-                    </IonItem>
-                    <div slot="content" className="tab1-accordion-content">
-                      {["Electronics", "Clothes", "Backpacks", "Keys", "Wallets", "Student ID", "Other"].map(category => (
-                        <IonItem key={category} lines="none" className="tab1-filter-item">
-                          <IonLabel>{category}</IonLabel>
-                          <IonCheckbox
-                            slot="end"
-                            onIonChange={(e) => handleFilterChange(e, "category", category)}
-                            className="tab1-filter-checkbox"
-                          />
-                        </IonItem>
-                      ))}
-                    </div>
-                  </IonAccordion>
-                  {/* Location Filter */}
-                  <IonAccordion value="location" className="tab1-accordion">
-                    <IonItem slot="header" className="tab1-accordion-header">
-                      <IonTitle className="tab1-accordion-title">Location</IonTitle>
-                    </IonItem>
-                    <div slot="content" className="tab1-accordion-content">
-                      {["A Block", "B Block", "C Block", "D Block", "E Block", "F Block", "G Block", "H Block", "S Block", "Connect Building"].map(location => (
-                        <IonItem key={location} lines="none" className="tab1-filter-item">
-                          <IonLabel>{location}</IonLabel>
-                          <IonCheckbox
-                            slot="end"
-                            onIonChange={(e) => handleFilterChange(e, "location", location)}
-                            className="tab1-filter-checkbox"
-                          />
-                        </IonItem>
-                      ))}
-                    </div>
-                  </IonAccordion>
-                </IonAccordionGroup>
-                <IonButton expand="full" onClick={applyFilters} className="tab1-apply-filters">
-                  Apply Filters
-                </IonButton>
-              </IonList>
-            </IonContent>
-          </IonMenu>
-          <IonPage id="main-content" className="tab1-page">
-            <IonHeader className="tab1-header">
-              <Header />
-              {showSearch && (
-                <IonToolbar className="tab1-search-toolbar">
-                  <IonSearchbar
-                    placeholder="Search for items..."
-                    value={searchQuery}
-                    onIonInput={(e) => setSearchQuery(e.detail.value!)}
-                    show-clear-button="focus"
-                    className="tab1-searchbar"
-                  />
-                </IonToolbar>
-              )}
-            </IonHeader>
-            <IonContent className="tab1-content">
-            <IonGrid className="tab1-grid">
-  <IonRow className="tab1-row">
-    {displayedItems.length > 0 ? (
-      displayedItems.map(item => (
-        <IonCol
-          size="12"
-          sizeLg="6"
-          sizeMd="6"
-          sizeXl="4"
-          key={item._id}
-          className="tab1-col"
-        >
-          <IonCard className="tab1-card">
-            <img
-              alt={item.name}
-              src={item.image}
-              className="tab1-card-img"
-            />
+                                    </IonCol>
+                                    <IonCol size="auto" className="tab1-pagination-col">
+                                        <IonButton disabled={currentPage >= totalPages}
+                                                   onClick={() => setCurrentPage(currentPage + 1)}
+                                                   className="tab1-pagination-button">
+                                            <IonIcon icon={chevronForwardOutline} className="tab1-pagination-icon"/>
+                                        </IonButton>
+                                    </IonCol>
+                                </IonRow>
+                            </IonGrid>
+                            {/* Floating button to toggle the filter menu */}
+                            <IonFab vertical="bottom" horizontal="end" slot="fixed" className="tab1-fab">
+                                <IonMenuToggle menu="filterMenu" className="tab1-menu-toggle">
+                                    <IonFabButton className="tab1-fab-button">
+                                        <IonIcon icon={filterOutline} className="tab1-fab-icon"/>
+                                    </IonFabButton>
+                                </IonMenuToggle>
+                            </IonFab>
+                        </IonContent>
 
-            <IonCardHeader
-              className="tab1-card-header"
-              style={{ 
-                borderBottom: '1px solid #ddd', 
-                marginBottom: '10px',
-                position: 'relative',       
-              }}
-            >
-              <IonCardSubtitle className="tab1-card-subtitle">
-                {item.category}
-              </IonCardSubtitle>
+                    </IonPage>
+                </>
+            ) : (
+                // Large screen layout: Use IonSplitPane to show filters permanently
+                <IonSplitPane contentId="main-content" className="tab1-split-pane">
+                    <IonMenu contentId="main-content" type="push" menuId="filterMenu" side="start"
+                             className="tab1-menu">
+                        <IonHeader className="tab1-menu-header">
+                            <IonToolbar className="tab1-menu-toolbar">
+                                <IonTitle className="tab1-menu-title">Filters</IonTitle>
+                            </IonToolbar>
+                        </IonHeader>
+                        <IonContent className="tab1-menu-content">
+                            <IonList className="tab1-menu-list">
+                                <IonAccordionGroup className="tab1-accordion-group">
+                                    {/* Type Filter */}
+                                    <IonAccordion value="type" className="tab1-accordion">
+                                        <IonItem slot="header" className="tab1-accordion-header">
+                                            <IonTitle className="tab1-accordion-title">Type</IonTitle>
+                                        </IonItem>
+                                        <div slot="content" className="tab1-accordion-content">
+                                            <IonItem lines="none" className="tab1-filter-item">
+                                                <IonLabel>Lost</IonLabel>
+                                                <IonCheckbox
+                                                    slot="end"
+                                                    onIonChange={(e) => handleFilterChange(e, "type", "Lost")}
+                                                    className="tab1-filter-checkbox"
+                                                />
+                                            </IonItem>
+                                            <IonItem lines="none" className="tab1-filter-item">
+                                                <IonLabel>Found</IonLabel>
+                                                <IonCheckbox
+                                                    slot="end"
+                                                    onIonChange={(e) => handleFilterChange(e, "type", "Found")}
+                                                    className="tab1-filter-checkbox"
+                                                />
+                                            </IonItem>
+                                        </div>
+                                    </IonAccordion>
+                                    {/* Category Filter */}
+                                    <IonAccordion value="category" className="tab1-accordion">
+                                        <IonItem slot="header" className="tab1-accordion-header">
+                                            <IonTitle className="tab1-accordion-title">Category</IonTitle>
+                                        </IonItem>
+                                        <div slot="content" className="tab1-accordion-content">
+                                            {["Electronics", "Clothes", "Backpacks", "Keys", "Wallets", "Student ID", "Other"].map(category => (
+                                                <IonItem key={category} lines="none" className="tab1-filter-item">
+                                                    <IonLabel>{category}</IonLabel>
+                                                    <IonCheckbox
+                                                        slot="end"
+                                                        onIonChange={(e) => handleFilterChange(e, "category", category)}
+                                                        className="tab1-filter-checkbox"
+                                                    />
+                                                </IonItem>
+                                            ))}
+                                        </div>
+                                    </IonAccordion>
+                                    {/* Location Filter */}
+                                    <IonAccordion value="location" className="tab1-accordion">
+                                        <IonItem slot="header" className="tab1-accordion-header">
+                                            <IonTitle className="tab1-accordion-title">Location</IonTitle>
+                                        </IonItem>
+                                        <div slot="content" className="tab1-accordion-content">
+                                            {["A Block", "B Block", "C Block", "D Block", "E Block", "F Block", "G Block", "H Block", "S Block", "Connect Building"].map(location => (
+                                                <IonItem key={location} lines="none" className="tab1-filter-item">
+                                                    <IonLabel>{location}</IonLabel>
+                                                    <IonCheckbox
+                                                        slot="end"
+                                                        onIonChange={(e) => handleFilterChange(e, "location", location)}
+                                                        className="tab1-filter-checkbox"
+                                                    />
+                                                </IonItem>
+                                            ))}
+                                        </div>
+                                    </IonAccordion>
+                                </IonAccordionGroup>
+                                <IonButton expand="full" onClick={applyFilters} className="tab1-apply-filters">
+                                    Apply Filters
+                                </IonButton>
+                            </IonList>
+                        </IonContent>
+                    </IonMenu>
+                    <IonPage id="main-content" className="tab1-page">
+                        <IonHeader className="tab1-header">
+                            <Header/>
+                            {showSearch && (
+                                <IonToolbar className="tab1-search-toolbar">
+                                    <IonSearchbar
+                                        placeholder="Search for items..."
+                                        value={searchQuery}
+                                        onIonInput={(e) => setSearchQuery(e.detail.value!)}
+                                        show-clear-button="focus"
+                                        className="tab1-searchbar"
+                                    />
+                                </IonToolbar>
+                            )}
+                        </IonHeader>
+                        <IonContent className="tab1-content">
+                            <IonGrid className="tab1-grid">
+                                <IonRow className="tab1-row">
+                                    {displayedItems.length > 0 ? (
+                                        displayedItems.map(item => (
+                                            <IonCol
+                                                size="12"
+                                                sizeLg="6"
+                                                sizeMd="6"
+                                                sizeXl="4"
+                                                key={item._id}
+                                                className="tab1-col"
+                                            >
+                                                <IonCard className="tab1-card">
+                                                    <img
+                                                        alt={item.name}
+                                                        src={item.image}
+                                                        className="tab1-card-img"
+                                                    />
 
-              {/* 
+                                                    <IonCardHeader
+                                                        className="tab1-card-header"
+                                                        style={{
+                                                            borderBottom: '1px solid #ddd',
+                                                            marginBottom: '10px',
+                                                            position: 'relative',
+                                                        }}
+                                                    >
+                                                        <IonCardSubtitle className="tab1-card-subtitle">
+                                                            {item.category}
+                                                        </IonCardSubtitle>
+
+                                                        {/*
                 Wrapper for title+badge: 
                 we absolutely position both around the center 
               */}
-              <div style={{ position: 'relative', width: '100%', height: '2.2rem' }}>
-                <IonCardTitle 
-                  className="tab1-card-title"
-                  style={{ 
-                    position: 'absolute',
-                    top: '50%',
-                    left: '50%',
-                    transform: 'translate(-50%, -50%)',
-                    margin: 0,
-                  }}
-                >
-                  {item.name}
-                </IonCardTitle>
+                                                        <div style={{
+                                                            position: 'relative',
+                                                            width: '100%',
+                                                            height: '2.2rem'
+                                                        }}>
+                                                            <IonCardTitle
+                                                                className="tab1-card-title"
+                                                                style={{
+                                                                    position: 'absolute',
+                                                                    top: '50%',
+                                                                    left: '50%',
+                                                                    transform: 'translate(-50%, -50%)',
+                                                                    margin: 0,
+                                                                }}
+                                                            >
+                                                                {item.name}
+                                                            </IonCardTitle>
 
-                <IonBadge
-                  color={item.type === 'Lost' ? 'danger' : 'success'}
-                  style={{
-                    position: 'absolute',
-                    top: '50%',
-                    
-                    left: 'calc(50% + 80px)',
-                    transform: 'translateY(-50%)',
-                    color: '#ffffff', 
-                  }}
-                >
-                  {item.type}
-                </IonBadge>
-              </div>
-            </IonCardHeader>
+                                                            <IonBadge
+                                                                color={item.type === 'Lost' ? 'danger' : 'success'}
+                                                                style={{
+                                                                    position: 'absolute',
+                                                                    top: '50%',
 
-            <IonCardContent className="tab1-card-content">
-              <p className="tab1-card-desc" style={{ marginBottom: '8px' }}>
-                {item.description}
-              </p>
-              <p className="tab1-card-location" style={{ fontWeight: 'bold', fontSize: '1.1rem' }}>
-                Location: {item.location}
-              </p>
-            </IonCardContent>
+                                                                    left: 'calc(50% + 80px)',
+                                                                    transform: 'translateY(-50%)',
+                                                                    color: '#ffffff',
+                                                                }}
+                                                            >
+                                                                {item.type}
+                                                            </IonBadge>
+                                                        </div>
+                                                    </IonCardHeader>
 
-            <IonButton onClick={() => handleItemClick(item._id)} className="tab1-card-button">
-              View Item
-            </IonButton>
-          </IonCard>
-        </IonCol>
-      ))
-    ) : (
-      <IonCol size="12" className="tab1-col">
-        <p className="tab1-no-items">No items found.</p>
-      </IonCol>
-    )}
-  </IonRow>
-</IonGrid>
+                                                    <IonCardContent className="tab1-card-content">
+                                                        <p className="tab1-card-desc" style={{marginBottom: '8px'}}>
+                                                            {item.description}
+                                                        </p>
+                                                        <p className="tab1-card-location"
+                                                           style={{fontWeight: 'bold', fontSize: '1.1rem'}}>
+                                                            Location: {item.location}
+                                                        </p>
+                                                    </IonCardContent>
 
-              <IonGrid className="tab1-pagination-grid">
-                <IonRow className="tab1-pagination-row ion-align-items-center ion-justify-content-center">
-                  <IonCol size="auto" className="tab1-pagination-col">
-                    <IonButton disabled={currentPage === 1} onClick={() => setCurrentPage(currentPage - 1)} className="tab1-pagination-button">
-                      <IonIcon icon={chevronBackOutline} className="tab1-pagination-icon" />
-                    </IonButton>
-                  </IonCol>
-                  <IonCol size="auto" className="tab1-pagination-col">
+                                                    <IonButton onClick={() => handleItemClick(item._id)}
+                                                               className="tab1-card-button">
+                                                        View Item
+                                                    </IonButton>
+                                                </IonCard>
+                                            </IonCol>
+                                        ))
+                                    ) : (
+                                        <IonCol size="12" className="tab1-col">
+                                            <p className="tab1-no-items">No items found.</p>
+                                        </IonCol>
+                                    )}
+                                </IonRow>
+                            </IonGrid>
+
+                            <IonGrid className="tab1-pagination-grid">
+                                <IonRow
+                                    className="tab1-pagination-row ion-align-items-center ion-justify-content-center">
+                                    <IonCol size="auto" className="tab1-pagination-col">
+                                        <IonButton disabled={currentPage === 1}
+                                                   onClick={() => setCurrentPage(currentPage - 1)}
+                                                   className="tab1-pagination-button">
+                                            <IonIcon icon={chevronBackOutline} className="tab1-pagination-icon"/>
+                                        </IonButton>
+                                    </IonCol>
+                                    <IonCol size="auto" className="tab1-pagination-col">
                     <span className="tab1-pagination-info">
                       Page {currentPage} of {totalPages}
                     </span>
-                  </IonCol>
-                  <IonCol size="auto" className="tab1-pagination-col">
-                    <IonButton disabled={currentPage >= totalPages} onClick={() => setCurrentPage(currentPage + 1)} className="tab1-pagination-button">
-                      <IonIcon icon={chevronForwardOutline} className="tab1-pagination-icon" />
-                    </IonButton>
-                  </IonCol>
-                </IonRow>
-              </IonGrid>
-              <IonFab vertical="bottom" horizontal="end" slot="fixed" className="tab1-fab">
-                <IonMenuToggle menu="filterMenu" className="tab1-menu-toggle">
-                  <IonFabButton className="tab1-fab-button">
-                    <IonIcon icon={filterOutline} className="tab1-fab-icon" />
-                  </IonFabButton>
-                </IonMenuToggle>
-              </IonFab>
-            <Footer />
-            </IonContent>
-            
-          </IonPage>
-        </IonSplitPane>
-      )}
-    </>
-  );
+                                    </IonCol>
+                                    <IonCol size="auto" className="tab1-pagination-col">
+                                        <IonButton disabled={currentPage >= totalPages}
+                                                   onClick={() => setCurrentPage(currentPage + 1)}
+                                                   className="tab1-pagination-button">
+                                            <IonIcon icon={chevronForwardOutline} className="tab1-pagination-icon"/>
+                                        </IonButton>
+                                    </IonCol>
+                                </IonRow>
+                            </IonGrid>
+                            <IonFab vertical="bottom" horizontal="end" slot="fixed" className="tab1-fab">
+                                <IonMenuToggle menu="filterMenu" className="tab1-menu-toggle">
+                                    <IonFabButton className="tab1-fab-button">
+                                        <IonIcon icon={filterOutline} className="tab1-fab-icon"/>
+                                    </IonFabButton>
+                                </IonMenuToggle>
+                            </IonFab>
+                            <Footer/>
+                        </IonContent>
+
+                    </IonPage>
+                </IonSplitPane>
+            )}
+        </>
+    );
 };
 
 export default Tab1;

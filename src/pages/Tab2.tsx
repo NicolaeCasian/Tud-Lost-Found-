@@ -138,8 +138,8 @@ const Tab2: React.FC = () => {
     <IonPage>
       <Header />
 
-      <IonContent className="ion-padding">
-        <IonGrid>
+      <IonContent fullscreen>
+        <IonGrid style={{ marginTop: '20px'}}>
           <IonRow className="ion-justify-content-center">
             <IonCol size="6">
               <IonButton expand="full" color="secondary" routerLink="/tab2">
@@ -153,7 +153,7 @@ const Tab2: React.FC = () => {
             </IonCol>
           </IonRow>
         </IonGrid>
-        <IonCard>
+        <IonCard style={{ margin: '20px 20px 20px 20px' }}>
           <IonCardHeader>
             <IonCardTitle>Report Lost Item</IonCardTitle>
           </IonCardHeader>
@@ -288,8 +288,7 @@ const Tab2: React.FC = () => {
           </IonCardContent>
         </IonCard>
 
-        <IonFooter className="footer-tips">
-          <IonCard>
+          <IonCard style={{margin: '20px'}}>
             <IonCardHeader>
               <IonCardTitle>Tips for Reporting Lost Items:</IonCardTitle>
             </IonCardHeader>
@@ -304,7 +303,6 @@ const Tab2: React.FC = () => {
               </IonText>
             </IonCardContent>
           </IonCard>
-        </IonFooter>
         <IonAlert
           isOpen={showAlert}
           onDidDismiss={() => setShowAlert(false)}
