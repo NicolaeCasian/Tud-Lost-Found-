@@ -31,7 +31,9 @@ import Header from '../components/Header';
 import Footer from '../components/Footer';
 
 const Tab2: React.FC = () => {
-  const [form, setForm] = useState<{
+  const [isLostForm, setIsLostForm] = useState(true);
+
+  const [lostForm, setLostForm] = useState<{
     type: string;
     itemName: string;
     category: string;
@@ -50,25 +52,50 @@ const Tab2: React.FC = () => {
     contactInfo: '',
     image: null,
   });
+
+  const [foundForm, setFoundForm] = useState<{
+    type: string;
+    itemName: string;
+    category: string;
+    description: string;
+    locationFound: string;
+    dateFound: string;
+    contactInfo: string;
+    image: File | null;
+  }>({
+    type: 'found',
+    itemName: '',
+    category: '',
+    description: '',
+    locationFound: '',
+    dateFound: '',
+    contactInfo: '',
+    image: null,
+  });
+
   const [showAlert, setShowAlert] = useState(false);
   const [alertMessage, setAlertMessage] = useState('');
   const history = useHistory();
   const API_URL =
     import.meta.env.VITE_API_URL ||
     'https://tudlnf-serverv2-90ee51882713.herokuapp.com';
-  const [imagePreview, setImagePreview] = useState<string | null>(null);
+  const [lostImagePreview, setLostImagePreview] = useState<string | null>(null);
+  const [foundImagePreview, setFoundImagePreview] = useState<string | null>(null);
 
   const { accounts } = useMsal();
   const userEmail = accounts.length > 0 ? accounts[0].username : '';
 
   // Pre-populate contactInfo with userEmail if it's empty
   useEffect(() => {
-    if (!form.contactInfo && userEmail) {
-      setForm((prevForm) => ({ ...prevForm, contactInfo: userEmail }));
+    if (!lostForm.contactInfo && userEmail) {
+      setLostForm((prevForm) => ({ ...prevForm, contactInfo: userEmail }));
     }
-  }, [userEmail, form.contactInfo]);
+    if (!foundForm.contactInfo && userEmail) {
+      setFoundForm((prevForm) => ({ ...prevForm, contactInfo: userEmail }));
+    }
+  }, [userEmail, lostForm.contactInfo, foundForm.contactInfo]);
 
-  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleLostImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
       const validTypes = ['image/jpeg', 'image/png', 'image/jpg', 'image/heic'];
@@ -78,34 +105,59 @@ const Tab2: React.FC = () => {
       }
 
       const imageURL = URL.createObjectURL(file);
-      setImagePreview(imageURL);
+      setLostImagePreview(imageURL);
 
-      setForm((prevForm) => ({
+      setLostForm((prevForm) => ({
         ...prevForm,
         image: file,
       }));
     }
   };
 
-  const handleInputChange = (
+  const handleFoundImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const validTypes = ['image/jpeg', 'image/png', 'image/jpg', 'image/heic'];
+      if (!validTypes.includes(file.type)) {
+        alert('Only JPEG and PNG images are allowed.');
+        return;
+      }
+
+      const imageURL = URL.createObjectURL(file);
+      setFoundImagePreview(imageURL);
+
+      setFoundForm((prevForm) => ({
+        ...prevForm,
+        image: file,
+      }));
+    }
+  };
+
+  const handleLostInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
     const { name, value } = e.target;
-    setForm((prevForm) => ({ ...prevForm, [name]: value }));
+    setLostForm((prevForm) => ({ ...prevForm, [name]: value }));
   };
 
-  const handleSubmit = async () => {
-    if (form.image) {
+  const handleFoundInputChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    const { name, value } = e.target;
+    setFoundForm((prevForm) => ({ ...prevForm, [name]: value }));
+  };
+
+  const handleLostSubmit = async () => {
+    if (lostForm.image) {
       const formData = new FormData();
       formData.append('type', 'lost');
-      formData.append('name', form.itemName);
-      formData.append('category', form.category);
-      formData.append('description', form.description);
-      formData.append('location', form.locationLost);
-      formData.append('dateLost', form.dateLost);
-      // Use form.contactInfo or fall back to userEmail during submission
-      formData.append('email', form.contactInfo || userEmail);
-      formData.append('image', form.image);
+      formData.append('name', lostForm.itemName);
+      formData.append('category', lostForm.category);
+      formData.append('description', lostForm.description);
+      formData.append('location', lostForm.locationLost);
+      formData.append('dateLost', lostForm.dateLost);
+      formData.append('email', lostForm.contactInfo || userEmail);
+      formData.append('image', lostForm.image);
 
       try {
         const response = await fetch(`${API_URL}/api/report_lost`, {
@@ -130,8 +182,47 @@ const Tab2: React.FC = () => {
     }
   };
 
+  const handleFoundSubmit = async () => {
+    if (foundForm.image) {
+      const formData = new FormData();
+      formData.append('type', 'found');
+      formData.append('name', foundForm.itemName);
+      formData.append('category', foundForm.category);
+      formData.append('description', foundForm.description);
+      formData.append('location', foundForm.locationFound);
+      formData.append('dateFound', foundForm.dateFound);
+      formData.append('email', foundForm.contactInfo || userEmail);
+      formData.append('image', foundForm.image);
+
+      try {
+        const response = await fetch(`${API_URL}/api/report_found`, {
+          method: 'POST',
+          body: formData,
+        });
+        const data = await response.json();
+        if (data.success) {
+          setAlertMessage(
+            'Your report has been submitted successfully. We will contact if someone claims this item.'
+          );
+          setShowAlert(true);
+        } else {
+          alert('Something went wrong!');
+        }
+      } catch (error) {
+        console.error('Error submitting form:', error);
+        alert('Failed to submit the report!');
+      }
+    } else {
+      alert('Please upload an image!');
+    }
+  };
+
   const navigateToLostItems = () => {
     history.push('/tab1');
+  };
+
+  const navigateToFoundItems = () => {
+    history.push('/tab3');
   };
 
   return (
@@ -142,164 +233,323 @@ const Tab2: React.FC = () => {
         <IonGrid style={{ marginTop: '20px'}}>
           <IonRow className="ion-justify-content-center">
             <IonCol size="6">
-              <IonButton expand="full" color="secondary" routerLink="/tab2">
+              <IonButton
+                expand="full"
+                color={isLostForm ? "secondary" : "primary"}
+                onClick={() => setIsLostForm(true)}
+              >
                 Report Lost
               </IonButton>
             </IonCol>
             <IonCol size="6">
-              <IonButton expand="full" color="primary" routerLink="found">
+              <IonButton
+                expand="full"
+                color={!isLostForm ? "secondary" : "primary"}
+                onClick={() => setIsLostForm(false)}
+              >
                 Report Found
               </IonButton>
             </IonCol>
           </IonRow>
         </IonGrid>
-        <IonCard style={{ margin: '20px 20px 20px 20px' }}>
-          <IonCardHeader>
-            <IonCardTitle>Report Lost Item</IonCardTitle>
-          </IonCardHeader>
-          <IonCardContent>
-            <IonItem>
-              <IonLabel position="stacked">Item Name</IonLabel>
-              <IonInput
-                name="itemName"
-                value={form.itemName}
-                placeholder="Enter item name"
-                onIonChange={(e) => handleInputChange(e)}
-              />
-            </IonItem>
 
-            <IonItem>
-              <IonLabel position="stacked">Category</IonLabel>
-              <IonSelect
-                name="category"
-                value={form.category}
-                placeholder="Select category"
-                onIonChange={(e) => handleInputChange(e)}
-              >
-                <IonSelectOption value="Electronics">
-                  Electronics
-                </IonSelectOption>
-                <IonSelectOption value="Clothes">Clothes</IonSelectOption>
-                <IonSelectOption value="Backpacks">Backpacks</IonSelectOption>
-                <IonSelectOption value="Keys">Keys</IonSelectOption>
-                <IonSelectOption value="Wallets">Wallets</IonSelectOption>
-                <IonSelectOption value="ID Cards">ID Cards</IonSelectOption>
-                <IonSelectOption value="Other">Other</IonSelectOption>
-              </IonSelect>
-            </IonItem>
+        {isLostForm ? (
+          // Lost Items Form
+          <IonCard>
+            <IonCardHeader>
+              <IonCardTitle>Report Lost Item</IonCardTitle>
+            </IonCardHeader>
+            <IonCardContent>
+              <IonItem>
+                <IonLabel position="stacked">Item Name</IonLabel>
+                <IonInput
+                  name="itemName"
+                  value={lostForm.itemName}
+                  placeholder="Enter item name"
+                  onIonChange={(e) => handleLostInputChange(e)}
+                />
+              </IonItem>
 
-            <IonItem>
-              <IonLabel position="stacked">Description</IonLabel>
-              <IonTextarea
-                name="description"
-                value={form.description}
-                placeholder="Describe the item"
-                onIonChange={(e) => handleInputChange(e)}
-              />
-            </IonItem>
+              <IonItem>
+                <IonLabel position="stacked">Category</IonLabel>
+                <IonSelect
+                  name="category"
+                  value={lostForm.category}
+                  placeholder="Select category"
+                  onIonChange={(e) => handleLostInputChange(e)}
+                >
+                  <IonSelectOption value="Electronics">
+                    Electronics
+                  </IonSelectOption>
+                  <IonSelectOption value="Clothes">Clothes</IonSelectOption>
+                  <IonSelectOption value="Backpacks">Backpacks</IonSelectOption>
+                  <IonSelectOption value="Keys">Keys</IonSelectOption>
+                  <IonSelectOption value="Wallets">Wallets</IonSelectOption>
+                  <IonSelectOption value="ID Cards">ID Cards</IonSelectOption>
+                  <IonSelectOption value="Other">Other</IonSelectOption>
+                </IonSelect>
+              </IonItem>
 
-            <IonItem>
-              <IonLabel position="stacked">Contact Information</IonLabel>
-              <IonInput
-                name="contactInfo"
-                value={form.contactInfo || userEmail}
-                readonly
-                type="email"
-                placeholder="Enter email"
-                onIonChange={(e) => handleInputChange(e)}
-              />
-            </IonItem>
+              <IonItem>
+                <IonLabel position="stacked">Description</IonLabel>
+                <IonTextarea
+                  name="description"
+                  value={lostForm.description}
+                  placeholder="Describe the item"
+                  onIonChange={(e) => handleLostInputChange(e)}
+                />
+              </IonItem>
 
-            <IonItem>
-              <IonLabel position="stacked">Location Lost</IonLabel>
-              <IonSelect
-                name="locationLost"
-                value={form.locationLost}
-                placeholder="Select location"
-                onIonChange={(e) => handleInputChange(e)}
-              >
-                <IonSelectOption value="A Block">A Block</IonSelectOption>
-                <IonSelectOption value="B Block">B Block</IonSelectOption>
-                <IonSelectOption value="C Block">C Block</IonSelectOption>
-                <IonSelectOption value="D Block">D Block</IonSelectOption>
-                <IonSelectOption value="E Block">E Block</IonSelectOption>
-                <IonSelectOption value="F Block">F Block</IonSelectOption>
-                <IonSelectOption value="G Block">G Block</IonSelectOption>
-                <IonSelectOption value="H Block">H Block</IonSelectOption>
-                <IonSelectOption value="S Block">
-                  S Block | Sports Pavilion
-                </IonSelectOption>
-                <IonSelectOption value="Connect Building">
-                  Connect Building
-                </IonSelectOption>
-              </IonSelect>
-            </IonItem>
+              <IonItem>
+                <IonLabel position="stacked">Contact Information</IonLabel>
+                <IonInput
+                  name="contactInfo"
+                  value={lostForm.contactInfo || userEmail}
+                  readonly
+                  type="email"
+                  placeholder="Enter email"
+                  onIonChange={(e) => handleLostInputChange(e)}
+                />
+              </IonItem>
 
-            <IonItem>
-              <IonLabel position="stacked">Date Lost</IonLabel>
-              <IonDatetime
-                display-format="MM/DD/YYYY"
-                name="dateLost"
-                value={form.dateLost}
-                onIonChange={(e) => handleInputChange(e)}
-              />
-            </IonItem>
+              <IonItem>
+                <IonLabel position="stacked">Location Lost</IonLabel>
+                <IonSelect
+                  name="locationLost"
+                  value={lostForm.locationLost}
+                  placeholder="Select location"
+                  onIonChange={(e) => handleLostInputChange(e)}
+                >
+                  <IonSelectOption value="A Block">A Block</IonSelectOption>
+                  <IonSelectOption value="B Block">B Block</IonSelectOption>
+                  <IonSelectOption value="C Block">C Block</IonSelectOption>
+                  <IonSelectOption value="D Block">D Block</IonSelectOption>
+                  <IonSelectOption value="E Block">E Block</IonSelectOption>
+                  <IonSelectOption value="F Block">F Block</IonSelectOption>
+                  <IonSelectOption value="G Block">G Block</IonSelectOption>
+                  <IonSelectOption value="H Block">H Block</IonSelectOption>
+                  <IonSelectOption value="S Block">
+                    S Block | Sports Pavilion
+                  </IonSelectOption>
+                  <IonSelectOption value="Connect Building">
+                    Connect Building
+                  </IonSelectOption>
+                </IonSelect>
+              </IonItem>
 
-            <IonItem>
-              <IonLabel position="stacked">Upload Image</IonLabel>
-              <input
-                type="file"
-                accept="image/png, image/jpeg, image/jpg, image/heic"
-                style={{ display: 'none' }}
-                id="upload-image"
-                onChange={(e) => handleImageUpload(e)}
-              />
+              <IonItem>
+                <IonLabel position="stacked">Date Lost</IonLabel>
+                <IonDatetime
+                  display-format="MM/DD/YYYY"
+                  name="dateLost"
+                  value={lostForm.dateLost}
+                  onIonChange={(e) => handleLostInputChange(e)}
+                />
+              </IonItem>
+
+              <IonItem>
+                <IonLabel position="stacked">Upload Image</IonLabel>
+                <input
+                  type="file"
+                  accept="image/png, image/jpeg, image/jpg, image/heic"
+                  style={{ display: 'none' }}
+                  id="upload-lost-image"
+                  onChange={(e) => handleLostImageUpload(e)}
+                />
+                <IonButton
+                  expand="block"
+                  color="success"
+                  className="image-button"
+                  onClick={() =>
+                    document.getElementById('upload-lost-image')?.click()
+                  }
+                >
+                  Insert Image
+                </IonButton>
+              </IonItem>
+
+              {lostImagePreview && (
+                <div>
+                  <p>Image Preview:</p>
+                  <img
+                    src={lostImagePreview}
+                    alt="Image Preview"
+                    style={{ width: '200px', height: 'auto' }}
+                  />
+                </div>
+              )}
+
               <IonButton
                 expand="block"
-                color="success"
-                className="image-button"
-                onClick={() =>
-                  document.getElementById('upload-image')?.click()
-                }
+                color="primary"
+                onClick={handleLostSubmit}
+                className="submit-button"
               >
-                Insert Image
+                Submit Report
               </IonButton>
-            </IonItem>
-
-            {imagePreview && (
-              <div>
-                <p>Image Preview:</p>
-                <img
-                  src={imagePreview}
-                  alt="Image Preview"
-                  style={{ width: '200px', height: 'auto' }}
+            </IonCardContent>
+          </IonCard>
+        ) : (
+          // Found Items Form
+          <IonCard>
+            <IonCardHeader>
+              <IonCardTitle>Report Found Item</IonCardTitle>
+            </IonCardHeader>
+            <IonCardContent>
+              <IonItem>
+                <IonLabel position="stacked">Item Name</IonLabel>
+                <IonInput
+                  name="itemName"
+                  value={foundForm.itemName}
+                  placeholder="Enter item name"
+                  onIonChange={(e) => handleFoundInputChange(e)}
                 />
-              </div>
-            )}
+              </IonItem>
 
-            <IonButton
-              expand="block"
-              color="primary"
-              onClick={handleSubmit}
-              className="submit-button"
-            >
-              Submit Report
-            </IonButton>
-          </IonCardContent>
-        </IonCard>
+              <IonItem>
+                <IonLabel position="stacked">Category</IonLabel>
+                <IonSelect
+                  name="category"
+                  value={foundForm.category}
+                  placeholder="Select category"
+                  onIonChange={(e) => handleFoundInputChange(e)}
+                >
+                  <IonSelectOption value="Electronics">
+                    Electronics
+                  </IonSelectOption>
+                  <IonSelectOption value="Clothes">Clothes</IonSelectOption>
+                  <IonSelectOption value="Backpacks">Backpacks</IonSelectOption>
+                  <IonSelectOption value="Keys">Keys</IonSelectOption>
+                  <IonSelectOption value="Wallets">Wallets</IonSelectOption>
+                  <IonSelectOption value="ID Cards">ID Cards</IonSelectOption>
+                  <IonSelectOption value="Other">Other</IonSelectOption>
+                </IonSelect>
+              </IonItem>
+
+              <IonItem>
+                <IonLabel position="stacked">Description</IonLabel>
+                <IonTextarea
+                  name="description"
+                  value={foundForm.description}
+                  placeholder="Describe the item"
+                  onIonChange={(e) => handleFoundInputChange(e)}
+                />
+              </IonItem>
+
+              <IonItem>
+                <IonLabel position="stacked">Contact Information</IonLabel>
+                <IonInput
+                  name="contactInfo"
+                  value={foundForm.contactInfo || userEmail}
+                  readonly
+                  type="email"
+                  placeholder="Enter email"
+                  onIonChange={(e) => handleFoundInputChange(e)}
+                />
+              </IonItem>
+
+              <IonItem>
+                <IonLabel position="stacked">Location Found</IonLabel>
+                <IonSelect
+                  name="locationFound"
+                  value={foundForm.locationFound}
+                  placeholder="Select location"
+                  onIonChange={(e) => handleFoundInputChange(e)}
+                >
+                  <IonSelectOption value="A Block">A Block</IonSelectOption>
+                  <IonSelectOption value="B Block">B Block</IonSelectOption>
+                  <IonSelectOption value="C Block">C Block</IonSelectOption>
+                  <IonSelectOption value="D Block">D Block</IonSelectOption>
+                  <IonSelectOption value="E Block">E Block</IonSelectOption>
+                  <IonSelectOption value="F Block">F Block</IonSelectOption>
+                  <IonSelectOption value="G Block">G Block</IonSelectOption>
+                  <IonSelectOption value="H Block">H Block</IonSelectOption>
+                  <IonSelectOption value="S Block">
+                    S Block | Sports Pavilion
+                  </IonSelectOption>
+                  <IonSelectOption value="Connect Building">
+                    Connect Building
+                  </IonSelectOption>
+                </IonSelect>
+              </IonItem>
+
+              <IonItem>
+                <IonLabel position="stacked">Date Found</IonLabel>
+                <IonDatetime
+                  display-format="MM/DD/YYYY"
+                  name="dateFound"
+                  value={foundForm.dateFound}
+                  onIonChange={(e) => handleFoundInputChange(e)}
+                />
+              </IonItem>
+
+              <IonItem>
+                <IonLabel position="stacked">Upload Image</IonLabel>
+                <input
+                  type="file"
+                  accept="image/png, image/jpeg, image/jpg, image/heic"
+                  style={{ display: 'none' }}
+                  id="upload-found-image"
+                  onChange={(e) => handleFoundImageUpload(e)}
+                />
+                <IonButton
+                  expand="block"
+                  color="success"
+                  className="image-button"
+                  onClick={() =>
+                    document.getElementById('upload-found-image')?.click()
+                  }
+                >
+                  Insert Image
+                </IonButton>
+              </IonItem>
+
+              {foundImagePreview && (
+                <div>
+                  <p>Image Preview:</p>
+                  <img
+                    src={foundImagePreview}
+                    alt="Image Preview"
+                    style={{ width: '200px', height: 'auto' }}
+                  />
+                </div>
+              )}
+
+              <IonButton
+                expand="block"
+                color="primary"
+                onClick={handleFoundSubmit}
+                className="submit-button"
+              >
+                Submit Report
+              </IonButton>
+            </IonCardContent>
+          </IonCard>
+        )}
 
           <IonCard style={{margin: '20px'}}>
             <IonCardHeader>
-              <IonCardTitle>Tips for Reporting Lost Items:</IonCardTitle>
+              <IonCardTitle>
+                Tips for Reporting {isLostForm ? "Lost" : "Found"} Items:
+              </IonCardTitle>
             </IonCardHeader>
             <IonCardContent>
               <IonText>
-                <ul>
-                  <li>Be specific in your description.</li>
-                  <li>Include identifying features.</li>
-                  <li>Report the loss quickly.</li>
-                  <li>Check the found items section regularly.</li>
-                </ul>
+                {isLostForm ? (
+                  <ul>
+                    <li>Be specific in your description.</li>
+                    <li>Include identifying features.</li>
+                    <li>Report the loss quickly.</li>
+                    <li>Check the found items section regularly.</li>
+                  </ul>
+                ) : (
+                  <ul>
+                    <li>Take clear photos of the item.</li>
+                    <li>Don't share identifying details publicly.</li>
+                    <li>If possible, hand the item to campus security.</li>
+                    <li>Check for identifying marks that the owner might recognize.</li>
+                  </ul>
+                )}
               </IonText>
             </IonCardContent>
           </IonCard>
@@ -310,8 +560,8 @@ const Tab2: React.FC = () => {
           message={alertMessage}
           buttons={[
             {
-              text: 'Go to Lost Items',
-              handler: () => navigateToLostItems(),
+              text: isLostForm ? 'Go to Lost Items' : 'Go to Found Items',
+              handler: () => isLostForm ? navigateToLostItems() : navigateToFoundItems(),
             },
             {
               text: 'Okay',
