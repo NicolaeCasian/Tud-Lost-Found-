@@ -41,7 +41,7 @@ const Login: React.FC = () => {
         instance.setActiveAccount(account);
 
         // add account to localStorage.
-        addAccountToLocalStorage({email: account.username})
+        // addAccountToLocalStorage({email: account.username})
 
         // Redirect based on user email
         if (userEmail === 'crudtud@gmail.com') {
@@ -60,7 +60,7 @@ const Login: React.FC = () => {
   };
 
   // another function to just log in using dummy account.
-  const signInUsingDummyAccount() => {
+  const signInUsingDummyAccount = () => {
     addAccountToLocalStorage({email: "dummy@gmail.com"});
 
     window.location.href = '/tab1';
