@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   IonContent,
   IonHeader,
@@ -28,40 +28,40 @@ import {
   TextareaChangeEventDetail,
   DatetimeChangeEventDetail
 } from '@ionic/react';
-import { useHistory } from 'react-router-dom';
+import {useHistory} from 'react-router-dom';
 import './Tab2.css';
 import Header from '../components/Header';
-import { useMsal } from '@azure/msal-react';
+import {useMsal} from '@azure/msal-react';
 import Footer from '../components/Footer';
 
 const Found: React.FC = () => {
-  const [form, setForm] = useState<{
-    type: string;
-    itemName: string;
-    category: string;
-    description: string;
-    locationFound: string;
-    dateFound: string;
-    contactInfo: string;
-    image: File | null;
-  }>({
-    type: 'found',
-    itemName: '',
-    category: '',
-    description: '',
-    locationFound: '',
-    dateFound: '',
-    contactInfo: '',
-    image: null,
-  });
-  const [showAlert, setShowAlert] = useState(false);
-  const [alertMessage, setAlertMessage] = useState('');
-  const history = useHistory();
-  const [imagePreview, setImagePreview] = useState<string | null>(null);
+    const [form, setForm] = useState<{
+        type: string;
+        itemName: string;
+        category: string;
+        description: string;
+        locationFound: string;
+        dateFound: string;
+        contactInfo: string;
+        image: File | null;
+    }>({
+        type: 'found',
+        itemName: '',
+        category: '',
+        description: '',
+        locationFound: '',
+        dateFound: '',
+        contactInfo: '',
+        image: null,
+    });
+    const [showAlert, setShowAlert] = useState(false);
+    const [alertMessage, setAlertMessage] = useState('');
+    const history = useHistory();
+    const [imagePreview, setImagePreview] = useState<string | null>(null);
 
-  const { accounts } = useMsal();
-  // Get the user's email from MSAL
-  const userEmail = accounts.length > 0 ? accounts[0].username : '';
+    const {accounts} = useMsal();
+    // Get the user's email from MSAL
+    const userEmail = accounts.length > 0 ? accounts[0].username : '';
 
   // Pre-populate contactInfo with userEmail if it's empty
   useEffect(() => {
@@ -79,64 +79,73 @@ const Found: React.FC = () => {
     setForm((prevForm) => ({ ...prevForm, [name]: value }));
   };
 
-  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      // Allow only valid image types
-      const validTypes = ['image/jpeg', 'image/png', 'image/jpg', 'image/heic'];
-      if (!validTypes.includes(file.type)) {
-        alert('Only JPEG and PNG images are allowed.');
-        return;
-      }
-      const imageURL = URL.createObjectURL(file);
-      setImagePreview(imageURL);
-      setForm((prevForm) => ({
-        ...prevForm,
-        image: file,
-      }));
-    }
-  };
-
-  const handleSubmit = async () => {
-    if (form.image) {
-      const formData = new FormData();
-      formData.append('type', 'found');
-      formData.append('name', form.itemName);
-      formData.append('category', form.category);
-      formData.append('description', form.description);
-      formData.append('location', form.locationFound);
-      // Use "dateFound" for found items instead of "dateLost"
-      formData.append('dateFound', form.dateFound);
-      // Use form.contactInfo or fall back to userEmail
-      formData.append('email', form.contactInfo || userEmail);
-      formData.append('image', form.image);
-
-      try {
-        const response = await fetch('https://tudlnf-serverv2-90ee51882713.herokuapp.com/api/report_found', {
-          method: 'POST',
-          body: formData,
-        });
-        const data = await response.json();
-        if (data.success) {
-          setAlertMessage(
-            'Your report has been submitted successfully. We will notify you if someone finds your item.'
-          );
-          setShowAlert(true);
-        } else {
-          alert('Something went wrong!');
+    const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+        if (file) {
+            // Allow only valid image types
+            const validTypes = ['image/jpeg', 'image/png', 'image/jpg', 'image/heic'];
+            if (!validTypes.includes(file.type)) {
+                alert('Only JPEG and PNG images are allowed.');
+                return;
+            }
+            const imageURL = URL.createObjectURL(file);
+            setImagePreview(imageURL);
+            setForm((prevForm) => ({
+                ...prevForm,
+                image: file,
+            }));
         }
-      } catch (error) {
-        console.error('Error submitting form:', error);
-        alert('Failed to submit the report!');
-      }
-    } else {
-      alert('Please upload an image!');
-    }
-  };
+    };
 
-  const navigateToLostItems = () => {
-    history.push('/tab1');
-  };
+    // Updated event handler to check for e.detail.value if available
+    const handleInputChange = (
+        e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement> & { detail?: { value: any } }
+    ) => {
+        const {name} = e.target;
+        const value = e.detail?.value ?? e.target.value;
+        setForm((prevForm) => ({...prevForm, [name]: value}));
+    };
+
+    const handleSubmit = async () => {
+        if (form.image) {
+            const formData = new FormData();
+            formData.append('type', 'found');
+            formData.append('name', form.itemName);
+            formData.append('category', form.category);
+            formData.append('description', form.description);
+            formData.append('location', form.locationFound);
+            // Use "dateFound" for found items instead of "dateLost"
+            formData.append('dateFound', form.dateFound);
+            // Use form.contactInfo or fall back to userEmail
+            formData.append('email', form.contactInfo || userEmail);
+            formData.append('image', form.image);
+
+            try {
+                const response = await fetch('https://tudlnf-serverv2-90ee51882713.herokuapp.com/api/report_found', {
+                    method: 'POST',
+                    body: formData,
+                });
+                const data = await response.json();
+                if (data.success) {
+                    setAlertMessage(
+                        'Your report has been submitted successfully. We will notify you if someone finds your item.'
+                    );
+                    setShowAlert(true);
+                } else {
+                    alert('Something went wrong!');
+                }
+            } catch (error) {
+                console.error('Error submitting form:', error);
+                alert('Failed to submit the report!');
+            }
+        } else {
+            alert('Please upload an image!');
+        }
+    };
+
+    const navigateToLostItems = () => {
+        history.push('/tab1');
+    };
 
   return (
     <IonPage>

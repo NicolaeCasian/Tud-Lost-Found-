@@ -43,4 +43,14 @@
 .main-footer {
     color: #3a3f51;
 }
+
+@media (max-width: 600px) {
+    .header-title {
+        font-size: 1rem;
+    }
+
+    .nav-buttons .nav-button {
+        font-size: 0.8rem;
+    }
+}
   

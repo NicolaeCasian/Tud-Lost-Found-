@@ -24,6 +24,7 @@ const Login: React.FC = () => {
       console.log('Triggering login with popup...');
       const response = await instance.loginPopup(loginRequest);
       const account = response.account;
+      console.log(account)
       if (account) {
         const userEmail = account.username;
         console.log('User email:', userEmail);
@@ -39,6 +40,9 @@ const Login: React.FC = () => {
         console.log('Login successful. Setting active account:', account);
         instance.setActiveAccount(account);
 
+        // add account to localStorage.
+        // addAccountToLocalStorage({email: account.username})
+
         // Redirect based on user email
         if (userEmail === 'crudtud@gmail.com') {
           console.log('Admin account detected. Redirecting to /admin app...');
@@ -53,6 +57,18 @@ const Login: React.FC = () => {
     } catch (error) {
       console.error('Login failed:', error);
     }
+  };
+
+  // another function to just log in using dummy account.
+  const signInUsingDummyAccount = () => {
+    addAccountToLocalStorage({email: "dummy@gmail.com"});
+
+    window.location.href = '/tab1';
+  }
+
+  // function to add account to localStorage
+  const addAccountToLocalStorage = (account: any) => {
+    localStorage.setItem('account', JSON.stringify(account));
   };
 
   return (
@@ -104,6 +120,7 @@ const Login: React.FC = () => {
             </svg>
             Login with Microsoft
           </IonButton>
+          <IonButton onClick={signInUsingDummyAccount} className="login-button" style={{ marginTop: '10px', padding: '10px 20px', fontSize: '16px' }}></IonButton>
 
           <div className="login-disclaimer" style={{ marginTop: '30px', textAlign: 'center', padding: '10px' }}>
             <IonText color="medium" className="disclaimer-text" style={{ fontSize: '14px' }}>

@@ -3,12 +3,12 @@ import {
   IonAlert,
   IonButton,
   IonCol,
-  IonContent,
+  IonContent, IonFooter,
   IonGrid,
   IonImg,
   IonPage,
   IonRow,
-  IonText,
+  IonText, IonToolbar,
 } from '@ionic/react';
 import Footer from '../components/Footer';
 import Header from '../components/Header';
@@ -84,7 +84,7 @@ const LostItem: React.FC = () => {
   return (
     <IonPage>
       <Header />
-      <IonContent fullscreen className="ion-padding">
+      <IonContent fullscreen>
         <div style={{ maxWidth: '850px', margin: '0 auto', padding: '0 1rem'}}>
           <IonGrid>
             {/* Top Section: Image First & Description */}
@@ -99,10 +99,10 @@ const LostItem: React.FC = () => {
                 </div>
                 <div
                   style={{
-                    backgroundColor: '#333',
+                    backgroundColor: '#F8F8F8',
                     borderRadius: '12px',
                     padding: '1rem',
-                    color: 'white',
+                    color: 'black',
                     textAlign: 'left',
                   }}
                 >
@@ -149,10 +149,10 @@ const LostItem: React.FC = () => {
               <IonCol size="12">
                 <div
                   style={{
-                    backgroundColor: '#333',
+                    backgroundColor: '#F8F8F8',
                     borderRadius: '12px',
                     padding: '1rem',
-                    color: 'white',
+                    color: 'black',
                     textAlign: 'left',
                     marginTop: '20px',
                   }}
@@ -209,7 +209,9 @@ const LostItem: React.FC = () => {
             </IonRow>
           </IonGrid>
         </div>
-        <Footer />
+        <IonFooter>
+          <Footer/>
+        </IonFooter>
       </IonContent>
     </IonPage>
   );

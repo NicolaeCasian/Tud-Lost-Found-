@@ -150,8 +150,8 @@ const Tab2: React.FC = () => {
     <IonPage>
       <Header />
 
-      <IonContent className="ion-padding">
-        <IonGrid>
+      <IonContent fullscreen>
+        <IonGrid style={{ marginTop: '20px'}}>
           <IonRow className="ion-justify-content-center">
             <IonCol size="6">
               <IonButton expand="full" color="secondary" routerLink="/tab2">
@@ -316,7 +316,6 @@ const Tab2: React.FC = () => {
               </IonText>
             </IonCardContent>
           </IonCard>
-        </IonFooter>
         <IonAlert
           isOpen={showAlert}
           onDidDismiss={() => setShowAlert(false)}
