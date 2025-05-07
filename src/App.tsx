@@ -17,6 +17,7 @@ import Tab2 from './pages/Tab2';
 import Tab3 from './pages/Tab3';
 import Login from './pages/Login';
 import Faq from './pages/faq';
+import ManageItemPage from "./pages/ManageItemPage";
 import Found from './pages/Found';
 import LostItem from './pages/LostItem';
 import Admin from './pages/Admin';
@@ -62,6 +63,7 @@ const App: React.FC = () => {
             {/* Public Routes */}
             <Route exact path="/login" component={Login} />
             <Route exact path="/faq" component={Faq} />
+            <Route exact path="/manage-item" component={ManageItemPage}/>
 
             {/* Authenticated Routes */}
             {isAuthenticated ? (
@@ -75,7 +77,7 @@ const App: React.FC = () => {
                       <Route exact path="/tab2" component={Tab2} />
                       <Route exact path="/tab3" component={Tab3} />
                       <Route exact path="/Admin" component={Admin} />
-                      {/* The item details route is placed here so that when a user on Tab1 clicks "View Item", 
+                      {/* The item details route is placed here so that when a user on Tab1 clicks "View Item",
                           the LostItem page is rendered within the tab structure */}
                       <Route exact path="/item/:id" component={LostItem} />
                       <Redirect exact from="/" to="/tab1" />
