@@ -13,11 +13,11 @@ import {
   IonCardTitle,
   IonCardContent,
   IonText,
-  isPlatform,                      // ← added
+  isPlatform,                      
 } from '@ionic/react';
 import { useMsal } from '@azure/msal-react';
-import { PopupRequest, RedirectRequest } from '@azure/msal-browser';  // ← added
-import { loginRequest } from './authConfig';
+import { PopupRequest, RedirectRequest } from '@azure/msal-browser'; 
+import { loginRequest, REDIRECT_MOBILE } from './authConfig';
 import './css/login.css';
 
 const Login: React.FC = () => {
@@ -26,9 +26,13 @@ const Login: React.FC = () => {
   const login = async () => {
     try {
       console.log('Triggering login...');
-      if (isPlatform('capacitor')) {
+      if (isPlatform('capacitor') ) {
         // On device/emulator: use redirect flow
-        await instance.loginRedirect(loginRequest as RedirectRequest);
+        const request: RedirectRequest = {
+          ...loginRequest,
+          redirectUri: REDIRECT_MOBILE,
+        };
+        await instance.loginRedirect(request);
       } else {
         // In browser: use popup flow
         await instance.loginPopup(loginRequest as PopupRequest);

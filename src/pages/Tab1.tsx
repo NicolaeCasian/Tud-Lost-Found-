@@ -30,7 +30,7 @@ import {
     IonFooter,
     IonBadge
 } from '@ionic/react';
-import {useMsal} from '@azure/msal-react';
+
 import {useHistory} from 'react-router-dom';
 import axios from 'axios';
 import {chevronBackOutline, chevronForwardOutline, filterOutline} from 'ionicons/icons';
@@ -38,11 +38,35 @@ import {menuController} from '@ionic/core';
 import Footer from '../components/Footer';
 import './Tab1.css';
 import Header from '../components/Header';
-
+import { useMsal } from '@azure/msal-react';
+import { RedirectRequest } from '@azure/msal-browser';
 
 const Tab1: React.FC = () => {
-    const {instance} = useMsal();
-    const history = useHistory();
+    const { instance, accounts } = useMsal();
+  const history = useHistory();
+
+  // 1) Catch the redirect response when AAD calls back to /Tab1#code=…
+  useEffect(() => {
+    instance
+      .handleRedirectPromise()
+      .then((response) => {
+        if (response?.account) {
+          instance.setActiveAccount(response.account);
+        }
+      })
+      .catch((e) => console.error('MSAL redirect error', e));
+  }, [instance]);
+
+  // 2) Once MSAL has an account, let the rest of your code run (e.g. fetch items)
+  useEffect(() => {
+    if (accounts.length > 0) {
+      console.log('Signed in as', accounts[0].username);
+      // Optionally, you could redirect or trigger data loads here
+    } else {
+      // No account → redirect to login
+      history.replace('/login');
+    }
+  }, [accounts, history]);
 
     // Create a ref for the IonMenu (used in small screens)
     const menuRef = useRef<HTMLIonMenuElement>(null);

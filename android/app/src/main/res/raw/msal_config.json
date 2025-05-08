@@ -1,0 +1,14 @@
+{
+  "client_id" : "66e000f7-e91b-4972-9974-c6745914d1e4",
+  "authorization_user_agent" : "DEFAULT",
+  "redirect_uri" : "msauth://io.ionic.starter/g8yEzGu%2FOSEgBl4iWdvcEpiA7Kg%3D",
+  "authorities" : [
+    {
+      "type": "AAD",
+      "audience": {
+        "type": "AzureADandPersonalMicrosoftAccount",
+        "tenant_id": "common"
+      }
+    }
+  ]
+}

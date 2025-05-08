@@ -5,7 +5,7 @@ import { PublicClientApplication, Configuration, PopupRequest } from '@azure/msa
 
 // Define redirect URIs exactly as registered in Azure
 const REDIRECT_WEB    = 'http://localhost:8100/Tab1';
-const REDIRECT_MOBILE = 'msauth://io.ionic.starter/g8yEzGu%2FOSEgBl4iWdvcEpiA7Kg%3D';
+export const REDIRECT_MOBILE = 'msauth://io.ionic.starter/g8yEzGu%2FOSEgBl4iWdvcEpiA7Kg%3D';
 
 // MSAL configuration
 export const msalConfig: Configuration = {
@@ -21,6 +21,8 @@ export const msalConfig: Configuration = {
 export const loginRequest: PopupRequest = {
   scopes: ['openid', 'profile', 'User.Read'],
 };
+
+
 
 // Create MSAL instance
 export const msalInstance = new PublicClientApplication(msalConfig);

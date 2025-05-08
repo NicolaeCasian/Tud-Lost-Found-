@@ -10,31 +10,29 @@
         android:theme="@style/AppTheme">
 
         <activity
-            android:configChanges="orientation|keyboardHidden|keyboard|screenSize|locale|smallestScreenSize|screenLayout|uiMode"
-            android:name=".MainActivity"
-            android:label="@string/title_activity_main"
-            android:theme="@style/AppTheme.NoActionBarLaunch"
+            android:name="com.getcapacitor.BridgeActivity"
+            android:exported="true"
             android:launchMode="singleTask"
-            android:exported="true">
+            android:configChanges="orientation|keyboardHidden|keyboard|screenSize|locale|smallestScreenSize|screenLayout|uiMode"
+            android:theme="@style/AppTheme.NoActionBarLaunch">
 
-            <!-- Existing launcher filter -->
+            <!-- Launcher -->
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
 
-            <!-- Add this block for MSAL custom-scheme redirect -->
-            <intent-filter android:autoVerify="true">
+            <!-- MSAL custom-scheme catchall -->
+            <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
-
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
 
-                <!-- Must exactly match your redirectUri in authConfig.ts -->
+                <!-- Matches ms auth callbacks for any path under the scheme -->
                 <data
                     android:scheme="msauth"
                     android:host="io.ionic.starter"
-                    android:path="/g8yEzGu%2FOSEgBl4iWdvcEpiA7Kg%3D" />
+                    android:pathPrefix="/" />
             </intent-filter>
 
         </activity>
@@ -50,6 +48,5 @@
         </provider>
     </application>
 
-    <!-- Permissions -->
     <uses-permission android:name="android.permission.INTERNET" />
 </manifest>
