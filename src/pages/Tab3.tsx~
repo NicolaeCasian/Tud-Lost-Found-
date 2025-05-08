@@ -42,7 +42,7 @@ const Tab3: React.FC = () => {
   const [showAlert, setShowAlert] = useState(false);
   const [alertMessage, setAlertMessage] = useState('');
 
-  const API_URL = import.meta.env.VITE_API_URL || "https://tudlnf-serverv2-90ee51882713.herokuapp.com";
+  const API_URL = "https://tudlnf-serverv2-90ee51882713.herokuapp.com";
 
   useEffect(() => {
     if (userEmail && userName) {

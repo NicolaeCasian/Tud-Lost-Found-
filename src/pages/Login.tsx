@@ -28,11 +28,11 @@ const Login: React.FC = () => {
       console.log('Triggering login...');
       if (isPlatform('capacitor') ) {
         // On device/emulator: use redirect flow
-        const request: RedirectRequest = {
-          ...loginRequest,
-          redirectUri: REDIRECT_MOBILE,
-        };
-        await instance.loginRedirect(request);
+         const request: RedirectRequest = {
+        ...loginRequest,
+        redirectUri: REDIRECT_MOBILE,
+      };
+      await instance.loginRedirect(request);
       } else {
         // In browser: use popup flow
         await instance.loginPopup(loginRequest as PopupRequest);
